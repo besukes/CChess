@@ -1,2 +1,2 @@
 # CChess
-Chess project developed in C from two college freshmen trying have fun.
+Chess project developed in C from two college freshmen trying to have fun.
