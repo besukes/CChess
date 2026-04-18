@@ -1,2 +1,2 @@
-# BlackJackC
-Black Jack project from a freshman in C.
+# CChess
+Chess project developed in C from a freshman.
