@@ -14,7 +14,7 @@ void initPosicoesCavalos(Coordenadas * af1, int line){
 }
 
 AffectedPositions * initPosicoesAfetadas(int additor){
-    AffectedPositions * af = malloc(sizeof(AffectedPositions)*2);
+    AffectedPositions * af = malloc(sizeof(AffectedPositions)*32);
     af->refferedPiece = Pawn;
     af->cordJogo = malloc(sizeof(Coordenadas)*16);
     af->refferedPiece = Horse;
@@ -25,6 +25,7 @@ AffectedPositions * initPosicoesAfetadas(int additor){
         Coordenadas * c = af->cordJogo + counter;
         c->linha = l;
         c->coluna = i;
+        af->cordenadaPiece
         (c + 1)->linha = l + linhaDif;
         (c + 1)->coluna = i;
     }

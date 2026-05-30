@@ -20,6 +20,7 @@ typedef enum {
 
 typedef struct AffectedPositions{
     Pieces refferedPiece;
+    Coordenadas cordenadaPiece;
     Coordenadas * cordJogo;
 }AffectedPositions;
 
@@ -56,7 +57,11 @@ typedef struct EstadoJogo{
 EstadoJogo initEstadoJogo(void);
 
 
-
 //Modulo afterMoves.c
 
 AffectedPositions * initPosicoesAfetadas(int additor);
+
+
+//Modulo initTabuleiro.c
+
+PecaTabuleiro * initTabuleiro(PecaTabuleiro pt[32]);
