@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -ggdb -Iinclude
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 
-SRC = GameFiles/main.c GameFiles/initStructs.c GameFiles/afterMoves.c
+SRC = gamefiles/main.c gamefiles/initStructs.c gamefiles/afterMoves.c
 OBJ = $(SRC:GameFiles/%.c=build/%.o)
 
 TARGET = simpleSimon
