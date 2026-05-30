@@ -1,8 +1,8 @@
-#include "main.h"
+#include "library/main.h"
 
 
 PecaTabuleiro * initTabuleiro(PecaTabuleiro pt[32]){
-
+    
 }
 
 
