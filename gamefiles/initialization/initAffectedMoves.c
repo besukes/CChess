@@ -1,6 +1,5 @@
 #include "library/main.h"
-
-
+#include <stdlib.h>
 
 void initPosicoesCavalos(Coordenadas * af1, int line){
     af1->coluna = 0;

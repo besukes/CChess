@@ -1,3 +1,7 @@
 //////////////TO-DO-LIST//////////////////
-1-- improve affectedPostiions 
-2--
+1-- userinterface.c
+2-- cleanup
+3-- handleGameplay.c
+4-- events.c 
+5-- corefunctions.c 
+6-- affectedPostiions.c (finish)
