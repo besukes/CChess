@@ -39,11 +39,14 @@ typedef struct PecaTabuleiro{
 
 
 typedef struct EstadoJogo{
-    int quantidadePecasJogo;
-    PecaTabuleiro tabuleiroJogo[32];
+    int checkMate;
+    PecaTabuleiro tabuleiroJogoBrancas[16];
+    PecaTabuleiro tabuleiroJogoPretas[16];
     int maxIndxBrancas;
+    int maxIndxMemoriaB;
     AffectedPositions * posicoesAfetadasBrancas;
     int maxIndxPretas;
+    int maxIndxMemoriaP;
     AffectedPositions * posicoesAfetadasPretas;
 }EstadoJogo;
 
@@ -64,4 +67,4 @@ AffectedPositions * initPosicoesAfetadas(int additor);
 
 //Modulo initTabuleiro.c
 
-PecaTabuleiro * initTabuleiro(PecaTabuleiro pt[32]);
+PecaTabuleiro * initTabuleiro(PecaTabuleiro pt[32],int additor);
