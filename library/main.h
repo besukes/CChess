@@ -40,6 +40,8 @@ typedef struct PecaTabuleiro{
 
 typedef struct EstadoJogo{
     int checkMate;
+    int checkBrancas;
+    int checkPretas;
     PecaTabuleiro tabuleiroJogoBrancas[16];
     PecaTabuleiro tabuleiroJogoPretas[16];
     int maxIndxBrancas;
