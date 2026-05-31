@@ -9,7 +9,7 @@
 void loadTexturasPieces(SDL_Texture * chessPieces[16],SDL_Texture * sdl_renderer){
     for(int i=0;i<16;i++){
         char str[30];
-        sprintf(str,"assets/pieces/%d",i);
+        sprintf(str,"assets/pieces/%d.png",i);
         chessPieces[i] = IMG_LoadTexture(sdl_renderer,str);
     }
 }
