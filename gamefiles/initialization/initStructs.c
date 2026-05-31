@@ -40,8 +40,8 @@ EstadoJogo initEstadoJogo(void){
     initTabuleiro(es.tabuleiroJogoBrancas,5);
     es.maxIndxBrancas = 10;
     es.maxIndxMemoriaB = 32;
-    es.posicoesAfetadasBrancas = initPosicoesAfetadasBrancas(5);
+    es.posicoesAfetadasBrancas = initPosicoesAfetadas(5);
     es.maxIndxPretas = 10;
     es.maxIndxMemoriaP = 32;
-    es.posicoesAfetadasPretas = initPosicoesAfetadasPretas(0);
+    es.posicoesAfetadasPretas = initPosicoesAfetadas(0);
 }
