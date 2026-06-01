@@ -8,25 +8,31 @@ void checkPawnPositions(PecaTabuleiro piece , EstadoJogo * estado , CorPiece cor
 
 }
 
+
 void checkRookPositions(PecaTabuleiro piece , EstadoJogo * estado , CorPiece cor){
     
 }
+
 
 void checkHorsePositions(PecaTabuleiro piece , EstadoJogo * estado , CorPiece cor){
     
 }
 
+
 void checkBishopPositions(PecaTabuleiro piece , EstadoJogo * estado , CorPiece cor){
     
 }
+
 
 void checkQueenPositions(PecaTabuleiro piece , EstadoJogo * estado , CorPiece cor){
     
 }
 
+
 void checkKingPositions(PecaTabuleiro piece , EstadoJogo * estado , CorPiece cor){
     
 }
+
 
 void checkPositions(PecaTabuleiro piece , EstadoJogo * jogo , CorPiece cor){
     switch(piece.tipoPiece){
