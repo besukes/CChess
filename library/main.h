@@ -17,12 +17,12 @@ typedef unsigned long long uint64_bit;
 
 /*Enum que guarda todas as peças possíveis do jogo*/
 typedef enum {
-    King, //The piece is the KING
-    Queen, //The piece is the QUEEN
-    Bishop, //The piece is the BISHOP
-    Horse, //The piece is the HORSE
+    Pawn, //The piece is a PAWN
     Rook, //The piece is the ROOK
-    Pawn, //The piece is the PAWN
+    Horse, //The piece is the HORSE
+    Bishop, //The piece is the BISHOP
+    Queen, //The piece is the QUEEN
+    King, //The piece is the KING
     Empty //There is no piece
 } Pieces;
 
