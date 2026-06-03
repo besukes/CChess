@@ -6,11 +6,14 @@
 
 typedef int Boolean; //Forma mais intuitiva de perceber quando as variáveis são usadas como valores lógicos.
 
-/*Struct que define um par de (linha,coluna) para melhor representar a matriz 8x8 de xadrez*/
+/*Coordenadas cartesianas*/
 typedef struct Coordenadas{
-    int linha; //Coordenada vertical
-    int coluna; //Coordenada Horizontal
+    int x;
+    int y;
 }Coordenadas;
+
+/*Struct que define a posicao de uma peca no tabuleiro de xadrez usando um long 64 bit*/
+typedef unsigned long long uint64_bit;
 
 /*Enum que guarda todas as peças possíveis do jogo*/
 typedef enum {
@@ -27,23 +30,28 @@ typedef enum {
 /*Struct que guarda , para uma dada peça , as posições que ela "afeta"*/
 typedef struct AffectedPositions{
     Pieces refferedPiece; //Tipo de peça que afeta as posições
-    Coordenadas cordenadaPiece; //Posição original da peça que afeta as outras posições
-    Coordenadas * cordJogo; //Posições que são afetadas por esta peça
+    uint64_bit bitboard_position; //Posição original da peça que afeta as outras posições
+    uint64_bit bitboard_position; //Posições que são afetadas por esta peça
 }AffectedPositions;
 
+typedef enum casas_board{
+    A1,B1,C1,D1,E1,F1,G1,H1,
+    A2,B2,C2,D2,E2,F2,G2,H2,
+    A3,B3,C3,D3,E3,F3,G3,H3,
+    A4,B4,C4,D4,E4,F4,G4,H4,
+    A5,B5,C5,D5,E5,F5,G5,H5,
+    A6,B6,C6,D6,E6,F6,G6,H6,
+    A7,B7,C7,D7,E7,F7,G7,H7,
+    A8,B8,C8,D8,E8,F8,G8,H8
+} casas_board;
+
 //Representa a cor de uma dada peça
-typedef enum {
-    Branca,
-    Preta
-}CorPiece;
+typedef enum { brancas , pretas } CorPiece;
 
 /*Este struct define uma peça com um dado tipo , uma posição própria , uma cor e um bool que informa se já se 
 moveu alguma vez ou não*/
 typedef struct PecaTabuleiro{
-    int linhaTabuleiro; //Posição vertical da matriz que a peça ocupa no tabuleiro
-    int colunaTabuleiro; //Posicão horizontal da matriz que a peça ocupa no tabuleiro
-    CorPiece cor; //Cor da respectiva peça
-    Pieces tipoPiece; //Tipo da peça que está nas coordenadas (linhaTabuleiro,colunaTabuleiro)
+    uint64_bit bitboard_position; //Posicao na matriz de uma dada peca
     Boolean firstTimeMoving; //Informa se a peça já se moveu ou não (é relevante para algumas peças)
 }PecaTabuleiro;
 
@@ -54,14 +62,10 @@ typedef struct EstadoJogo{
     int checkMate; //Informa se um rei está em checkmate (game over)
     int checkBrancas; //Informa se o rei branco está em check
     int checkPretas; //Informa se o rei preto está em check
-    PecaTabuleiro tabuleiroJogoBrancas[16]; //Guarda as informações das peças brancas
-    PecaTabuleiro tabuleiroJogoPretas[16]; //Guarda as informações das peças pretas
-    int maxIndxBrancas; //índice de quantas peças brancas é que afetam posições(i.e , quantos índices existem no array)
-    int maxIndxMemoriaB; //índice de quanta memória foi alocada para o array posicoesAfetadasBrancas
-    AffectedPositions * posicoesAfetadasBrancas; //Array de posições afetadas por cada peça branca em jogo
-    int maxIndxPretas; //índice de quantas peças pretas é que afetam posições(i.e , quantos índices existem no array)
-    int maxIndxMemoriaP; //índice de quanta memória foi alocada para o array posicoesAfetadasPretas
-    AffectedPositions * posicoesAfetadasPretas; //Array de posições afetadas por cada peça preta em jogo
+    PecaTabuleiro tabuleirojogo[2][6]; //Guarda as informações do tabuleiro
+    uint64_bit bitboard_brancas;
+    uint64_bit bitboard_pretas;
+    uint64_bit bitboard_todas_pieces;
 }EstadoJogo;
 
 
@@ -79,7 +83,7 @@ typedef struct GameStruct{
     EstadoJogo estadoJogo; //Estado atual do jogo
     Boolean isKeyPressedDown; //Verifica se o utilizador está a premir a tecla
     Pieces pieceSelecionada; //Guarda a peça que o utilizador está a ser segurada , caso esteja
-    Coordenadas pieceCoords; //Guarda a posição de onde a peça que está a ser segurada veio , caso esteja
+    uint64_bit pieceCoords; //Guarda a posição de onde a peça que está a ser segurada veio , caso esteja
     CorPiece turnoJogador; //Guarda o turno do utilizador 
     TipoJogada jogada; //Guarda a jogada do utilizador
 }GameStruct;

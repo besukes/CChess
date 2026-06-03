@@ -24,9 +24,8 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     game.isKeyPressedDown = 0;
     game.jogada = Valid;
     game.pieceSelecionada = Empty;
-    game.turnoJogador = Branca;
-    game.pieceCoords.coluna = (-1);
-    game.pieceCoords.linha = (-1);
+    game.turnoJogador = brancas;
+    game.pieceCoords = 0;
     return game;
 }
 
@@ -36,12 +35,8 @@ EstadoJogo initEstadoJogo(void){
     es.checkMate = 0;
     es.checkBrancas = 0;
     es.checkPretas = 0;
-    initTabuleiro(es.tabuleiroJogoPretas,0);
-    initTabuleiro(es.tabuleiroJogoBrancas,5);
-    es.maxIndxBrancas = 10;
-    es.maxIndxMemoriaB = 32;
-    es.posicoesAfetadasBrancas = initPosicoesAfetadas(5);
-    es.maxIndxPretas = 10;
-    es.maxIndxMemoriaP = 32;
-    es.posicoesAfetadasPretas = initPosicoesAfetadas(0);
+    initTabuleiro(es.tabuleirojogo[0],0);
+    initTabuleiro((es.tabuleirojogo + 6),5);
+    init_other_bitboards(&es);
+    return es;
 }

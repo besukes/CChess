@@ -2,52 +2,57 @@
 
 
 
-void initTabQueensKing(PecaTabuleiro pt[32], int fst , int pos , Pieces peca , int linha ,CorPiece cor){
-    for(int i=0;i<2;i++){
-        pt[fst + i].cor = cor;
-        pt[fst + i].tipoPiece = peca;
-        pt[fst + i].firstTimeMoving = 1;
-        pt[fst + i].linhaTabuleiro = linha;
-        pt[fst + i].colunaTabuleiro = pos;
-    }
-}
 
-void initTabRooksHorsesBishops(PecaTabuleiro pt[32],int fst , int pos1 , int pos2, Pieces peca,int linha,CorPiece cor){
-    for(int i=0;i<2;i++){
-        pt[fst + i].cor = cor;
-        pt[fst + i].tipoPiece = peca;
-        pt[fst + i].firstTimeMoving = 1;
-        pt[fst + i].linhaTabuleiro = linha;
-        pt[fst + i].colunaTabuleiro = pos1;
-        pos1=pos2;
+void initPieces(PecaTabuleiro pt[32],int index,int tipo,casas_board pos,int difPos){
+    if(tipo==0){
+        pt[index].bitboard_position |= (1ULL << pos);
+        pt[index].bitboard_position |= (1ULL << (pos + difPos));
+    }
+    else{
+        pt[index].bitboard_position |= (1ULL << (56 + pos));
+        pt[index].bitboard_position |= (1ULL << (56 + pos + difPos));
     }
 }
 
 
-void initTabPawns(PecaTabuleiro pt[32],int max,int ad , CorPiece cor){
-    int i;
-    for(i=0;i<max;i++){
-        pt[i].cor = cor;
-        pt[i].tipoPiece = Pawn;
-        pt[i].firstTimeMoving = 1;
-        pt[i].linhaTabuleiro = 1 + ad;
-        pt[i].colunaTabuleiro = i;
+void initTabPawns(PecaTabuleiro pt[16],int tipo){
+    if(tipo==0){
+        pt[0].bitboard_position |= (1ULL << A2);
+        pt[0].bitboard_position |= (1ULL << B2);
+        pt[0].bitboard_position |= (1ULL << C2);
+        pt[0].bitboard_position |= (1ULL << D2);
+        pt[0].bitboard_position |= (1ULL << E2);
+        pt[0].bitboard_position |= (1ULL << F2);
+        pt[0].bitboard_position |= (1ULL << G2);
+        pt[0].bitboard_position |= (1ULL << H2);
+    }
+    else{
+        pt[0].bitboard_position |= (1ULL << A7);
+        pt[0].bitboard_position |= (1ULL << B7);
+        pt[0].bitboard_position |= (1ULL << C7);
+        pt[0].bitboard_position |= (1ULL << D7);
+        pt[0].bitboard_position |= (1ULL << E7);
+        pt[0].bitboard_position |= (1ULL << F7);
+        pt[0].bitboard_position |= (1ULL << G7);
+        pt[0].bitboard_position |= (1ULL << H7);
     }
 }
 
 PecaTabuleiro * initTabuleiro(PecaTabuleiro pt[16], int additor){
-    CorPiece cor;
-    int position;
-    if(additor==0){
-        cor=Preta;position=0;
+    initTabPawns(pt,additor);
+    initPieces(pt,1,additor,A1,7); //rook
+    initPieces(pt,2,additor,B1,5); //horse
+    initPieces(pt,3,additor,C1,3); //bishop
+    initPieces(pt,4,additor,D1,0); //queen
+    initPieces(pt,5,additor,E1,0); //king
+}
+
+void init_other_bitboards(EstadoJogo * es){
+    es->bitboard_brancas = 0;
+    es->bitboard_pretas = 0;
+    for(int i = 0 ; i < 16 ; i++){
+        es->bitboard_brancas |= es->tabuleirojogo[0][i].bitboard_position;
+        es->bitboard_pretas |= es->tabuleirojogo[1][i].bitboard_position;
     }
-    else{
-        cor=Branca;position=7;
-    }
-    initTabPawns(pt,8,additor,cor);
-    initTabRooksHorsesBishops(pt,8,0,7,Rook,position,cor);
-    initTabRooksHorsesBishops(pt,10,1,6,Horse,position,cor);
-    initTabRooksHorsesBishops(pt,12,2,5,Bishop,position,cor);
-    initTabQueensKing(pt,14,3,Queen,position,cor);
-    initTabQueensKing(pt,15,4,King,position,cor);
+    es->bitboard_todas_pieces = es->bitboard_brancas | es->bitboard_pretas;
 }
