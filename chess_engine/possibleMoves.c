@@ -1,5 +1,7 @@
 #include "library/main.h"
 
+
+
 uint64_bit get_cross_attacks(uint64_bit piece_pos){
     int indx_tab = posTabuleiro(piece_pos);
     int linha = indx_tab/8 , coluna = indx_tab % 8,
@@ -22,6 +24,8 @@ uint64_bit get_cross_attacks(uint64_bit piece_pos){
     }
     return atk;
 }
+
+
 
 uint64_bit get_sliding_attacks(uint64_bit piece_pos){
     int indx_tab = posTabuleiro(piece_pos);
@@ -46,16 +50,26 @@ uint64_bit get_sliding_attacks(uint64_bit piece_pos){
     return atk;
 }
 
-uint64_bit get_pawn_attacks(uint64_bit piece_pos){
+
+
+uint64_bit get_pawn_attacks(uint64_bit piece_pos,CorPiece cor){
     uint64_bit at = 0 , colunaA = 0 , colunaH = 0;
     for(int i=0;i<8;i++){
         colunaA |= (1ULL<< (8*i));
         colunaH |= (1ULL<< (8*i + 7));
     }
-    at |= ((piece_pos<<9) & ~colunaA);
-    at |= ((piece_pos<<7) & ~colunaH);
+    if(cor==brancas){
+        at |= ((piece_pos<<9) & ~colunaA);
+        at |= ((piece_pos<<7) & ~colunaH);
+    }
+    else{
+        at |= ((piece_pos>>9) & ~colunaH);
+        at |= ((piece_pos>>7) & ~colunaA);
+    }
     return at;
 }
+
+
 
 uint64_bit get_knight_attacks(uint64_bit piece_pos){
     uint64_bit at = 0 , colunaA = 0 , colunaH = 0 ,
@@ -77,16 +91,19 @@ uint64_bit get_knight_attacks(uint64_bit piece_pos){
     return at;
 }
 
+
+
 Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor){
-    uint64_bit op_knight = estado->tabuleirojogo[cor][2].bitboard_position,
-               op_pawns = estado->tabuleirojogo[cor][0].bitboard_position,
-               op_rooks = estado->tabuleirojogo[cor][1].bitboard_position,
-               op_bishops = estado->tabuleirojogo[cor][3].bitboard_position,
-               op_queen = estado->tabuleirojogo[cor][4].bitboard_position;
+    CorPiece oponente = (cor == brancas) ? pretas : brancas;
+    uint64_bit op_knight = estado->tabuleirojogo[oponente][2].bitboard_position,
+               op_pawns = estado->tabuleirojogo[oponente][0].bitboard_position,
+               op_rooks = estado->tabuleirojogo[oponente][1].bitboard_position,
+               op_bishops = estado->tabuleirojogo[oponente][3].bitboard_position,
+               op_queen = estado->tabuleirojogo[oponente][4].bitboard_position;
     Boolean check_knights = get_knights_attacks(kingpos) & op_knight,
-            check_pawns = get_pawn_attacks(kingpos) & op_pawns,
+            check_pawns = get_pawn_attacks(kingpos,cor) & op_pawns,
             check_diagonals = get_sliding_attacks(kingpos) & (op_bishops | op_queen),
             check_cross = get_cross_attacks(kingpos) & (op_rooks | op_queen);
-    return (check_knights && check_pawns && check_diagonals && check_cross);
+    return (check_knights || check_pawns || check_diagonals || check_cross);
 }
 
