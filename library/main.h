@@ -115,22 +115,16 @@ typedef struct CChessSettings{
 
 //Modulo initStructs.c
 
-EstadoJogo initEstadoJogo(void);
 CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer);
 GameStruct initGameStruct(SDL_Renderer * sdl_renderer);
-
-
-
-//Modulo afterMoves.c
-
-AffectedPositions * initPosicoesAfetadas(int additor);
 
 
 
 
 //Modulo initTabuleiro.c
 
-PecaTabuleiro * initTabuleiro(PecaTabuleiro pt[32],int additor);
+void initTabuleiro(PecaTabuleiro pt[6], int additor);
+void init_other_bitboards(EstadoJogo * es);
 
 
 
@@ -152,3 +146,10 @@ void handleWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event even
 
 SDL_Renderer * sdl_initializer(void);
 void free_allocated_memory(GameStruct game , CChessSettings user);
+
+
+
+//Modulo corefunctions.c
+
+int posTabuleiro(uint64_bit bitboard);
+uint64_bit click_table_position(int mouseX , int mouseY);

@@ -3,7 +3,8 @@
 
 
 
-void initPieces(PecaTabuleiro pt[32],int index,int tipo,casas_board pos,int difPos){
+void initPieces(PecaTabuleiro pt[6],int index,int tipo,casas_board pos,int difPos){
+    pt[index].bitboard_position = 0;
     if(tipo==0){
         pt[index].bitboard_position |= (1ULL << pos);
         pt[index].bitboard_position |= (1ULL << (pos + difPos));
@@ -15,7 +16,8 @@ void initPieces(PecaTabuleiro pt[32],int index,int tipo,casas_board pos,int difP
 }
 
 
-void initTabPawns(PecaTabuleiro pt[16],int tipo){
+void initTabPawns(PecaTabuleiro pt[6],int tipo){
+    pt[0].bitboard_position = 0;
     if(tipo==0){
         pt[0].bitboard_position |= (1ULL << A2);
         pt[0].bitboard_position |= (1ULL << B2);
@@ -38,7 +40,7 @@ void initTabPawns(PecaTabuleiro pt[16],int tipo){
     }
 }
 
-PecaTabuleiro * initTabuleiro(PecaTabuleiro pt[16], int additor){
+void initTabuleiro(PecaTabuleiro pt[6], int additor){
     initTabPawns(pt,additor);
     initPieces(pt,1,additor,A1,7); //rook
     initPieces(pt,2,additor,B1,5); //horse

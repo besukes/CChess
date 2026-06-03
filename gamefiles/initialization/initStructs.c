@@ -17,6 +17,16 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer){
     return settings;
 }
 
+EstadoJogo initEstadoJogo(void){
+    EstadoJogo es;
+    es.checkMate = 0;
+    es.checkBrancas = 0;
+    es.checkPretas = 0;
+    initTabuleiro(es.tabuleirojogo[0],0);
+    initTabuleiro((es.tabuleirojogo + 6),5);
+    init_other_bitboards(&es);
+    return es;
+}
 
 GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     GameStruct game;
@@ -27,16 +37,4 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     game.turnoJogador = brancas;
     game.pieceCoords = 0;
     return game;
-}
-
-
-EstadoJogo initEstadoJogo(void){
-    EstadoJogo es;
-    es.checkMate = 0;
-    es.checkBrancas = 0;
-    es.checkPretas = 0;
-    initTabuleiro(es.tabuleirojogo[0],0);
-    initTabuleiro((es.tabuleirojogo + 6),5);
-    init_other_bitboards(&es);
-    return es;
 }
