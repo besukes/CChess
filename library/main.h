@@ -153,3 +153,4 @@ void free_allocated_memory(GameStruct game , CChessSettings user);
 
 int posTabuleiro(uint64_bit bitboard);
 uint64_bit click_table_position(int mouseX , int mouseY);
+int dentroDoBotao(int mx , int my , int inf_x , int sup_x , int inf_y , int sup_y);

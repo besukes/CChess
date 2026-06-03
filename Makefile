@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -Wall -ggdb -I. -Ilibrary -Igamefiles/gameplay
+CFLAGS = -Wall -ggdb -I. -Ilibrary -Igamefiles/gameplay -Ichess_engine
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 
 SRC = gamefiles/actionbased/affectedPositionsCalc.c \
@@ -13,7 +13,8 @@ SRC = gamefiles/actionbased/affectedPositionsCalc.c \
 		gamefiles/initialization/startAndCleanup.c \
 		gamefiles/initialization/initStructs.c \
 		gamefiles/initialization/initTabuleiro.c \
-		library/loadAssets.c
+		library/loadAssets.c \
+		chess_engine/possibleMoves.c
 
 OBJ = $(SRC:%.c=build/%.o)
 

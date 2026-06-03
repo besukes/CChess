@@ -4,6 +4,18 @@
 #include <SDL2/SDL_mixer.h>
 #include <stdio.h>
 
+Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique){
+    uint64_bit bool = 0;
+    for(int i=0;i<6 && bool == 0;i++){
+        bool = estado.tabuleirojogo[cor][i].bitboard_position & posclique;
+    }
+}
+
+
+int dentroDoBotao(int mx , int my , int inf_x , int sup_x , int inf_y , int sup_y){
+    return ( (inf_x<=mx && mx<=sup_x) && (inf_y <= my && my<=sup_y));
+}
+
 
 int posTabuleiro(uint64_bit bitboard){
     if(bitboard==0) return (-1);
