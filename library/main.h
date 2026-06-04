@@ -106,6 +106,7 @@ typedef struct CChessSettings{
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////     MODULOS     ///////////////////////////////////////////////////////////////////////////
 
+
 //Modulo initStructs.c
 
 CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer);
@@ -125,6 +126,7 @@ void init_other_bitboards(EstadoJogo * es);
 //Modulo loadAssets.c
 
 void initTexturasJogo(AssetsCChess * assets,SDL_Renderer * sdl_renderer);
+
 
 
 //Modulo handleGameplay.c
@@ -158,12 +160,19 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
 void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event);
 
 
+
 //Modulo moveMaker.c
 
-TipoJogada check_or_mate(EstadoJogo estado);
 void atualizaJogada(EstadoJogo * estado , uint64_bit click);
 void updateBitboard_ClickEvent(CorPiece turno,Pieces piece,EstadoJogo * estado,uint64_bit click);
+
+
+
+//Modulo possibleMoves.c
+
 int isValidMove(EstadoJogo estado , uint64_bit click);
+TipoJogada check_or_mate(EstadoJogo estado);
+
 
 
 //Modulo userinterface.c
