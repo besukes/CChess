@@ -4,15 +4,17 @@
 #include <SDL2/SDL_mixer.h>
 #include <stdio.h>
 
+
+
+
 int minimum(int n1,int n2){
     return ((n1<n2)? n1 : n2);
 }
 
-Pieces comparePiece(EstadoJogo * estado , CorPiece cor , uint64_bit posclique){
-    uint64_bit bool = 0;
+Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique){
     int i;
     for(i=0;i<6;i++){
-        if(estado->tabuleirojogo[cor][i].bitboard_position & posclique){
+        if(estado.tabuleirojogo[cor][i].bitboard_position & posclique){
             return((Pieces)i);
         }
     }

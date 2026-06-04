@@ -5,6 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 
 
+
 void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event event){
     int mouseX = event.button.x , mouseY = event.button.y;
     uint64_bit click = click_table_position(mouseX,mouseY);
@@ -13,6 +14,7 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
         game->pieceCoords = click;
         game->pieceSelecionada = piece;
         if(piece==Empty) game->jogada = Invalid;
+        updateBitboard_ClickEvent(game->turnoJogador,piece,&(game->estadoJogo),click);
     }
     else{
         if(dentroDoBotao(mouseX,mouseY,20,20,20,20)){
@@ -25,5 +27,13 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
 }
 
 void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event){
-
+    int mouseX = event.button.x , mouseY = event.button.y;
+    uint64_bit click = click_table_position(mouseX,mouseY);
+    if(click != 0 && isValidMove(game->estadoJogo,click)){
+        atualizaJogada(&(game->estadoJogo),click);
+        game->jogada = check_or_mate(game->estadoJogo);
+    }
+    else{
+        game->jogada = Invalid;
+    }
 }

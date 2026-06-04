@@ -27,13 +27,6 @@ typedef enum {
 } Pieces;
 
 
-/*Struct que guarda , para uma dada peça , as posições que ela "afeta"*/
-typedef struct AffectedPositions{
-    Pieces refferedPiece; //Tipo de peça que afeta as posições
-    uint64_bit bitboard_position; //Posição original da peça que afeta as outras posições
-    uint64_bit bitboard_position; //Posições que são afetadas por esta peça
-}AffectedPositions;
-
 typedef enum casas_board{
     A1,B1,C1,D1,E1,F1,G1,H1,
     A2,B2,C2,D2,E2,F2,G2,H2,
@@ -131,7 +124,7 @@ void init_other_bitboards(EstadoJogo * es);
 
 //Modulo loadAssets.c
 
-void initTexturasJogo(AssetsCChess * assets,SDL_Texture * sdl_renderer);
+void initTexturasJogo(AssetsCChess * assets,SDL_Renderer * sdl_renderer);
 
 
 //Modulo handleGameplay.c
@@ -154,3 +147,28 @@ void free_allocated_memory(GameStruct game , CChessSettings user);
 int posTabuleiro(uint64_bit bitboard);
 uint64_bit click_table_position(int mouseX , int mouseY);
 int dentroDoBotao(int mx , int my , int inf_x , int sup_x , int inf_y , int sup_y);
+int minimum(int n1,int n2);
+Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique);
+
+
+
+//Modulo events.c
+
+void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event event);
+void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event);
+
+
+//Modulo moveMaker.c
+
+TipoJogada check_or_mate(EstadoJogo estado);
+void atualizaJogada(EstadoJogo * estado , uint64_bit click);
+void updateBitboard_ClickEvent(CorPiece turno,Pieces piece,EstadoJogo * estado,uint64_bit click);
+int isValidMove(EstadoJogo estado , uint64_bit click);
+
+
+//Modulo userinterface.c
+
+void desenhaInterfaceMenu(CChessSettings * settings,SDL_Event event);
+void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event);
+void desenhaMenuThemes(CChessSettings * settings,SDL_Event event);
+void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event);

@@ -8,6 +8,9 @@ void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event event){
 
 }
 
+void resetGrabbedPiece(GameStruct * game){
+    
+}
 
 void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event){
     if(event.type == SDL_MOUSEBUTTONDOWN){
@@ -21,6 +24,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
             game->isKeyPressedDown = 0;
             efetuaEventoSoltar(game,settings,event);
             if(game->jogada == Invalid) ;
+            resetGrabbedPiece(game);
         }
     }
 }

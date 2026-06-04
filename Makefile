@@ -3,18 +3,18 @@ CC = gcc
 CFLAGS = -Wall -ggdb -I. -Ilibrary -Igamefiles/gameplay -Ichess_engine
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 
-SRC = gamefiles/actionbased/affectedPositionsCalc.c \
-		gamefiles/actionbased/corefunctions.c \
+SRC =	gamefiles/universal/corefunctions.c \
 		gamefiles/gameplay/main.c \
 		gamefiles/gameplay/events.c \
 		gamefiles/gameplay/handleGameplay.c \
 		gamefiles/gameplay/userinterface.c	\
-		gamefiles/initialization/initAffectedMoves.c \
+		gamefiles/gameplay/moveMaker.c \
 		gamefiles/initialization/startAndCleanup.c \
 		gamefiles/initialization/initStructs.c \
 		gamefiles/initialization/initTabuleiro.c \
 		library/loadAssets.c \
-		chess_engine/possibleMoves.c
+		chess_engine/possibleMoves.c \
+		chess_engine/checkAndCheckmate.c
 
 OBJ = $(SRC:%.c=build/%.o)
 

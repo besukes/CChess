@@ -15,6 +15,7 @@ SDL_Renderer * sdl_initializer(void){
     return renderer;
 }
 
+
 void free_allocated_memory(GameStruct game , CChessSettings user){
 
 }

@@ -6,7 +6,7 @@
 
 
 
-void loadTexturasPieces(SDL_Texture * chessPieces[16],SDL_Texture * sdl_renderer){
+void loadTexturasPieces(SDL_Texture * chessPieces[12],SDL_Renderer * sdl_renderer){
     for(int i=0;i<12;i++){
         char str[30];
         sprintf(str,"assets/pieces/%d.png",i+1);
@@ -14,6 +14,6 @@ void loadTexturasPieces(SDL_Texture * chessPieces[16],SDL_Texture * sdl_renderer
     }
 }
 
-void initTexturasJogo(AssetsCChess * assets,SDL_Texture * sdl_renderer){
+void initTexturasJogo(AssetsCChess * assets,SDL_Renderer * sdl_renderer){
     loadTexturasPieces(assets->chessPieces,sdl_renderer);
 }
