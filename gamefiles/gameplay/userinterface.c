@@ -5,12 +5,10 @@
 #include <stdio.h>
 
 void desenharPiece(Pieces tipoPiece , int linha , int coluna , CChessSettings * settings, int offset){
-    int textureIndex = tipoPiece + offset;
-    if(tipoPiece == Queen) textureIndex = King + offset;
-    else if(tipoPiece == King) textureIndex = Queen + offset;
     SDL_Rect posicaoPeca = {125*coluna+200, 1080 - (125 * linha+167),125,125};
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.chessPieces[textureIndex],NULL,&posicaoPeca);
+    SDL_RenderCopy(settings->gameRenderer,settings->textures.chessPieces[tipoPiece + offset],NULL,&posicaoPeca);
 }
+
 
 void desenhaPieces(uint64_bit pos_pieces,Pieces tipoPiece , CChessSettings * settings, int offset){
     int counter=0 , linha , coluna;
