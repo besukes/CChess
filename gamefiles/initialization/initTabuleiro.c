@@ -16,7 +16,7 @@ void initPieces(uint64_bit pt[6],int index,int tipo,casas_board pos,int difPos){
 }
 
 
-void initTabPawns(uint64_bit pt[6],int tipo){
+void initTabPawns(uint64_bit * pt,int tipo){
     pt[0] = 0;
     if(tipo==0){
         pt[0] |= (1ULL << A2);
@@ -52,7 +52,7 @@ void initTabuleiro(uint64_bit pt[6], int additor){
 void init_other_bitboards(EstadoJogo * es){
     es->bitboard_brancas = 0;
     es->bitboard_pretas = 0;
-    for(int i = 0 ; i < 16 ; i++){
+    for(int i = 0 ; i < 6 ; i++){
         es->bitboard_brancas |= es->tabuleirojogo[0][i];
         es->bitboard_pretas |= es->tabuleirojogo[1][i];
     }

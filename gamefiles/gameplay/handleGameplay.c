@@ -5,7 +5,15 @@
 
 
 void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event event){
-
+   SDL_Point point = {settings->posMouseX,settings->posMouseY};
+   SDL_Rect botaoJogar = {700,400,500,100};
+   if(SDL_PointInRect(&point,&botaoJogar))
+   {
+     if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
+     {
+        settings->screenAtual = Chess;
+     }
+   }
 }
 
 void resetGrabbedPiece(GameStruct * game){
