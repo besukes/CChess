@@ -11,10 +11,12 @@ int minimum(int n1,int n2){
     return ((n1<n2)? n1 : n2);
 }
 
+
+
 Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique){
     int i;
     for(i=0;i<6;i++){
-        if(estado.tabuleirojogo[cor][i].bitboard_position & posclique){
+        if(estado.tabuleirojogo[cor][i] & posclique){
             return((Pieces)i);
         }
     }
@@ -47,6 +49,8 @@ int calcPosClique(int lower_border_limit , int upper_border_limit , int pos , in
     return (-1);
 }
 
+
+
 uint64_bit click_table_position(int mouseX , int mouseY){
     uint64_bit p = 0;
     int infHorizontal = 600 , supHorizontal = 1320 ,
@@ -58,4 +62,15 @@ uint64_bit click_table_position(int mouseX , int mouseY){
         p = (1ULL<<((cy*8)+cx));
     }
     return p;
+}
+
+
+int pawnFirstRank(uint64_bit pos,CorPiece cor){
+    int postab = __builtin_ctzll(pos);
+    if(cor==brancas){
+        return(0 <= postab && postab < 8);
+    }
+    else{
+        return( 56 < postab && postab < 64);
+    }
 }

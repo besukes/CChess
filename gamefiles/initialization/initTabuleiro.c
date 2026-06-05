@@ -3,44 +3,44 @@
 
 
 
-void initPieces(PecaTabuleiro pt[6],int index,int tipo,casas_board pos,int difPos){
-    pt[index].bitboard_position = 0;
+void initPieces(uint64_bit pt[6],int index,int tipo,casas_board pos,int difPos){
+    pt[index] = 0;
     if(tipo==0){
-        pt[index].bitboard_position |= (1ULL << pos);
-        pt[index].bitboard_position |= (1ULL << (pos + difPos));
+        pt[index] |= (1ULL << pos);
+        pt[index] |= (1ULL << (pos + difPos));
     }
     else{
-        pt[index].bitboard_position |= (1ULL << (56 + pos));
-        pt[index].bitboard_position |= (1ULL << (56 + pos + difPos));
+        pt[index] |= (1ULL << (56 + pos));
+        pt[index] |= (1ULL << (56 + pos + difPos));
     }
 }
 
 
-void initTabPawns(PecaTabuleiro pt[6],int tipo){
-    pt[0].bitboard_position = 0;
+void initTabPawns(uint64_bit pt[6],int tipo){
+    pt[0] = 0;
     if(tipo==0){
-        pt[0].bitboard_position |= (1ULL << A2);
-        pt[0].bitboard_position |= (1ULL << B2);
-        pt[0].bitboard_position |= (1ULL << C2);
-        pt[0].bitboard_position |= (1ULL << D2);
-        pt[0].bitboard_position |= (1ULL << E2);
-        pt[0].bitboard_position |= (1ULL << F2);
-        pt[0].bitboard_position |= (1ULL << G2);
-        pt[0].bitboard_position |= (1ULL << H2);
+        pt[0] |= (1ULL << A2);
+        pt[0] |= (1ULL << B2);
+        pt[0] |= (1ULL << C2);
+        pt[0] |= (1ULL << D2);
+        pt[0] |= (1ULL << E2);
+        pt[0] |= (1ULL << F2);
+        pt[0] |= (1ULL << G2);
+        pt[0] |= (1ULL << H2);
     }
     else{
-        pt[0].bitboard_position |= (1ULL << A7);
-        pt[0].bitboard_position |= (1ULL << B7);
-        pt[0].bitboard_position |= (1ULL << C7);
-        pt[0].bitboard_position |= (1ULL << D7);
-        pt[0].bitboard_position |= (1ULL << E7);
-        pt[0].bitboard_position |= (1ULL << F7);
-        pt[0].bitboard_position |= (1ULL << G7);
-        pt[0].bitboard_position |= (1ULL << H7);
+        pt[0] |= (1ULL << A7);
+        pt[0] |= (1ULL << B7);
+        pt[0] |= (1ULL << C7);
+        pt[0] |= (1ULL << D7);
+        pt[0] |= (1ULL << E7);
+        pt[0] |= (1ULL << F7);
+        pt[0] |= (1ULL << G7);
+        pt[0] |= (1ULL << H7);
     }
 }
 
-void initTabuleiro(PecaTabuleiro pt[6], int additor){
+void initTabuleiro(uint64_bit pt[6], int additor){
     initTabPawns(pt,additor);
     initPieces(pt,1,additor,A1,7); //rook
     initPieces(pt,2,additor,B1,5); //horse
@@ -53,8 +53,8 @@ void init_other_bitboards(EstadoJogo * es){
     es->bitboard_brancas = 0;
     es->bitboard_pretas = 0;
     for(int i = 0 ; i < 16 ; i++){
-        es->bitboard_brancas |= es->tabuleirojogo[0][i].bitboard_position;
-        es->bitboard_pretas |= es->tabuleirojogo[1][i].bitboard_position;
+        es->bitboard_brancas |= es->tabuleirojogo[0][i];
+        es->bitboard_pretas |= es->tabuleirojogo[1][i];
     }
     es->bitboard_todas_pieces = es->bitboard_brancas | es->bitboard_pretas;
 }

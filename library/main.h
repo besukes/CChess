@@ -41,21 +41,16 @@ typedef enum casas_board{
 //Representa a cor de uma dada peça
 typedef enum { brancas , pretas } CorPiece;
 
-/*Este struct define uma peça com um dado tipo , uma posição própria , uma cor e um bool que informa se já se 
-moveu alguma vez ou não*/
-typedef struct PecaTabuleiro{
-    uint64_bit bitboard_position; //Posicao na matriz de uma dada peca
-    Boolean firstTimeMoving; //Informa se a peça já se moveu ou não (é relevante para algumas peças)
-}PecaTabuleiro;
 
 /*Struct que define um estado de um jogo de xadrez.
 Guarda as posições de todas as peças , bem como as posições afetadas por elas.
 Guarda também informações sobre se um dado king está em check/checkmate ou não*/
 typedef struct EstadoJogo{
     int checkMate; //Informa se um rei está em checkmate (game over)
+    int stalemate; //Informa se o jogo acabou em staleMate
     int checkBrancas; //Informa se o rei branco está em check
     int checkPretas; //Informa se o rei preto está em check
-    PecaTabuleiro tabuleirojogo[2][6]; //Guarda as informações do tabuleiro
+    uint64_bit tabuleirojogo[2][6]; //Guarda as informações do tabuleiro
     uint64_bit bitboard_brancas;
     uint64_bit bitboard_pretas;
     uint64_bit bitboard_todas_pieces;
@@ -65,7 +60,7 @@ typedef struct EstadoJogo{
 typedef enum { Menu , Chess , Theme , WinScreen} UserScreen; //Define em qual tela está o utilizador
 
 
-typedef enum { Invalid , Leave , Valid , Win , TooLarge} TipoJogada; //Define o tipo de jogada que o utilizador efetuou
+typedef enum { Invalid , Leave , Valid , Checkmate , TooLarge} TipoJogada; //Define o tipo de jogada que o utilizador efetuou
 
 
 typedef enum { CChess , ChessDotCom , LiChess} Themes; //Define o tema de peças que o utilizador está a utilizar
@@ -117,7 +112,7 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer);
 
 //Modulo initTabuleiro.c
 
-void initTabuleiro(PecaTabuleiro pt[6], int additor);
+void initTabuleiro(uint64_bit pt[6], int additor);
 void init_other_bitboards(EstadoJogo * es);
 
 
@@ -151,6 +146,7 @@ uint64_bit click_table_position(int mouseX , int mouseY);
 int dentroDoBotao(int mx , int my , int inf_x , int sup_x , int inf_y , int sup_y);
 int minimum(int n1,int n2);
 Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique);
+int pawnFirstRank(uint64_bit pos,CorPiece cor);
 
 
 
@@ -165,13 +161,14 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
 
 void atualizaJogada(EstadoJogo * estado , uint64_bit click);
 void updateBitboard_ClickEvent(CorPiece turno,Pieces piece,EstadoJogo * estado,uint64_bit click);
+void undoMove(EstadoJogo * estado , uint64_bit click);
 
 
 
 //Modulo possibleMoves.c
 
-int isValidMove(EstadoJogo estado , uint64_bit click);
-TipoJogada check_or_mate(EstadoJogo estado);
+int isPseudoValidMove(GameStruct * game , uint64_bit drop);
+TipoJogada check_or_mate(GameStruct * game);
 
 
 
@@ -181,3 +178,15 @@ void desenhaInterfaceMenu(CChessSettings * settings,SDL_Event event);
 void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event);
 void desenhaMenuThemes(CChessSettings * settings,SDL_Event event);
 void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event);
+
+
+
+//Modulo checkAndCheckmate.c
+
+uint64_bit get_knight_attacks(uint64_bit piece_pos);
+uint64_bit get_pawn_attacks(uint64_bit piece_pos,CorPiece cor);
+uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites);
+uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites);
+TipoJogada check_or_mate(GameStruct * game);
+void isCheckMate(GameStruct * game);
+void notInCheck(GameStruct * game);

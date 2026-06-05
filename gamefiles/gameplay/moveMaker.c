@@ -2,6 +2,10 @@
 
 
 
+void undoMove(EstadoJogo * estado , uint64_bit click){
+
+}
+
 
 void atualizaJogada(EstadoJogo * estado , uint64_bit click){
 

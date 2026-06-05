@@ -1,7 +1,12 @@
 //////////////TO-DO-LIST//////////////////
 1-- userinterface.c
 2-- cleanup
-3-- handleGameplay.c
-4-- events.c 
-5-- corefunctions.c 
-6-- affectedPostiions.c (finish)
+3-- atualizaJogada{
+    fazer o movimento presumindo que e valido
+}
+4-- check_or_mate{
+    verificar se o rei ficou em check com esta jogada 
+    verificar se o rei oposto ficou em check com esta jogada 
+    verificar se o rei oposto ficou em check mate com esta jogada
+}
+

@@ -1,12 +1,21 @@
 #include "library/main.h"
 
+
+
+
+
+
 uint64_bit shiftr(uint64_bit pos,int shift){
     return (pos>>shift);
 }
 
+
+
 uint64_bit shiftl(uint64_bit pos,int shift){
     return (pos<<shift);
 }
+
+
 
 void get_attacks(int max , uint64_bit (*func)(uint64_bit,int),uint64_bit pos_limites,uint64_bit pos_piece,int shift ,uint64_bit * atk){
     for(int i=1;i<=max ;i++){
@@ -15,6 +24,8 @@ void get_attacks(int max , uint64_bit (*func)(uint64_bit,int),uint64_bit pos_lim
         if(pos_limites & casa_atual) break;
     }
 }
+
+
 
 uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites){
     int indx_tab = posTabuleiro(piece_pos);
@@ -96,11 +107,11 @@ uint64_bit get_knight_attacks(uint64_bit piece_pos){
 Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor){
     uint64_bit todas_pieces =  estado->bitboard_todas_pieces;
     CorPiece oponente = (cor==brancas) ? pretas : brancas;
-    uint64_bit op_knight = estado->tabuleirojogo[oponente][2].bitboard_position,
-               op_pawns = estado->tabuleirojogo[oponente][0].bitboard_position,
-               op_rooks = estado->tabuleirojogo[oponente][1].bitboard_position,
-               op_bishops = estado->tabuleirojogo[oponente][3].bitboard_position,
-               op_queen = estado->tabuleirojogo[oponente][4].bitboard_position;
+    uint64_bit op_knight = estado->tabuleirojogo[oponente][2],
+               op_pawns = estado->tabuleirojogo[oponente][0],
+               op_rooks = estado->tabuleirojogo[oponente][1],
+               op_bishops = estado->tabuleirojogo[oponente][3],
+               op_queen = estado->tabuleirojogo[oponente][4];
     Boolean check_knights = get_knight_attacks(kingpos) & op_knight,
             check_pawns = get_pawn_attacks(kingpos,cor) & op_pawns,
             check_diagonals = get_sliding_attacks(kingpos,todas_pieces) & (op_bishops | op_queen),
@@ -108,3 +119,17 @@ Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor){
     return (check_knights || check_pawns || check_diagonals || check_cross);
 }
 
+
+void notInCheck(GameStruct * game){
+
+}
+
+
+void isCheckMate(GameStruct * game){
+
+}
+
+
+TipoJogada check_or_mate(GameStruct * game){
+
+}
