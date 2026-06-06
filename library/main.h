@@ -188,6 +188,7 @@ void desenhaInterfaceMenu(CChessSettings * settings,SDL_Event event);
 void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event);
 void desenhaMenuThemes(CChessSettings * settings,SDL_Event event);
 void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event);
+void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettings * settings , int offset);
 
 
 
