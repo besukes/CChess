@@ -65,6 +65,14 @@ typedef enum { Invalid , Leave , Valid , Checkmate , TooLarge} TipoJogada; //Def
 
 typedef enum { CChess , ChessDotCom , LiChess} Themes; //Define o tema de peças que o utilizador está a utilizar
 
+
+typedef struct PecasComidas{
+    uint64_bit pos_de_piece;
+    Pieces tipo_piece;
+    CorPiece cor_piece;
+    struct PecasComidas * prox;
+} * PecasComidasLL;
+
 /*Struct que guarda o estado do jogo , tal como o turno do jogador , a peça que está a ser segurada(caso esteja a ser premida a tecla ,
 que é da responsabilidade do bool isKeyPressedDown) e também a jogada do utilizador */
 typedef struct GameStruct{
@@ -74,6 +82,7 @@ typedef struct GameStruct{
     uint64_bit pieceCoords; //Guarda a posição de onde a peça que está a ser segurada veio , caso esteja
     CorPiece turnoJogador; //Guarda o turno do utilizador 
     TipoJogada jogada; //Guarda a jogada do utilizador
+    PecasComidasLL lastmoves;
 }GameStruct;
 
 
@@ -147,6 +156,7 @@ int dentroDoBotao(int mx , int my , int inf_x , int sup_x , int inf_y , int sup_
 int minimum(int n1,int n2);
 Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique);
 int pawnFirstRank(uint64_bit pos,CorPiece cor);
+void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor);
 
 
 
@@ -159,9 +169,9 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
 
 //Modulo moveMaker.c
 
-void atualizaJogada(EstadoJogo * estado , uint64_bit click);
+void atualizaJogada(GameStruct * game , uint64_bit click);
 void updateBitboard_ClickEvent(CorPiece turno,Pieces piece,EstadoJogo * estado,uint64_bit click);
-void undoMove(EstadoJogo * estado , uint64_bit click);
+void undoMove(GameStruct * game , uint64_bit click);
 
 
 

@@ -55,7 +55,7 @@ uint64_bit click_table_position(int mouseX , int mouseY){
     uint64_bit p = 0;
     int infHorizontal = 200 , supHorizontal = 1075 ,
         infVertical = 38 , supVertical = 913;
-    int tamanhoQuadrado = (supHorizontal - infHorizontal) / 8;
+    int tamanhoQuadrado = 125;
     int cx = calcPosClique(infHorizontal,supHorizontal,mouseX,tamanhoQuadrado,1) , 
         cy = calcPosClique(infVertical,supVertical,mouseY,tamanhoQuadrado,0);
     if(cx!=(-1) && cy != (-1)){
@@ -73,4 +73,14 @@ int pawnFirstRank(uint64_bit pos,CorPiece cor){
     else{
         return( 56 < postab && postab < 64);
     }
+}
+
+
+void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor){
+    PecasComidasLL novo = malloc(sizeof(struct PecasComidas));
+    novo->cor_piece = cor;
+    novo->pos_de_piece = pos_piece;
+    novo->tipo_piece = piece_comida;
+    novo->prox = *list;
+    *list = novo;
 }

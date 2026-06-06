@@ -46,7 +46,10 @@ SDL_Renderer * sdl_initializer(void){
     return renderer;
 }
 
+void freeLinkedList(PecasComidasLL list){
+    
+}
 
 void free_allocated_memory(GameStruct game , CChessSettings user){
-
+    freeLinkedList(game.lastmoves);
 }

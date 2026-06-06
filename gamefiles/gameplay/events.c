@@ -30,10 +30,10 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
     int mouseX = event.button.x , mouseY = event.button.y;
     uint64_bit click = click_table_position(mouseX,mouseY);
     if(click != 0 && isPseudoValidMove(game,click)){
-        atualizaJogada(&(game->estadoJogo),click);
+        atualizaJogada(game,click);
         game->jogada = check_or_mate(game);
         if(game->jogada==Invalid){
-            undoMove(&(game->estadoJogo),click);
+            undoMove(game,click);
         }
         else if(game->jogada == Checkmate) isCheckMate(game);
         else notInCheck(game);
