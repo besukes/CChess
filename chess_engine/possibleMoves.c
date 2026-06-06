@@ -58,6 +58,6 @@ int isPseudoValidMove(GameStruct * game, uint64_bit drop){
     uint64_bit pos_piece = game->estadoJogo.tabuleirojogo[cor][piece],
                pos_atacks = get_piece_attacks(pos_piece,piece,game),
                pos_mesma_cor = get_same_colour_bitboard(&(game->estadoJogo),cor);
-    int bool = ( (~pos_mesma_cor & (pos_atacks & drop) ) != 0);
+    int bool = (~pos_mesma_cor & (pos_atacks & drop) );
     return bool;
 }
