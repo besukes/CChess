@@ -201,3 +201,5 @@ uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites);
 TipoJogada check_or_mate(GameStruct * game);
 void isCheckMate(GameStruct * game);
 void notInCheck(GameStruct * game);
+uint64_bit shiftr(uint64_bit pos,int shift);
+uint64_bit shiftl(uint64_bit pos,int shift);
