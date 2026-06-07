@@ -10,7 +10,7 @@ uint64_bit get_king_moves(uint64_bit pos,uint64_bit bitboard_pieces){
 
 uint64_bit get_possible_pawn_attacks(uint64_bit pos,uint64_bit bitboard_pieces,CorPiece turno){
     if(pawnFirstRank(pos,turno)){
-        return ( ( ( (pos<<8) | (pos<<16) ) & ~bitboard_pieces ) | get_pawn_attacks(pos,turno));
+        return ( (pos<<8 & ~bitboard_pieces) | (pos<<16 & ~bitboard_pieces ) | get_pawn_attacks(pos,turno));
     }
     else{
         return ( ( (pos<<8)  & ~bitboard_pieces ) | get_pawn_attacks(pos,turno));
@@ -55,7 +55,7 @@ uint64_bit get_same_colour_bitboard(EstadoJogo * estado , CorPiece cor){
 int isPseudoValidMove(GameStruct * game, uint64_bit drop){
     Pieces piece = game->pieceSelecionada;
     CorPiece cor = game->turnoJogador;
-    uint64_bit pos_piece = game->estadoJogo.tabuleirojogo[cor][piece],
+    uint64_bit pos_piece = game->pieceCoords;
                pos_atacks = get_piece_attacks(pos_piece,piece,game),
                pos_mesma_cor = get_same_colour_bitboard(&(game->estadoJogo),cor);
     uint64_bit bool = (~pos_mesma_cor & (pos_atacks & drop) );
