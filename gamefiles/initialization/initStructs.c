@@ -22,6 +22,8 @@ EstadoJogo initEstadoJogo(void){
     es.checkMate = 0;
     es.checkBrancas = 0;
     es.checkPretas = 0;
+    es.canCastleBlack = 1;
+    es.canCastleWhite = 1;
     initTabuleiro(&(es.tabuleirojogo[0][0]),0);
     initTabuleiro(&(es.tabuleirojogo[1][0]),5);
     init_other_bitboards(&es);

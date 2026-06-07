@@ -3,7 +3,7 @@
 
 
 uint64_bit get_king_moves(uint64_bit pos,uint64_bit bitboard_pieces){
-
+    
 }
 
 
@@ -11,7 +11,7 @@ uint64_bit get_king_moves(uint64_bit pos,uint64_bit bitboard_pieces){
 uint64_bit get_possible_pawn_attacks(uint64_bit pos,uint64_bit bitboard_pieces,CorPiece turno,uint64_bit (*func)(uint64_bit,int)){
     if(pawnFirstRank(pos,turno)){
         uint64_bit fst_step = func(pos,8) & ~bitboard_pieces;
-        uint64_bit snd_step = fst_step & ( func(pos,16) & ~bitboard_pieces );
+        uint64_bit snd_step = (fst_step) ? ( func(pos,16) & ~bitboard_pieces ) : 0;
         return ( fst_step | snd_step | get_pawn_attacks(pos,turno));
     }
     else{

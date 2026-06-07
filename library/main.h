@@ -50,6 +50,8 @@ typedef struct EstadoJogo{
     int stalemate; //Informa se o jogo acabou em staleMate
     int checkBrancas; //Informa se o rei branco está em check
     int checkPretas; //Informa se o rei preto está em check
+    int canCastleWhite; //Informa se o rei branco pode dar castle
+    int canCastleBlack; //Informa se o rei preto pode dar castle
     uint64_bit tabuleirojogo[2][6]; //Guarda as informações do tabuleiro
     uint64_bit bitboard_brancas;
     uint64_bit bitboard_pretas;
