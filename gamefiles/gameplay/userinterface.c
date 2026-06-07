@@ -4,6 +4,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <stdio.h>
 
+
 void desenharPiece(Pieces tipoPiece , int linha , int coluna , CChessSettings * settings, int offset){
     SDL_Rect posicaoPeca = {125*coluna+200, 1080 - (125 * linha+167),125,125};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.chessPieces[tipoPiece + offset],NULL,&posicaoPeca);

@@ -32,6 +32,9 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
             game->isKeyPressedDown = 0;
             efetuaEventoSoltar(game,settings,event);
             if(game->jogada == Invalid) ;
+            else{
+                game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
+            }
             resetGrabbedPiece(game);
         }
     }

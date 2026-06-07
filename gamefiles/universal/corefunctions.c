@@ -39,7 +39,7 @@ int posTabuleiro(uint64_bit bitboard){
 
 int calcPosClique(int lower_border_limit , int upper_border_limit , int pos , int square_size , int type){
     int c = (type) ? 0 : 7;
-    for(int i = lower_border_limit ; i < upper_border_limit ; i+=square_size){
+    for(int i = lower_border_limit ; i <= upper_border_limit ; i+=square_size){
         if(i <= pos && pos < i + square_size){
             return c;
         }
@@ -68,10 +68,10 @@ uint64_bit click_table_position(int mouseX , int mouseY){
 int pawnFirstRank(uint64_bit pos,CorPiece cor){
     int postab = __builtin_ctzll(pos);
     if(cor==brancas){
-        return(0 <= postab && postab < 8);
+        return(8 <= postab && postab < 16);
     }
     else{
-        return( 56 < postab && postab < 64);
+        return( 48 <= postab && postab < 56);
     }
 }
 
