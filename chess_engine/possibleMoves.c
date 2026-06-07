@@ -8,12 +8,12 @@ uint64_bit get_king_moves(uint64_bit pos,uint64_bit bitboard_pieces){
 
 
 
-uint64_bit get_possible_pawn_attacks(uint64_bit pos,uint64_bit bitboard_pieces,CorPiece turno){
+uint64_bit get_possible_pawn_attacks(uint64_bit pos,uint64_bit bitboard_pieces,CorPiece turno,uint64_bit (*func)(uint64_bit,int)){
     if(pawnFirstRank(pos,turno)){
-        return ( (pos<<8 & ~bitboard_pieces) | (pos<<16 & ~bitboard_pieces ) | get_pawn_attacks(pos,turno));
+        return ( (func(pos,8) & ~bitboard_pieces) | (func(pos,16) & ~bitboard_pieces ) | get_pawn_attacks(pos,turno));
     }
     else{
-        return ( ( (pos<<8)  & ~bitboard_pieces ) | get_pawn_attacks(pos,turno));
+        return ( (func(pos,8)  & ~bitboard_pieces ) | get_pawn_attacks(pos,turno));
     }
 }
 
@@ -22,7 +22,9 @@ uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game){
     uint64_bit bitboardPieces = game->estadoJogo.bitboard_todas_pieces;
     switch(piece){
         case Pawn :
-            return get_possible_pawn_attacks(pos,bitboardPieces,game->turnoJogador);
+            CorPiece cor = game->turnoJogador;
+            uint64_bit (*func)(uint64_bit,int) function = (cor==brancas) ? &shiftl : &shiftr;
+            return get_possible_pawn_attacks(pos,bitboardPieces,cor,function);
         break;
         case Rook :
             return get_cross_attacks(pos,bitboardPieces);
