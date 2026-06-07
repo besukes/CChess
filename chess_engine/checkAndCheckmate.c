@@ -38,7 +38,7 @@ uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites){
     get_attacks(maxDistNorte,&shiftl,pos_limites,piece_pos,8,&atkN);
     get_attacks(maxDistSul,&shiftr,pos_limites,piece_pos,8,&atkS);
     get_attacks(maxDistOeste,&shiftr,pos_limites,piece_pos,1,&atkO);
-    get_attacks(maxDistEste,&shiftr,pos_limites,piece_pos,1,&atkE);
+    get_attacks(maxDistEste,&shiftl,pos_limites,piece_pos,1,&atkE);
     atk = atkN | atkS | atkO | atkE;
     return atk;
 }
