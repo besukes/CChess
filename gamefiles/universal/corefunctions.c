@@ -111,3 +111,18 @@ int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor){
                 is_open_path(game->estadoJogo.bitboard_todas_pieces,destino_long,game->estadoJogo.tabuleirojogo[cor][Rook]);
     return (  ( castelShort && game->estadoJogo.canCastle[cor][Short]) || (castelLong && game->estadoJogo.canCastle[cor][Long]) );
 }
+
+uint64_bit initQuadrado(void){
+    uint64_bit quadrado = 0;
+    quadrado|= (1ULL << A8);quadrado|= (1ULL << B8);quadrado|= (1ULL << C8);quadrado|= (1ULL << D8);quadrado|= (1ULL << E8);quadrado|= (1ULL << F8);
+                                        quadrado|= (1ULL << G8);quadrado|= (1ULL << H8);
+    quadrado|= (1ULL << A7);                                                                                                quadrado|= (1ULL << H7); 
+    quadrado|= (1ULL << A6);                                                                                                quadrado|= (1ULL << H6); 
+    quadrado|= (1ULL << A5);                                                                                                quadrado|= (1ULL << H5); 
+    quadrado|= (1ULL << A4);                                                                                                quadrado|= (1ULL << H4);                                  
+    quadrado|= (1ULL << A3);                                                                                                quadrado|= (1ULL << H3); 
+    quadrado|= (1ULL << A2);                                                                                                quadrado|= (1ULL << H2); 
+    quadrado|= (1ULL << A1);quadrado|= (1ULL << B1);quadrado|= (1ULL << C1);quadrado|= (1ULL << D1);quadrado|= (1ULL << E1);quadrado|= (1ULL << F1);
+                                        quadrado|= (1ULL << G1);quadrado|= (1ULL << H1);
+    return quadrado;
+}

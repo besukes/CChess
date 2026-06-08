@@ -18,6 +18,7 @@ uint64_bit shiftl(uint64_bit pos,int shift){
 
 
 void get_attacks(int max , uint64_bit (*func)(uint64_bit,int),uint64_bit pos_limites,uint64_bit pos_piece,int shift ,uint64_bit * atk){
+    *atk = 0;
     for(int i=1;i<=max ;i++){
         uint64_bit casa_atual = func(pos_piece,shift*i);
         *(atk) |= casa_atual;
@@ -29,6 +30,8 @@ void get_attacks(int max , uint64_bit (*func)(uint64_bit,int),uint64_bit pos_lim
 
 uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites){
     int indx_tab = posTabuleiro(piece_pos);
+    uint64_bit quadrado = initQuadrado();
+    pos_limites |= quadrado;
     int linha = indx_tab/8 , coluna = indx_tab % 8,
         maxDistNorte = 7-linha,
         maxDistSul= linha,
@@ -52,7 +55,7 @@ uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites){
         maxDistNoroeste = minimum(7-linha,coluna),
         maxDistSudeste = minimum(linha,7-coluna),
         maxDistSudoeste = minimum(linha,coluna);
-    uint64_bit atkNo,atkNe,atkSude,atkSudo ,atk= 0;
+    uint64_bit atkNo,atkNe,atkSude ,atkSudo,atk;
     get_attacks(maxDistNordeste,&shiftl,pos_limites,piece_pos,9,&atkNe);
     get_attacks(maxDistNoroeste,&shiftl,pos_limites,piece_pos,7,&atkNo);
     get_attacks(maxDistSudeste,&shiftr,pos_limites,piece_pos,7,&atkSude);

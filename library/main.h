@@ -164,6 +164,7 @@ int pawnFirstRank(uint64_bit pos,CorPiece cor);
 void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor);
 int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor);
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH);
+uint64_bit initQuadrado(void);
 
 
 
