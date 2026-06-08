@@ -65,10 +65,7 @@ uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites){
 
 uint64_bit get_pawn_attacks(uint64_bit piece_pos,CorPiece cor){
     uint64_bit at = 0 , colunaA = 0 , colunaH = 0;
-    for(int i=0;i<8;i++){
-        colunaA |= (1ULL<< (8*i));
-        colunaH |= (1ULL<< (8*i + 7));
-    }
+    getColunasAH(&colunaA,&colunaH);
     if(cor==brancas){
         at |= ((piece_pos<<9) & ~colunaA);
         at |= ((piece_pos<<7) & ~colunaH);
@@ -91,14 +88,14 @@ uint64_bit get_knight_attacks(uint64_bit piece_pos){
         colunaH |= (1ULL<< (8*i + 7));
         colunaG |= (1ULL<< (8*i + 6));
     }
-    at |= ((piece_pos<<6) & ~colunaA & ~colunaB);
-    at |= ((piece_pos<<15) & ~colunaA);
-    at |= ((piece_pos<<10) & ~colunaH & ~colunaG);
-    at |= ((piece_pos<<17) & ~colunaH);
-    at |= ((piece_pos>>6) & ~colunaG & ~colunaH);
-    at |= ((piece_pos>>15) & ~colunaH);
-    at |= ((piece_pos>>10) & ~colunaA & ~colunaB);
-    at |= ((piece_pos>>17) & ~colunaA);
+    at |= ((piece_pos & ~colunaA & ~colunaB )<<6);
+    at |= ((piece_pos & ~colunaA)<<15);
+    at |= ((piece_pos & ~colunaH & ~colunaG )<<10);
+    at |= ((piece_pos & ~colunaH)<<17);
+    at |= ((piece_pos & ~colunaG & ~colunaH)>>6);
+    at |= ((piece_pos& ~colunaH)>>15);
+    at |= ((piece_pos & ~colunaA & ~colunaB)>>10);
+    at |= ((piece_pos& ~colunaA)>>17);
     return at;
 }
 

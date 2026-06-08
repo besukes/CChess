@@ -41,6 +41,8 @@ typedef enum casas_board{
 //Representa a cor de uma dada peça
 typedef enum { brancas , pretas } CorPiece;
 
+//Representa os diferentes castle types
+typedef enum { Short , Long} CastleTypes;
 
 /*Struct que define um estado de um jogo de xadrez.
 Guarda as posições de todas as peças , bem como as posições afetadas por elas.
@@ -50,8 +52,7 @@ typedef struct EstadoJogo{
     int stalemate; //Informa se o jogo acabou em staleMate
     int checkBrancas; //Informa se o rei branco está em check
     int checkPretas; //Informa se o rei preto está em check
-    int canCastleWhite; //Informa se o rei branco pode dar castle
-    int canCastleBlack; //Informa se o rei preto pode dar castle
+    int canCastle[2][2]; //Matriz de possibilidades de dar castle
     uint64_bit tabuleirojogo[2][6]; //Guarda as informações do tabuleiro
     uint64_bit bitboard_brancas;
     uint64_bit bitboard_pretas;
@@ -159,6 +160,8 @@ int minimum(int n1,int n2);
 Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique);
 int pawnFirstRank(uint64_bit pos,CorPiece cor);
 void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor);
+int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor);
+void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH);
 
 
 
@@ -171,7 +174,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
 
 //Modulo moveMaker.c
 
-void atualizaJogada(GameStruct * game , uint64_bit click);
+void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles);
 void updateBitboard_ClickEvent(CorPiece turno,Pieces piece,EstadoJogo * estado,uint64_bit click);
 void undoMove(GameStruct * game , uint64_bit click);
 
@@ -179,7 +182,7 @@ void undoMove(GameStruct * game , uint64_bit click);
 
 //Modulo possibleMoves.c
 
-int isPseudoValidMove(GameStruct * game , uint64_bit drop);
+int isPseudoValidMove(GameStruct * game , uint64_bit drop,Boolean * castle);
 TipoJogada check_or_mate(GameStruct * game);
 
 

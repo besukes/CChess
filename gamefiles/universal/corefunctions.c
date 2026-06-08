@@ -84,3 +84,25 @@ void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit 
     novo->prox = *list;
     *list = novo;
 }
+
+void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH){
+    for(int i=0;i<8;i++){
+        *colunaA |= (1ULL<< (8*i));
+        *colunaH |= (1ULL<< (8*i + 7));
+    }
+}
+
+int is_open_path(uint64_bit bitboard_todas_pieces,uint64_bit path , uint64_bit extraPositions){
+    uint64_bit relevant_path = path & ~extraPositions;
+    return ( (bitboard_todas_pieces & relevant_path )== 0);
+}
+
+int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor){
+    uint64_t destino_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7)  : (1ULL << 62 | 1ULL<<63),
+             destino_long  = (cor == brancas) ? (1ULL << 2 | 1ULL <<1 | 1ULL)  : (1ULL << 58 | 1ULL << 57 | 1ULL << 56);
+    Boolean castelShort = (destino_short != 0) && 
+                is_open_path(game->estadoJogo.bitboard_todas_pieces,destino_short,game->estadoJogo.tabuleirojogo[cor][Rook]),
+            castelLong = (destino_long != 0) && 
+                is_open_path(game->estadoJogo.bitboard_todas_pieces,destino_long,game->estadoJogo.tabuleirojogo[cor][Rook]);
+    return (  ( castelShort && game->estadoJogo.canCastle[cor][Short]) || (castelLong && game->estadoJogo.canCastle[cor][Long]) );
+}

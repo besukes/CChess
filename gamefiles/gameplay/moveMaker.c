@@ -32,18 +32,53 @@ void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor
 }
 
 
-void atualizaJogada(GameStruct * game , uint64_bit click){
+void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit * mesmaCor){
+    int pos = posTabuleiro(click) , offset = 0 , shiftam = 3;
+    CorPiece turno = game->turnoJogador;
+    CastleTypes ct;
+    uint64_bit (*funcRook)(uint64_bit,int) = &shiftl,
+               (*funcKing)(uint64_bit,int) = &shiftr;
+    if(pos%8 > 4){
+        offset=7;ct = Short; funcRook = &shiftr; shiftam = 2; funcKing = &shiftl;
+    }
+    else ct = Long;
+    uint64_bit rooks = game->estadoJogo.tabuleirojogo[turno][Rook],
+               rook_de_castle = 1ULL<<(square + offset),
+               rook_shifted = funcRook(rook_de_castle,shiftam);
+
+    *mesmaCor = *mesmaCor & ~rooks;
+    game->estadoJogo.bitboard_todas_pieces &= ~rooks;
+
+    rooks = rook_shifted | (rooks & ~rook_de_castle);
+    game->estadoJogo.tabuleirojogo[turno][Rook] = rooks;
+    uint64_bit click_shifted = funcKing(rook_shifted,1);
+
+    *mesmaCor |= (rooks | click );
+    game->estadoJogo.bitboard_todas_pieces |= (rooks | click);
+    game->estadoJogo.tabuleirojogo[turno][King] = click_shifted;
+}
+
+
+void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles){
     CorPiece turno = game->turnoJogador;
     uint64_bit * bitboard_cor_oposta , * bitboard_cor_turno;
+    int square;
         if(turno==brancas){
             bitboard_cor_oposta = &(game->estadoJogo.bitboard_pretas);
             bitboard_cor_turno = &(game->estadoJogo.bitboard_brancas);
+            square=0;
         }
         else{
             bitboard_cor_oposta = &(game->estadoJogo.bitboard_brancas);
             bitboard_cor_turno = &(game->estadoJogo.bitboard_pretas);
+            square=56;
         }
-    if(*bitboard_cor_oposta & click){
+    if(castles){
+        castle_King(game,click,square,bitboard_cor_turno);
+        game->estadoJogo.canCastle[turno][Short] = 0;
+        game->estadoJogo.canCastle[turno][Long] = 0;
+    }
+    else if(*bitboard_cor_oposta & click){
         fetch_change_board(game,click,bitboard_cor_turno,bitboard_cor_oposta);
     }
     else{
