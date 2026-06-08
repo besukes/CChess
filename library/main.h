@@ -49,8 +49,7 @@ Guarda também informações sobre se um dado king está em check/checkmate ou n
 typedef struct EstadoJogo{
     int checkMate; //Informa se um rei está em checkmate (game over)
     int stalemate; //Informa se o jogo acabou em staleMate
-    int checkBrancas; //Informa se o rei branco está em check
-    int checkPretas; //Informa se o rei preto está em check
+    int king_in_check[2]; //Informa se o reis estão em check
     int canCastle[2][2]; //Matriz de possibilidades de dar castle
     uint64_bit enpassant; //Guarda a posição possível de se fazer enpassant
     uint64_bit tabuleirojogo[2][6]; //Guarda as informações do tabuleiro
@@ -207,7 +206,7 @@ uint64_bit get_pawn_attacks(uint64_bit piece_pos,CorPiece cor);
 uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites);
 uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites);
 TipoJogada check_or_mate(GameStruct * game);
-void isCheckMate(GameStruct * game);
+int isCheckMate(EstadoJogo * estado , uint64_bit pos_king , uint64_bit cor);
 void notInCheck(GameStruct * game);
 uint64_bit shiftr(uint64_bit pos,int shift);
 uint64_bit shiftl(uint64_bit pos,int shift);

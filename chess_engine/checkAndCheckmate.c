@@ -122,11 +122,21 @@ void notInCheck(GameStruct * game){
 }
 
 
-void isCheckMate(GameStruct * game){
+int isCheckMate(EstadoJogo * estado , uint64_bit pos_king , uint64_bit cor){
 
 }
 
 
 TipoJogada check_or_mate(GameStruct * game){
-
+    TipoJogada j = Valid;
+    CorPiece turno_op = (game->turnoJogador) ? brancas : pretas;
+    uint64_bit pos_king_op = game->estadoJogo.tabuleirojogo[turno_op][King];
+    if(is_in_check(&(game->estadoJogo),pos_king_op,turno_op)){
+        game->estadoJogo.king_in_check[turno_op] = 1;
+        if(isCheckMate(&(game->estadoJogo),pos_king_op,turno_op)){
+            j = Checkmate;
+        }
+        else j = Invalid;
+    }
+    return j;
 }

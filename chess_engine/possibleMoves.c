@@ -83,5 +83,5 @@ int isPseudoValidMove(GameStruct * game, uint64_bit drop , Boolean * castle , Bo
     uint64_bit jogada = (~pos_mesma_cor & (pos_atacks & drop));
     *castle = game->pieceSelecionada == King && is_castelling_king(pos_piece,game,cor);
     *enpassant = can_en_passant(game,drop,cor);
-    return (jogada != 0 || *castle);
+    return (jogada != 0 || *castle || *enpassant);
 }

@@ -2,15 +2,20 @@
 #include <stdio.h>
 
 
+
 void undoMove(GameStruct * game , uint64_bit click){
 
 }
+
+
 
 void efetuaJogada(uint64_bit * selected_piece , uint64_bit * todas_pieces , uint64_bit original_coords , uint64_bit click , uint64_bit * mesmacor){
     *mesmacor = ( ( (*mesmacor) & (~original_coords) ) | click);
     *selected_piece = ( ( (*selected_piece) & (~original_coords) ) | click);
     *todas_pieces = ( ( (*todas_pieces) & (~original_coords)) | click);
 }
+
+
 
 void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor , uint64_bit * corOposta){
     CorPiece turno = game->turnoJogador;
@@ -32,6 +37,7 @@ void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor
 }
 
 
+
 void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit * mesmaCor){
     int pos = posTabuleiro(click) , offset = 0 , shiftam = 3;
     CorPiece turno = game->turnoJogador;
@@ -51,8 +57,8 @@ void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit *
     game->estadoJogo.tabuleirojogo[turno][Rook] = rooks;
     uint64_bit click_shifted = funcKing(rook_shifted,1);
 
-    *mesmaCor |= (rooks | click );
-    game->estadoJogo.bitboard_todas_pieces |= (rooks | click);
+    *mesmaCor |= rooks;
+    game->estadoJogo.bitboard_todas_pieces |= rooks;
     game->estadoJogo.tabuleirojogo[turno][King] = click_shifted;
 }
 

@@ -26,6 +26,12 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
     }
 }
 
+
+void end_of_game(GameStruct * game){
+    
+}
+
+
 void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event){
     int mouseX = event.button.x , mouseY = event.button.y;
     Boolean castles = 0, enpassant = 0;
@@ -36,7 +42,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
         if(game->jogada==Invalid){
             undoMove(game,click);
         }
-        else if(game->jogada == Checkmate) isCheckMate(game);
+        else if(game->jogada == Checkmate) end_of_game(game);
         else {
             notInCheck(game);
             update_en_passant(game);

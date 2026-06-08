@@ -20,8 +20,8 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer){
 EstadoJogo initEstadoJogo(void){
     EstadoJogo es;
     es.checkMate = 0;
-    es.checkBrancas = 0;
-    es.checkPretas = 0;
+    es.king_in_check[brancas] = 0;
+    es.king_in_check[pretas] = 0;
     for(int i=0;i<2;i++){
         es.canCastle[i][0] = 1;
         es.canCastle[i][1] = 1;
