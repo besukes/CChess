@@ -3,13 +3,10 @@
 
 
 void undoPieceComida(GameStruct * game , uint64_bit * bb_cor_piece_comida, uint64_bit click){
-    if(game->lastmoves == NULL) printf("[ERROR] in function undoPieceComida\n");
-    else{
         uint64_bit pos_ant = game->lastmoves->pos_de_piece;
         game->estadoJogo.tabuleirojogo[game->lastmoves->cor_piece][game->lastmoves->tipo_piece] |= pos_ant;
         *bb_cor_piece_comida |= pos_ant;
         game->estadoJogo.bitboard_todas_pieces |= pos_ant;
-    }
 }
 
 
@@ -30,6 +27,6 @@ void undoMove(GameStruct * game , uint64_bit click){
         cor_oposta = &(game->estadoJogo.bitboard_brancas);
     }
     undoPiece_move(game,mesma_cor,cor_oposta,click);
-    undoPieceComida(game,cor_oposta,click);
+    if(game->lastmoves == NULL || game->lastmoves->pos_de_piece == click) undoPieceComida(game,cor_oposta,click);
     game->estadoJogo.king_in_check[game->turnoJogador] = 0;
 }
