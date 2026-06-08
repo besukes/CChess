@@ -74,7 +74,7 @@ uint64_bit get_same_colour_bitboard(EstadoJogo * estado , CorPiece cor){
 }
 
 
-int isPseudoValidMove(GameStruct * game, uint64_bit drop , Boolean * castle){
+int isPseudoValidMove(GameStruct * game, uint64_bit drop , Boolean * castle , Boolean * enpassant){
     Pieces piece = game->pieceSelecionada;
     CorPiece cor = game->turnoJogador;
     uint64_bit pos_piece = game->pieceCoords,
@@ -82,5 +82,6 @@ int isPseudoValidMove(GameStruct * game, uint64_bit drop , Boolean * castle){
                pos_mesma_cor = get_same_colour_bitboard(&(game->estadoJogo),cor);
     uint64_bit jogada = (~pos_mesma_cor & (pos_atacks & drop));
     *castle = game->pieceSelecionada == King && is_castelling_king(pos_piece,game,cor);
+    *enpassant = can_en_passant(game,drop,cor);
     return (jogada != 0 || *castle);
 }

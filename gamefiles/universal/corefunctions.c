@@ -92,10 +92,15 @@ void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH){
     }
 }
 
+
+
 int is_open_path(uint64_bit bitboard_todas_pieces,uint64_bit path , uint64_bit extraPositions){
     uint64_bit relevant_path = path & ~extraPositions;
     return ( (bitboard_todas_pieces & relevant_path )== 0);
 }
+
+
+
 
 int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor){
     uint64_t destino_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7)  : (1ULL << 62 | 1ULL<<63),

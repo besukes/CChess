@@ -3,7 +3,6 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
-
 typedef int Boolean; //Forma mais intuitiva de perceber quando as variáveis são usadas como valores lógicos.
 
 /*Coordenadas cartesianas*/
@@ -53,10 +52,11 @@ typedef struct EstadoJogo{
     int checkBrancas; //Informa se o rei branco está em check
     int checkPretas; //Informa se o rei preto está em check
     int canCastle[2][2]; //Matriz de possibilidades de dar castle
+    uint64_bit enpassant; //Guarda a posição possível de se fazer enpassant
     uint64_bit tabuleirojogo[2][6]; //Guarda as informações do tabuleiro
-    uint64_bit bitboard_brancas;
-    uint64_bit bitboard_pretas;
-    uint64_bit bitboard_todas_pieces;
+    uint64_bit bitboard_brancas; // Bitboard das peças brancas
+    uint64_bit bitboard_pretas; // Bitboard das peças pretas
+    uint64_bit bitboard_todas_pieces; //Bitboard que guarda as posições ocupadas por todas as peças no jogo
 }EstadoJogo;
 
 
@@ -109,6 +109,9 @@ typedef struct CChessSettings{
     UserScreen screenAtual; //Tela atual em que o utilizador se encontra
     int ticks; //Número de ticks que já passaram desde o começo do jogo (importante para o timer)
 }CChessSettings;
+
+
+typedef uint64_bit (*ShiftFunction)(uint64_bit,int);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////     MODULOS     ///////////////////////////////////////////////////////////////////////////
@@ -174,7 +177,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
 
 //Modulo moveMaker.c
 
-void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles);
+void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean enpassant);
 void updateBitboard_ClickEvent(CorPiece turno,Pieces piece,EstadoJogo * estado,uint64_bit click);
 void undoMove(GameStruct * game , uint64_bit click);
 
@@ -182,7 +185,7 @@ void undoMove(GameStruct * game , uint64_bit click);
 
 //Modulo possibleMoves.c
 
-int isPseudoValidMove(GameStruct * game , uint64_bit drop,Boolean * castle);
+int isPseudoValidMove(GameStruct * game , uint64_bit drop,Boolean * castle,Boolean * enpassant);
 TipoJogada check_or_mate(GameStruct * game);
 
 
@@ -208,3 +211,13 @@ void isCheckMate(GameStruct * game);
 void notInCheck(GameStruct * game);
 uint64_bit shiftr(uint64_bit pos,int shift);
 uint64_bit shiftl(uint64_bit pos,int shift);
+
+
+
+
+
+//Modulo en_passant.c
+
+void update_en_passant(GameStruct * game);
+Boolean can_en_passant(GameStruct * game , uint64_bit drop,CorPiece cor);
+void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * mesma_cor,ShiftFunction ep);

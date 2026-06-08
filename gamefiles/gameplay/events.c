@@ -28,16 +28,19 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
 
 void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event){
     int mouseX = event.button.x , mouseY = event.button.y;
-    Boolean castles;
+    Boolean castles = 0, enpassant = 0;
     uint64_bit click = click_table_position(mouseX,mouseY);
-    if(click != 0 && isPseudoValidMove(game,click,&castles)){
-        atualizaJogada(game,click,castles);
+    if(click != 0 && isPseudoValidMove(game,click,&castles,&enpassant)){
+        atualizaJogada(game,click,castles,enpassant);
         game->jogada = check_or_mate(game);
         if(game->jogada==Invalid){
             undoMove(game,click);
         }
         else if(game->jogada == Checkmate) isCheckMate(game);
-        else notInCheck(game);
+        else {
+            notInCheck(game);
+            update_en_passant(game);
+        }
     }
     else{
         game->jogada = Invalid;

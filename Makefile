@@ -14,7 +14,8 @@ SRC =	gamefiles/universal/corefunctions.c \
 		gamefiles/initialization/initTabuleiro.c \
 		library/loadAssets.c \
 		chess_engine/possibleMoves.c \
-		chess_engine/checkAndCheckmate.c
+		chess_engine/checkAndCheckmate.c \
+		chess_engine/en_passant.c
 
 OBJ = $(SRC:%.c=build/%.o)
 
