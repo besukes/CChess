@@ -65,16 +65,6 @@ uint64_bit click_table_position(int mouseX , int mouseY){
 }
 
 
-int pawnFirstRank(uint64_bit pos,CorPiece cor){
-    int postab = __builtin_ctzll(pos);
-    if(cor==brancas){
-        return(8 <= postab && postab < 16);
-    }
-    else{
-        return( 48 <= postab && postab < 56);
-    }
-}
-
 
 void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor){
     PecasComidasLL novo = malloc(sizeof(struct PecasComidas));
@@ -85,6 +75,8 @@ void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit 
     *list = novo;
 }
 
+
+
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH){
     for(int i=0;i<8;i++){
         *colunaA |= (1ULL<< (8*i));
@@ -94,23 +86,6 @@ void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH){
 
 
 
-int is_open_path(uint64_bit bitboard_todas_pieces,uint64_bit path , uint64_bit extraPositions){
-    uint64_bit relevant_path = path & ~extraPositions;
-    return ( (bitboard_todas_pieces & relevant_path )== 0);
-}
-
-
-
-
-int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor){
-    uint64_t destino_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7)  : (1ULL << 62 | 1ULL<<63),
-             destino_long  = (cor == brancas) ? (1ULL << 2 | 1ULL <<1 | 1ULL)  : (1ULL << 58 | 1ULL << 57 | 1ULL << 56);
-    Boolean castelShort = (destino_short != 0) && 
-                is_open_path(game->estadoJogo.bitboard_todas_pieces,destino_short,game->estadoJogo.tabuleirojogo[cor][Rook]),
-            castelLong = (destino_long != 0) && 
-                is_open_path(game->estadoJogo.bitboard_todas_pieces,destino_long,game->estadoJogo.tabuleirojogo[cor][Rook]);
-    return (  ( castelShort && game->estadoJogo.canCastle[cor][Short]) || (castelLong && game->estadoJogo.canCastle[cor][Long]) );
-}
 
 uint64_bit initQuadrado(void){
     uint64_bit quadrado = 0;
@@ -125,4 +100,21 @@ uint64_bit initQuadrado(void){
     quadrado|= (1ULL << A1);quadrado|= (1ULL << B1);quadrado|= (1ULL << C1);quadrado|= (1ULL << D1);quadrado|= (1ULL << E1);quadrado|= (1ULL << F1);
                                         quadrado|= (1ULL << G1);quadrado|= (1ULL << H1);
     return quadrado;
+}
+
+
+
+
+uint64_bit get_same_colour_bitboard(EstadoJogo * estado , CorPiece cor){
+    if(cor==brancas) return estado->bitboard_brancas;
+    else return estado->bitboard_pretas;
+}
+
+
+
+
+void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,int),uint64_bit pos , uint64_bit colunaA , uint64_bit colunaH){
+        *atk |= func(pos,8);
+        *atk |= func(pos&~colunaA,7);
+        *atk |= func(pos&~colunaA,9);
 }

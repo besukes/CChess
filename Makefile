@@ -4,6 +4,7 @@ CFLAGS = -Wall -ggdb -I. -Ilibrary -Igamefiles/gameplay -Ichess_engine
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 
 SRC =	gamefiles/universal/corefunctions.c \
+		gamefiles/universal/chess_important.c \
 		gamefiles/gameplay/main.c \
 		gamefiles/gameplay/events.c \
 		gamefiles/gameplay/handleGameplay.c \
@@ -15,7 +16,7 @@ SRC =	gamefiles/universal/corefunctions.c \
 		library/loadAssets.c \
 		chess_engine/possibleMoves.c \
 		chess_engine/checkAndCheckmate.c \
-		chess_engine/en_passant.c
+		chess_engine/en_passant.c \
 
 OBJ = $(SRC:%.c=build/%.o)
 

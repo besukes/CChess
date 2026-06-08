@@ -4,6 +4,7 @@
 #include <SDL2/SDL_mixer.h>
 
 
+
 void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event event){
    SDL_Point point = {settings->posMouseX,settings->posMouseY};
    SDL_Rect botaoJogar = {700,400,500,100};
@@ -16,15 +17,18 @@ void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event event){
    }
 }
 
+
 void resetGrabbedPiece(GameStruct * game){
     
 }
+
 
 void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event){
     if(event.type == SDL_MOUSEBUTTONDOWN){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown ==0){
             game->isKeyPressedDown = 1;
             efetuaEventoClique(game,settings,event);
+            game->jogada = Valid;
         }
     }
     else if(event.type == SDL_MOUSEBUTTONUP){

@@ -38,7 +38,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
     uint64_bit click = click_table_position(mouseX,mouseY);
     if(click != 0 && isPseudoValidMove(game,click,&castles,&enpassant)){
         atualizaJogada(game,click,castles,enpassant);
-        game->jogada = check_or_mate(game);
+        game->jogada = check_or_mate(game,castles,click);
         if(game->jogada==Invalid){
             undoMove(game,click);
         }
