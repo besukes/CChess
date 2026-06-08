@@ -30,8 +30,7 @@ void get_attacks(int max , uint64_bit (*func)(uint64_bit,int),uint64_bit pos_lim
 
 uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites){
     int indx_tab = posTabuleiro(piece_pos);
-    uint64_bit quadrado = initQuadrado();
-    pos_limites |= quadrado;
+    pos_limites |= initQuadrado();
     int linha = indx_tab/8 , coluna = indx_tab % 8,
         maxDistNorte = 7-linha,
         maxDistSul= linha,
@@ -50,6 +49,7 @@ uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites){
 
 uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites){
     int indx_tab = posTabuleiro(piece_pos);
+    pos_limites |= initQuadrado();
     int linha = indx_tab/8 , coluna = indx_tab % 8,
         maxDistNordeste = minimum(7-linha,7-coluna),
         maxDistNoroeste = minimum(7-linha,coluna),
