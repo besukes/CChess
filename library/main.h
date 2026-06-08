@@ -181,7 +181,6 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
 
 void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean enpassant);
 void updateBitboard_ClickEvent(CorPiece turno,Pieces piece,EstadoJogo * estado,uint64_bit click);
-void undoMove(GameStruct * game , uint64_bit click);
 
 
 
@@ -237,3 +236,6 @@ uint64_bit shiftr(uint64_bit pos,int shift);
 uint64_bit shiftl(uint64_bit pos,int shift);
 
 
+//Modulo undoMove.c
+
+void undoMove(GameStruct * game , uint64_bit click);

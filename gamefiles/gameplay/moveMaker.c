@@ -4,11 +4,6 @@
 
 
 
-void undoMove(GameStruct * game , uint64_bit click){
-
-}
-
-
 
 void efetuaJogada(uint64_bit * selected_piece , uint64_bit * todas_pieces , uint64_bit original_coords , uint64_bit click , uint64_bit * mesmacor){
     *mesmacor = ( ( (*mesmacor) & (~original_coords) ) | click);
