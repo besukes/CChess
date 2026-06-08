@@ -10,6 +10,7 @@ SRC =	gamefiles/universal/corefunctions.c \
 		gamefiles/gameplay/handleGameplay.c \
 		gamefiles/gameplay/userinterface.c	\
 		gamefiles/gameplay/moveMaker.c \
+		gamefiles/gameplay/undoMove.c \
 		gamefiles/initialization/startAndCleanup.c \
 		gamefiles/initialization/initStructs.c \
 		gamefiles/initialization/initTabuleiro.c \
