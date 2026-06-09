@@ -29,14 +29,14 @@ void notInCheck(GameStruct * game){
 
 int isCheckMate(GameStruct * game , uint64_bit pos_king , uint64_bit cor){
     int pos_tab = 0 , in_check = 1;
+    uint64_bit same_colour = get_same_colour_bitboard(&(game->estadoJogo),cor);
     for(int i=0;i<6 && in_check;i++){
         pos_tab = 0;
         uint64_bit tab_piece = game->estadoJogo.tabuleirojogo[cor][i];
         while(tab_piece !=0 && in_check){
             if(tab_piece & 1ULL){
                 uint64_bit pos_piece = (1ULL<<pos_tab);
-                uint64_bit pieces_move = get_piece_attacks(pos_piece,(Pieces)i,game),
-                           same_colour = get_same_colour_bitboard(&(game->estadoJogo),cor);
+                uint64_bit pieces_move = get_piece_attacks(pos_piece,(Pieces)i,game);
                 uint64_bit tries = pieces_move & ~same_colour;
                 while( tries !=0 && in_check){
                     Boolean castles = 0 , enpassant = 0;
@@ -65,11 +65,14 @@ TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click){
     CorPiece turno = game->turnoJogador;
     CorPiece turno_op = (turno) ? brancas : pretas;
     uint64_bit pos_king_op = game->estadoJogo.tabuleirojogo[turno_op][King];
-    if(is_in_check(&(game->estadoJogo),game->estadoJogo.tabuleirojogo[turno][King],turno) || invalidCastle(game,castles,click)){
+    Boolean check_op = is_in_check(&(game->estadoJogo),pos_king_op,turno_op);
+    if(check_op) game->estadoJogo.king_in_check[turno_op] = 1;
+    if(is_in_check(&(game->estadoJogo),game->estadoJogo.tabuleirojogo[turno][King],turno)){
         game->estadoJogo.king_in_check[turno] = 1;
         j = Invalid;
     }
-    else if(is_in_check(&(game->estadoJogo),pos_king_op,turno_op) && isCheckMate(game,pos_king_op,turno_op)) j = Checkmate;
+    else if(invalidCastle(game,castles,click)) j = Invalid;
+    else if(check_op && isCheckMate(game,pos_king_op,turno_op)) j = Checkmate;
     else{
         game->estadoJogo.king_in_check[turno] = 0;
         verifica_direito_castle(game,turno);
