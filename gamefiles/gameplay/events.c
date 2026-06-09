@@ -42,7 +42,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
         if(game->jogada==Invalid){
             undoMove(game,click);
         }
-        else if(game->jogada == Checkmate) end_of_game(game);
+        else if(game->jogada == Checkmate) settings->screenAtual = WinScreen;
         else {
             notInCheck(game);
             update_en_passant(game);

@@ -8,16 +8,21 @@ SRC =	gamefiles/universal/corefunctions.c \
 		gamefiles/gameplay/main.c \
 		gamefiles/gameplay/events.c \
 		gamefiles/gameplay/handleGameplay.c \
-		gamefiles/gameplay/userinterface.c	\
 		gamefiles/gameplay/moveMaker.c \
 		gamefiles/gameplay/undoMove.c \
 		gamefiles/initialization/startAndCleanup.c \
 		gamefiles/initialization/initStructs.c \
 		gamefiles/initialization/initTabuleiro.c \
+		gamefiles/gameplay/userinterface/draw_pieces.c \
+		gamefiles/gameplay/userinterface/game_screen.c \
+		gamefiles/gameplay/userinterface/menu.c \
+		gamefiles/gameplay/userinterface/themes.c \
+		gamefiles/gameplay/userinterface/win_screen.c \
 		library/loadAssets.c \
 		chess_engine/possibleMoves.c \
 		chess_engine/checkAndCheckmate.c \
 		chess_engine/en_passant.c \
+		chess_engine/castle_logic.c 
 
 OBJ = $(SRC:%.c=build/%.o)
 

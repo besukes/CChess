@@ -19,4 +19,5 @@ void initTexturasJogo(AssetsCChess * assets,SDL_Renderer * sdl_renderer){
     assets->miscTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/misc/menu.png");
     assets->miscTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/pieces/1.png");
     assets->tabTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/chessTableTest.png");
+    assets->tabTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/firsttab.png");
 }

@@ -190,6 +190,7 @@ uint64_bit get_knight_attacks(uint64_bit piece_pos);
 uint64_bit get_pawn_attacks(uint64_bit piece_pos,CorPiece cor);
 uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites);
 uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites);
+uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game);
 
 
 
@@ -208,7 +209,7 @@ void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettin
 //Modulo checkAndCheckmate.c
 
 TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click);
-int isCheckMate(EstadoJogo * estado , uint64_bit pos_king , uint64_bit cor);
+int isCheckMate(GameStruct * game , uint64_bit pos_king , uint64_bit cor);
 void notInCheck(GameStruct * game);
 
 
@@ -246,3 +247,40 @@ void undoMove(GameStruct * game , uint64_bit click);
 int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor , uint64_bit drop);
 int invalidCastle(GameStruct * game , Boolean castles , uint64_bit click);
 void verifica_direito_castle(GameStruct * game ,CorPiece turno);
+
+
+
+
+//Modulo draw_pieces.c
+
+void desenharPiece(Pieces tipoPiece , int linha , int coluna , CChessSettings * settings, int offset);
+void desenhaTipoPiece(uint64_bit pos_pieces,Pieces tipoPiece , CChessSettings * settings, GameStruct * game, int offset);
+void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettings * settings , int offset);
+
+
+
+
+//Modulo game_screen.c
+
+void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event);
+
+
+
+
+
+//Modulo menu.c
+
+void desenhaInterfaceMenu(CChessSettings * settings,SDL_Event event);
+
+
+
+
+//Modulo themes.c
+
+void desenhaMenuThemes(CChessSettings * settings,SDL_Event event);
+
+
+
+//Modulo win_screen.c
+
+void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event);
