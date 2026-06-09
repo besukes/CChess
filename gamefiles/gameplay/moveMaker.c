@@ -46,14 +46,14 @@ void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit *
                rook_de_castle = 1ULL<<(square + offset),
                rook_shifted = funcRook(rook_de_castle,shiftam);
 
-    *mesmaCor = *mesmaCor & ~rooks;
+    *mesmaCor = *mesmaCor & ~rooks & ~game->estadoJogo.tabuleirojogo[turno][King];
     game->estadoJogo.bitboard_todas_pieces &= ~rooks;
 
     rooks = rook_shifted | (rooks & ~rook_de_castle);
     game->estadoJogo.tabuleirojogo[turno][Rook] = rooks;
     uint64_bit click_shifted = funcKing(rook_shifted,1);
 
-    *mesmaCor |= rooks;
+    *mesmaCor |= (rooks | click_shifted);
     game->estadoJogo.bitboard_todas_pieces |= rooks;
     game->estadoJogo.tabuleirojogo[turno][King] = click_shifted;
 }
@@ -94,7 +94,7 @@ void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean
         uint64_bit * bit_piece = &(game->estadoJogo.tabuleirojogo[turno][game->pieceSelecionada]),
                    * bit_global = &(game->estadoJogo.bitboard_todas_pieces);
         efetuaJogada(bit_piece,bit_global,game->pieceCoords,click,bitboard_cor_turno);
-    }   
+    } 
 }
 
 

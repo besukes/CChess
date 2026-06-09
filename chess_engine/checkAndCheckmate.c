@@ -20,7 +20,11 @@ Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor){
 
 
 void notInCheck(GameStruct * game){
-
+    CorPiece turno = game->turnoJogador;
+    if(game->pieceSelecionada == King){
+        game->estadoJogo.canCastle[turno][Short] = 0;
+        game->estadoJogo.canCastle[turno][Long] = 0;
+    }
 }
 
 

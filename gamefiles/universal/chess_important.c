@@ -30,14 +30,15 @@ int is_open_castle_path(uint64_bit bitboard_todas_pieces,uint64_bit path , uint6
 }
 
 
-int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor){
+int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor, uint64_bit drop){
     uint64_t destino_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7)  : (1ULL << 62 | 1ULL<<63),
              destino_long  = (cor == brancas) ? (1ULL << 2 | 1ULL <<1 | 1ULL)  : (1ULL << 58 | 1ULL << 57 | 1ULL << 56);
-    Boolean castelShort = (destino_short != 0) && 
+    Boolean castelShort = ( (destino_short & drop) != 0) && 
                 is_open_castle_path(game->estadoJogo.bitboard_todas_pieces,destino_short,game->estadoJogo.tabuleirojogo[cor][Rook]),
-            castelLong = (destino_long != 0) && 
+            castelLong = ( (destino_long & drop) != 0) && 
                 is_open_castle_path(game->estadoJogo.bitboard_todas_pieces,destino_long,game->estadoJogo.tabuleirojogo[cor][Rook]);
-    return (  ( castelShort && game->estadoJogo.canCastle[cor][Short]) || (castelLong && game->estadoJogo.canCastle[cor][Long]) );
+    return (                                      !game->estadoJogo.king_in_check[cor] &&
+            ( (castelShort && game->estadoJogo.canCastle[cor][Short]) || (castelLong && game->estadoJogo.canCastle[cor][Long]) ) );
 }
 
 

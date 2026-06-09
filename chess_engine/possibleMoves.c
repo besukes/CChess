@@ -157,7 +157,7 @@ int isPseudoValidMove(GameStruct * game, uint64_bit drop , Boolean * castle , Bo
                pos_atacks = get_piece_attacks(pos_piece,piece,game),
                pos_mesma_cor = get_same_colour_bitboard(&(game->estadoJogo),cor);
     uint64_bit jogada = (~pos_mesma_cor & (pos_atacks & drop));
-    *castle = game->pieceSelecionada == King && is_castelling_king(pos_piece,game,cor);
+    *castle = game->pieceSelecionada == King && is_castelling_king(pos_piece,game,cor,drop);
     *enpassant = can_en_passant(game,drop,cor);
     return (jogada != 0 || *castle || *enpassant);
 }

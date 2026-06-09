@@ -230,10 +230,11 @@ void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * m
 //Modulo chess_important.c
 
 int pawnFirstRank(uint64_bit pos,CorPiece cor);
-int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor);
+int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor , uint64_bit drop);
 int invalidCastle(GameStruct * game , Boolean castles , uint64_bit click);
 uint64_bit shiftr(uint64_bit pos,int shift);
 uint64_bit shiftl(uint64_bit pos,int shift);
+
 
 
 //Modulo undoMove.c
