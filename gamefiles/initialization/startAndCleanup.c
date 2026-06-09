@@ -50,6 +50,6 @@ void freeLinkedList(PecasComidasLL list){
     
 }
 
-void free_allocated_memory(GameStruct game , CChessSettings user){
-    freeLinkedList(game.lastmoves);
+void free_allocated_memory(GameStruct * game , CChessSettings * user){
+    freeLinkedList(game->lastmoves);
 }

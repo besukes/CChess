@@ -49,6 +49,6 @@ int main(void){
     CChessSettings settings = initCChessSettings(sdl_renderer);
     GameStruct game = initGameStruct(sdl_renderer);
     interfaceCChess(&game,&settings);
-    free_allocated_memory(game,settings);
+    free_allocated_memory(&game,&settings);
     return 0;
 }

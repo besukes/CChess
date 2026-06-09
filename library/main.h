@@ -148,7 +148,7 @@ void handleWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event even
 //Modulo startAndCleanup.c
 
 SDL_Renderer * sdl_initializer(void);
-void free_allocated_memory(GameStruct game , CChessSettings user);
+void free_allocated_memory(GameStruct * game , CChessSettings * user);
 
 
 
@@ -162,8 +162,6 @@ int minimum(int n1,int n2);
 Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique);
 void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor);
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH);
-uint64_bit initQuadrado(void);
-uint64_bit get_same_colour_bitboard(EstadoJogo * estado , CorPiece cor);
 void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,int),uint64_bit pos , uint64_bit colunaA , uint64_bit colunaH);
 
 
@@ -230,13 +228,21 @@ void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * m
 //Modulo chess_important.c
 
 int pawnFirstRank(uint64_bit pos,CorPiece cor);
-int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor , uint64_bit drop);
-int invalidCastle(GameStruct * game , Boolean castles , uint64_bit click);
 uint64_bit shiftr(uint64_bit pos,int shift);
 uint64_bit shiftl(uint64_bit pos,int shift);
+uint64_bit get_same_colour_bitboard(EstadoJogo * estado , CorPiece cor);
+uint64_bit initQuadrado(void);
 
 
 
 //Modulo undoMove.c
 
 void undoMove(GameStruct * game , uint64_bit click);
+
+
+
+//Modulo castle_logic.c
+
+int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor , uint64_bit drop);
+int invalidCastle(GameStruct * game , Boolean castles , uint64_bit click);
+void verifica_direito_castle(GameStruct * game ,CorPiece turno);

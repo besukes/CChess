@@ -25,8 +25,10 @@ void notInCheck(GameStruct * game){
 
 
 int isCheckMate(EstadoJogo * estado , uint64_bit pos_king , uint64_bit cor){
-
+    return 0;
 }
+
+
 
 
 TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click){
@@ -39,7 +41,9 @@ TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click){
         j = Invalid;
     }
     else if(isCheckMate(&(game->estadoJogo),pos_king_op,turno_op)) j = Checkmate;
-    else if(game->pieceSelecionada == King){
+    else{
+        game->estadoJogo.king_in_check[turno] = 0;
+        verifica_direito_castle(game,turno);
         game->estadoJogo.canCastle[turno][Short] = 0;
         game->estadoJogo.canCastle[turno][Long] = 0;
     }
