@@ -6,10 +6,14 @@
 
 
 
-
+void desenhaFundo(CChessSettings * settings){
+    SDL_Rect fundo = {0,0,1920,1080};
+    SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[0],NULL,&fundo);
+}
 
 
 void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event){
+    desenhaFundo(settings);
     SDL_Rect tabuleiro = {200,40,1000,1000};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.tabTextures[1],NULL,&tabuleiro);
     for(int i = 0 ; i < 6 ; i++){

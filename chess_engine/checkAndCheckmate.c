@@ -37,6 +37,7 @@ void initgame_aux(GameStruct * game_aux , CorPiece cor_pieces_teste , Pieces pie
 
 
 int isCheckMate(GameStruct * game , uint64_bit pos_king , CorPiece cor){
+    return 1; // Testes de checkmate , importante remover depois
     int in_check = 1;
     CorPiece cor_atual = game->turnoJogador;
     game->turnoJogador = cor;

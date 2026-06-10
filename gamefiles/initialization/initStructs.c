@@ -13,6 +13,9 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer){
     settings.posMouseX = 0;
     settings.posMouseY = 0;
     settings.textures.temaSelecionado = CChess;
+    settings.nivelDificuldade = Floresta;
+    settings.ticks = 0;
+    settings.ticks_checkmate = 0;
     initTexturasJogo(&settings.textures,sdl_renderer);
     return settings;
 }

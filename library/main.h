@@ -64,6 +64,8 @@ typedef enum { Invalid , Leave , Valid , Checkmate , TooLarge} TipoJogada; //Def
 
 typedef enum { CChess , ChessDotCom , LiChess} Themes; //Define o tema de peças que o utilizador está a utilizar
 
+typedef enum { Floresta , Mar , Deserto , Vulcao , CidadeSimples , CidadeScifi , Espaco} Niveis; //Define o nível de dificuldade do jogo (para o modo singleplayer , que ainda não existe)
+
 /*Linked List que guarda a piece que foi comida na jogada anterior , para depois desfazer a jogada , caso seja necessário*/
 typedef struct PecasComidas{
     uint64_bit pos_de_piece;
@@ -89,7 +91,8 @@ typedef struct GameStruct{
 typedef struct AssetsCChess{
     Themes temaSelecionado; //Tema selecionado pelo utilizador
     SDL_Texture * chessPieces[12]; //Texturas das peças de xadrez do CChess
-    SDL_Texture * tabTextures[2]; //Texturas dos tabuleiros de xadrez do CChess
+    SDL_Texture * tabTextures[5]; //Texturas dos tabuleiros de xadrez do CChess
+     SDL_Texture * niveisTextures[10]; //Texturas misc do CChess
     SDL_Texture * miscTextures[20]; //Texturas misc do CChess
 }AssetsCChess;
 
@@ -104,6 +107,8 @@ typedef struct CChessSettings{
     int posMouseY; //Posição vertical do rato do utilizador , em termos de píxeis
     UserScreen screenAtual; //Tela atual em que o utilizador se encontra
     int ticks; //Número de ticks que já passaram desde o começo do jogo (importante para o timer)
+    int ticks_checkmate; //Número de ticks que já passaram desde o começo da animação de checkmate (importante para o timer)
+    Niveis nivelDificuldade; //Nível de dificuldade do jogo (para o modo singleplayer , que ainda não existe)
 }CChessSettings;
 
 

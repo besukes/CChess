@@ -41,7 +41,10 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
             undoMove(game,click,castles);
             game->estadoJogo.king_in_check[game->turnoJogador] = check_antes;
         }
-        else if(game->jogada == Checkmate) settings->screenAtual = WinScreen;
+        else if(game->jogada == Checkmate){
+            settings->screenAtual = WinScreen;
+            settings->ticks_checkmate = settings->ticks;
+        }
         else {
             notInCheck(game);
             update_en_passant(game);
