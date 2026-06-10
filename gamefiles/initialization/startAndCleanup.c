@@ -47,8 +47,15 @@ SDL_Renderer * sdl_initializer(void){
 }
 
 void freeLinkedList(PecasComidasLL list){
-    
+    PecasComidasLL cur = list;
+    while(cur){
+        PecasComidasLL next = cur->prox;
+        free(cur);
+        cur = next;
+    }
 }
+
+
 
 void free_allocated_memory(GameStruct * game , CChessSettings * user){
     freeLinkedList(game->lastmoves);

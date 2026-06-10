@@ -191,6 +191,7 @@ uint64_bit get_pawn_attacks(uint64_bit piece_pos,CorPiece cor);
 uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites);
 uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites);
 uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game,CorPiece cor_turno);
+uint64_bit get_king_moves(uint64_bit pos);
 
 
 
@@ -209,7 +210,7 @@ void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettin
 //Modulo checkAndCheckmate.c
 
 TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click);
-int isCheckMate(GameStruct * game , uint64_bit pos_king , uint64_bit cor);
+int isCheckMate(GameStruct * game , uint64_bit pos_king , CorPiece cor);
 void notInCheck(GameStruct * game);
 
 
