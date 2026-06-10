@@ -190,7 +190,7 @@ uint64_bit get_knight_attacks(uint64_bit piece_pos);
 uint64_bit get_pawn_attacks(uint64_bit piece_pos,CorPiece cor);
 uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites);
 uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites);
-uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game);
+uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game,CorPiece cor_turno);
 
 
 

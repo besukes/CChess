@@ -26,43 +26,42 @@ void notInCheck(GameStruct * game){
 }
 
 
-void initgame_aux(GameStruct * game_aux , CorPiece cor_pieces_teste , Pieces piece_atual , uint64_bit pos_piece_atual){
+void initgame_aux(GameStruct * game_aux , CorPiece cor_pieces_teste , Pieces piece_atual ,uint64_bit pos_piece){
     game_aux->turnoJogador = cor_pieces_teste;
     game_aux->pieceSelecionada = piece_atual;
-    game_aux->pieceCoords = pos_piece_atual;
     game_aux->lastmoves = NULL;
+    game_aux->pieceCoords = pos_piece;
 }
 
 
 int isCheckMate(GameStruct * game , uint64_bit pos_king , uint64_bit cor){
-    int pos_tab = 0 , in_check = 1;
+    int in_check = 1;
+    CorPiece cor_atual = game->turnoJogador;
+    game->turnoJogador = cor;
     uint64_bit same_colour = get_same_colour_bitboard(&(game->estadoJogo),cor);
     for(int i=0;i<6 && in_check;i++){
-        pos_tab = 0;
         uint64_bit tab_piece = game->estadoJogo.tabuleirojogo[cor][i];
         Pieces piece_atual = (Pieces)i;
         while(tab_piece !=0 && in_check){
-            if(tab_piece & 1ULL){
-                uint64_bit pos_piece = (1ULL<<pos_tab);
-                uint64_bit pieces_move = get_piece_attacks(pos_piece,piece_atual,game);
-                uint64_bit tries = pieces_move & ~same_colour;
-                while( tries !=0 && in_check){
-                    GameStruct game_aux = *game;
-                    initgame_aux(&game_aux,cor,piece_atual,pos_piece);
-                    Boolean castles = 0 , enpassant = 0;
-                    int casa_destino = __builtin_ctzll(tries);
-                    uint64_bit drop = 1ULL<<casa_destino;
-                    if(isPseudoValidMove(&game_aux,drop,&castles,&enpassant)){
-                        atualizaJogada(&game_aux,drop,castles,enpassant);
-                        in_check = is_in_check(&(game_aux.estadoJogo),(game_aux.estadoJogo.tabuleirojogo[cor][King]),cor);
-                    }
-                    tries &= (tries-1);
+            uint64_bit pos_piece = (1ULL<<(__builtin_ctzll(tab_piece) ));
+            uint64_bit pieces_move = get_piece_attacks(pos_piece,piece_atual,game,cor);
+            uint64_bit tries = pieces_move & ~same_colour;
+            while( tries !=0 && in_check){
+                GameStruct game_aux = *game;
+                initgame_aux(&game_aux,cor,piece_atual,pos_piece);
+                Boolean castles = 0 , enpassant = 0;
+                int casa_destino = __builtin_ctzll(tries);
+                uint64_bit drop = 1ULL<<casa_destino;
+                if(isPseudoValidMove(&game_aux,drop,&castles,&enpassant)){
+                    atualizaJogada(&game_aux,drop,castles,enpassant);
+                    in_check = is_in_check(&(game_aux.estadoJogo),(game_aux.estadoJogo.tabuleirojogo[cor][King]),cor);
                 }
+                tries &= (tries-1);
             }
-            tab_piece = tab_piece>>1;
-            pos_tab++;
+            tab_piece &= (tab_piece-1);
         }
     }
+    game->turnoJogador = cor_atual;
     return (in_check);
 }
 

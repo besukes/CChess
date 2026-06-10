@@ -86,7 +86,7 @@ uint64_bit get_knight_attacks(uint64_bit piece_pos){
 }
 
 
-uint64_bit get_king_moves(uint64_bit pos,uint64_bit bitboard_pieces,CorPiece turno){
+uint64_bit get_king_moves(uint64_bit pos){
     int posTab = posTabuleiro(pos);
     uint64_bit at = 0 , colunaA = 0 , colunaH = 0;
     getColunasAH(&colunaA,&colunaH);
@@ -117,13 +117,12 @@ uint64_bit get_possible_pawn_moves(uint64_bit pos,uint64_bit bitboard_pieces,Cor
 
 
 
-uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game){
+uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game , CorPiece cor_turno){
     uint64_bit bitboardPieces = game->estadoJogo.bitboard_todas_pieces;
-    CorPiece cor = game->turnoJogador;
     switch(piece){
         case Pawn :
-            uint64_bit (*func)(uint64_bit,int) = (cor==brancas) ? &shiftl : &shiftr;
-            return get_possible_pawn_moves(pos,bitboardPieces,cor,func,game);
+            uint64_bit (*func)(uint64_bit,int) = (cor_turno==brancas) ? &shiftl : &shiftr;
+            return get_possible_pawn_moves(pos,bitboardPieces,cor_turno,func,game);
         break;
         case Rook :
             return get_cross_attacks(pos,bitboardPieces);
@@ -138,7 +137,7 @@ uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game){
             return (get_sliding_attacks(pos,bitboardPieces) | get_cross_attacks(pos,bitboardPieces));
         break;
         case King :
-            return get_king_moves(pos,bitboardPieces,cor);
+            return get_king_moves(pos);
         break;
         default :
             return 0ULL;
@@ -154,7 +153,7 @@ int isPseudoValidMove(GameStruct * game, uint64_bit drop , Boolean * castle , Bo
     Pieces piece = game->pieceSelecionada;
     CorPiece cor = game->turnoJogador;
     uint64_bit pos_piece = game->pieceCoords,
-               pos_atacks = get_piece_attacks(pos_piece,piece,game),
+               pos_atacks = get_piece_attacks(pos_piece,piece,game,cor),
                pos_mesma_cor = get_same_colour_bitboard(&(game->estadoJogo),cor);
     uint64_bit jogada = (~pos_mesma_cor & (pos_atacks & drop));
     *castle = game->pieceSelecionada == King && is_castelling_king(pos_piece,game,cor,drop);
