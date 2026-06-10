@@ -34,30 +34,6 @@ void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor
 
 
 
-void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit * mesmaCor){
-    int pos = posTabuleiro(click) , offset = 0 , shiftam = 3;
-    CorPiece turno = game->turnoJogador;
-    uint64_bit (*funcRook)(uint64_bit,int) = &shiftl,
-               (*funcKing)(uint64_bit,int) = &shiftr;
-    if(pos%8 > 4){
-        offset=7;funcRook = &shiftr; shiftam = 2; funcKing = &shiftl;
-    }
-    uint64_bit rooks = game->estadoJogo.tabuleirojogo[turno][Rook],
-               rook_de_castle = 1ULL<<(square + offset),
-               rook_shifted = funcRook(rook_de_castle,shiftam);
-
-    *mesmaCor = *mesmaCor & ~rooks & ~game->estadoJogo.tabuleirojogo[turno][King];
-    game->estadoJogo.bitboard_todas_pieces &= ~rooks;
-
-    rooks = rook_shifted | (rooks & ~rook_de_castle);
-    game->estadoJogo.tabuleirojogo[turno][Rook] = rooks;
-    uint64_bit click_shifted = funcKing(rook_shifted,1);
-
-    *mesmaCor |= (rooks | click_shifted);
-    game->estadoJogo.bitboard_todas_pieces |= rooks;
-    game->estadoJogo.tabuleirojogo[turno][King] = click_shifted;
-}
-
 
 void checkTurno(CorPiece turno , uint64_bit * * oposta , uint64_bit * * mesma_cor,int * sq , GameStruct * game , uint64_bit (**ep)(uint64_bit,int)){
     if(turno==brancas){

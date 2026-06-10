@@ -26,9 +26,6 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
 }
 
 
-void end_of_game(GameStruct * game){
-    
-}
 
 
 void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event){
@@ -39,7 +36,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
         atualizaJogada(game,click,castles,enpassant);
         game->jogada = check_or_mate(game,castles,click);
         if(game->jogada==Invalid){
-            undoMove(game,click);
+            undoMove(game,click,castles);
         }
         else if(game->jogada == Checkmate) settings->screenAtual = WinScreen;
         else {

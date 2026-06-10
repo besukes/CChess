@@ -238,7 +238,7 @@ uint64_bit initQuadrado(void);
 
 //Modulo undoMove.c
 
-void undoMove(GameStruct * game , uint64_bit click);
+void undoMove(GameStruct * game , uint64_bit click , Boolean castles);
 
 
 
@@ -247,6 +247,7 @@ void undoMove(GameStruct * game , uint64_bit click);
 int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor , uint64_bit drop);
 int invalidCastle(GameStruct * game , Boolean castles , uint64_bit click);
 void verifica_direito_castle(GameStruct * game ,CorPiece turno);
+void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit * mesmaCor);
 
 
 
