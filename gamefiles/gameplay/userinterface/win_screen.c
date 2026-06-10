@@ -24,7 +24,7 @@ void desenhaEndGameUI(CChessSettings * settings){
 
 void desenhaAnimacaoCheckmate(int temp_inicial, CChessSettings * settings){
     SDL_Rect quadrado;
-    quadrado.x = 100 * (settings->ticks - temp_inicial)/4000; 
+    quadrado.x = 30 * (settings->ticks - temp_inicial)/670; 
     quadrado.y = 140; 
     quadrado.w = 1800;  
     quadrado.h = 900;
@@ -32,7 +32,7 @@ void desenhaAnimacaoCheckmate(int temp_inicial, CChessSettings * settings){
 }
 
 void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event){
-    int temp_inicial = settings->ticks_checkmate, tempo_animacao = temp_inicial + 5000;
+    int temp_inicial = settings->ticks_checkmate, tempo_animacao = temp_inicial + 2000;
     while(settings->ticks < tempo_animacao){
         SDL_RenderClear(settings->gameRenderer);
         desenhaInterfaceJogo(game,settings,event);

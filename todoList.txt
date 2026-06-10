@@ -1,32 +1,4 @@
 //////////////TO-DO-LIST//////////////////
 1-- userinterface.c
-2-- cleanup
-3-- atualizaJogada{
-    fazer o movimento presumindo que e valido
-}
-4-- check_or_mate{
-    verificar se o rei ficou em check com esta jogada 
-    verificar se o rei oposto ficou em check com esta jogada 
-    verificar se o rei oposto ficou em check mate com esta jogada
-}
+2-- add Vecteezy.com && gemini to contributors for images
 
-
-**Maybe fix**
-void get_attacks(int max , uint64_bit (*func)(uint64_bit,int),uint64_bit pos_limites,uint64_bit pos_piece,int shift ,uint64_bit * atk){
-    uint64_bit colunaA = 0, colunaH = 0;
-    getColunasAH(&colunaA,&colunaH);
-    *atk = 0;
-    uint64_bit current = pos_piece;
-    for(int i=1;i<=max ;i++){
-        if(shift == 1 && func == &shiftl && (current & colunaH)) break;
-        if(shift == 1 && func == &shiftr && (current & colunaA)) break;
-        if(shift == 7 && func == &shiftl && (current & colunaA)) break;
-        if(shift == 9 && func == &shiftl && (current & colunaH)) break;
-        if(shift == 7 && func == &shiftr && (current & colunaH)) break;
-        if(shift == 9 && func == &shiftr && (current & colunaA)) break;
-        current = func(current,shift);
-        if(current == 0) break;
-        *(atk) |= current;
-        if(pos_limites & current) break;
-    }
-}

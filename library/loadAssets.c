@@ -25,4 +25,5 @@ void initTexturasJogo(AssetsCChess * assets,SDL_Renderer * sdl_renderer){
     assets->miscTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/misc/menu_inicial.png");
     assets->miscTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/pieces/1.png");
     assets->miscTextures[2] = IMG_LoadTexture(sdl_renderer,"assets/misc/checkmate(1).png");
+    assets->miscTextures[3] = IMG_LoadTexture(sdl_renderer,"assets/misc/CChess_name.png");
 }
