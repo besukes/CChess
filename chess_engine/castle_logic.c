@@ -59,13 +59,13 @@ void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit *
                rook_shifted = funcRook(rook_de_castle,shiftam);
 
     *mesmaCor = *mesmaCor & ~rooks & ~game->estadoJogo.tabuleirojogo[turno][King];
-    game->estadoJogo.bitboard_todas_pieces &= ~rooks;
+    game->estadoJogo.bitboard_todas_pieces &= ~rooks & ~game->estadoJogo.tabuleirojogo[turno][King];
 
     rooks = rook_shifted | (rooks & ~rook_de_castle);
     game->estadoJogo.tabuleirojogo[turno][Rook] = rooks;
     uint64_bit click_shifted = funcKing(rook_shifted,1);
 
     *mesmaCor |= (rooks | click_shifted);
-    game->estadoJogo.bitboard_todas_pieces |= rooks;
+    game->estadoJogo.bitboard_todas_pieces |= (rooks | click_shifted);
     game->estadoJogo.tabuleirojogo[turno][King] = click_shifted;
 }
