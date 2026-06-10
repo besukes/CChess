@@ -14,7 +14,6 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
         game->pieceCoords = click;
         game->pieceSelecionada = piece;
         if(piece==Empty) game->jogada = Invalid;
-        updateBitboard_ClickEvent(game->turnoJogador,piece,&(game->estadoJogo),click);
     }
     else{
         if(dentroDoBotao(mouseX,mouseY,20,20,20,20)){

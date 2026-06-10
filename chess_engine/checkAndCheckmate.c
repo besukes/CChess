@@ -41,7 +41,7 @@ int isCheckMate(GameStruct * game , uint64_bit pos_king , uint64_bit cor){
                 uint64_bit tries = pieces_move & ~same_colour;
                 while( tries !=0 && in_check){
                     GameStruct game_aux = *game;
-                    game_aux.turnoJogador = pretas;
+                    game_aux.turnoJogador = cor;
                     game_aux.pieceSelecionada = piece_atual;
                     game_aux.pieceCoords = pos_piece;
                     Boolean castles = 0 , enpassant = 0;
