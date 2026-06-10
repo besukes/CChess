@@ -22,6 +22,8 @@ EstadoJogo initEstadoJogo(void){
     es.checkMate = 0;
     es.king_in_check[brancas] = 0;
     es.king_in_check[pretas] = 0;
+    es.enpassant = 0;
+    es.stalemate = 0;
     for(int i=0;i<2;i++){
         es.canCastle[i][0] = 1;
         es.canCastle[i][1] = 1;
@@ -40,5 +42,6 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     game.pieceSelecionada = Empty;
     game.turnoJogador = brancas;
     game.pieceCoords = 0;
+    game.lastmoves = NULL;
     return game;
 }

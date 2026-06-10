@@ -1,5 +1,5 @@
 #include "library/main.h"
-
+#include <stdio.h>
 
 
 
@@ -11,20 +11,27 @@ Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor){
                op_rooks = estado->tabuleirojogo[oponente][1],
                op_bishops = estado->tabuleirojogo[oponente][3],
                op_queen = estado->tabuleirojogo[oponente][4];
-    Boolean check_knights = get_knight_attacks(kingpos) & op_knight,
-            check_pawns = get_pawn_attacks(kingpos,cor) & op_pawns,
-            check_diagonals = get_sliding_attacks(kingpos,todas_pieces) & (op_bishops | op_queen),
-            check_cross = get_cross_attacks(kingpos,todas_pieces) & (op_rooks | op_queen);
-    return (check_knights || check_pawns || check_diagonals || check_cross);
+    uint64_bit check_knights = get_knight_attacks(kingpos) & op_knight,
+               check_pawns = get_pawn_attacks(kingpos,cor) & op_pawns,
+               check_diagonals = get_sliding_attacks(kingpos,todas_pieces) & (op_bishops | op_queen),
+               check_cross = get_cross_attacks(kingpos,todas_pieces) & (op_rooks | op_queen);
+    return ( (check_knights | check_pawns | check_diagonals | check_cross ) != 0);
 }
 
 
 
 void notInCheck(GameStruct * game){
     CorPiece turno = game->turnoJogador;
+    game->estadoJogo.king_in_check[turno] = 0;
 }
 
 
+void initgame_aux(GameStruct * game_aux , CorPiece cor_pieces_teste , Pieces piece_atual , uint64_bit pos_piece_atual){
+    game_aux->turnoJogador = cor_pieces_teste;
+    game_aux->pieceSelecionada = piece_atual;
+    game_aux->pieceCoords = pos_piece_atual;
+    game_aux->lastmoves = NULL;
+}
 
 
 int isCheckMate(GameStruct * game , uint64_bit pos_king , uint64_bit cor){
@@ -41,9 +48,7 @@ int isCheckMate(GameStruct * game , uint64_bit pos_king , uint64_bit cor){
                 uint64_bit tries = pieces_move & ~same_colour;
                 while( tries !=0 && in_check){
                     GameStruct game_aux = *game;
-                    game_aux.turnoJogador = cor;
-                    game_aux.pieceSelecionada = piece_atual;
-                    game_aux.pieceCoords = pos_piece;
+                    initgame_aux(&game_aux,cor,piece_atual,pos_piece);
                     Boolean castles = 0 , enpassant = 0;
                     int casa_destino = __builtin_ctzll(tries);
                     uint64_bit drop = 1ULL<<casa_destino;
@@ -70,19 +75,20 @@ TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click){
     CorPiece turno_op = (turno == pretas) ? brancas : pretas;
     uint64_bit pos_king_op = game->estadoJogo.tabuleirojogo[turno_op][King];
     if(is_in_check(&(game->estadoJogo),pos_king_op,turno_op)){
-        if(isCheckMate(game,pos_king_op,turno_op)) j = Checkmate;
+        if(isCheckMate(game,pos_king_op,turno_op)){
+            j = Checkmate;
+            printf("Rei em CHECKMATE\n");
+        }
         game->estadoJogo.king_in_check[turno_op] = 1;
     }
     
     if(is_in_check(&(game->estadoJogo),game->estadoJogo.tabuleirojogo[turno][King],turno)){
-        j = Invalid;
+        return Invalid;
     }
     else if(invalidCastle(game,castles,click)){
-        j = Invalid;
+        return Invalid;;
     }
     else{
-        game->estadoJogo.king_in_check[turno] = 0;
-        game->estadoJogo.king_in_check[turno_op] = 0;
         verifica_direito_castle(game,turno);
     }
     return j;
