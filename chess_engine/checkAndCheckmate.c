@@ -72,6 +72,7 @@ TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click){
     Boolean check_op = is_in_check(&(game->estadoJogo),pos_king_op,turno_op);
     if(is_in_check(&(game->estadoJogo),game->estadoJogo.tabuleirojogo[turno][King],turno)){
         j = Invalid;
+        game->estadoJogo.king_in_check[turno] = 1;
     }
     else if(check_op){
         if(isCheckMate(game,pos_king_op,turno_op)) j = Checkmate;
@@ -82,6 +83,7 @@ TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click){
     }
     else{
         game->estadoJogo.king_in_check[turno] = 0;
+        game->estadoJogo.king_in_check[turno_op] = 0;
         verifica_direito_castle(game,turno);
     }
     return j;
