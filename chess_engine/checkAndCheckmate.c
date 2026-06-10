@@ -33,17 +33,21 @@ int isCheckMate(GameStruct * game , uint64_bit pos_king , uint64_bit cor){
     for(int i=0;i<6 && in_check;i++){
         pos_tab = 0;
         uint64_bit tab_piece = game->estadoJogo.tabuleirojogo[cor][i];
+        Pieces piece_atual = (Pieces)i;
         while(tab_piece !=0 && in_check){
             if(tab_piece & 1ULL){
                 uint64_bit pos_piece = (1ULL<<pos_tab);
-                uint64_bit pieces_move = get_piece_attacks(pos_piece,(Pieces)i,game);
+                uint64_bit pieces_move = get_piece_attacks(pos_piece,piece_atual,game);
                 uint64_bit tries = pieces_move & ~same_colour;
                 while( tries !=0 && in_check){
+                    GameStruct game_aux = *game;
+                    game_aux.turnoJogador = pretas;
+                    game_aux.pieceSelecionada = piece_atual;
+                    game_aux.pieceCoords = pos_piece;
                     Boolean castles = 0 , enpassant = 0;
                     int casa_destino = __builtin_ctzll(tries);
                     uint64_bit drop = 1ULL<<casa_destino;
-                    if(isPseudoValidMove(game,drop,&castles,&enpassant)){
-                        GameStruct game_aux = *game;
+                    if(isPseudoValidMove(&game_aux,drop,&castles,&enpassant)){
                         atualizaJogada(&game_aux,drop,castles,enpassant);
                         in_check = is_in_check(&(game_aux.estadoJogo),(game_aux.estadoJogo.tabuleirojogo[cor][King]),cor);
                     }
@@ -63,16 +67,19 @@ int isCheckMate(GameStruct * game , uint64_bit pos_king , uint64_bit cor){
 TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click){
     TipoJogada j = Valid;
     CorPiece turno = game->turnoJogador;
-    CorPiece turno_op = (turno) ? brancas : pretas;
+    CorPiece turno_op = (turno == pretas) ? brancas : pretas;
     uint64_bit pos_king_op = game->estadoJogo.tabuleirojogo[turno_op][King];
     Boolean check_op = is_in_check(&(game->estadoJogo),pos_king_op,turno_op);
-    if(check_op) game->estadoJogo.king_in_check[turno_op] = 1;
     if(is_in_check(&(game->estadoJogo),game->estadoJogo.tabuleirojogo[turno][King],turno)){
-        game->estadoJogo.king_in_check[turno] = 1;
         j = Invalid;
     }
-    else if(invalidCastle(game,castles,click)) j = Invalid;
-    else if(check_op && isCheckMate(game,pos_king_op,turno_op)) j = Checkmate;
+    else if(check_op){
+        if(isCheckMate(game,pos_king_op,turno_op)) j = Checkmate;
+        game->estadoJogo.king_in_check[turno_op] = 1;
+    }
+    else if(invalidCastle(game,castles,click)){
+        j = Invalid;
+    }
     else{
         game->estadoJogo.king_in_check[turno] = 0;
         verifica_direito_castle(game,turno);
