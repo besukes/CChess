@@ -34,7 +34,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
     Boolean castles = 0, enpassant = 0;
     uint64_bit click = click_table_position(mouseX,mouseY);
     if(click != 0 && isPseudoValidMove(game,click,&castles,&enpassant)){
-        Boolean check_antes = game->estadoJogo.king_in_check[game->turnoJogador];
+        int check_antes = game->estadoJogo.king_in_check[game->turnoJogador];
         atualizaJogada(game,click,castles,enpassant);
         game->jogada = check_or_mate(game,castles,click);
         if(game->jogada==Invalid){
