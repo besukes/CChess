@@ -54,5 +54,4 @@ void undoMove(GameStruct * game , uint64_bit click,Boolean castles){
     }
     undoPiece_move(game,mesma_cor,cor_oposta,click,castles);
     if(game->lastmoves != NULL && game->lastmoves->pos_de_piece == click) undoPieceComida(game,cor_oposta,click);
-    game->estadoJogo.king_in_check[game->turnoJogador] = 0;
 }
