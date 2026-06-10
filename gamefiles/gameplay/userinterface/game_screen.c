@@ -8,7 +8,7 @@
 
 void desenhaFundo(CChessSettings * settings){
     SDL_Rect fundo = {0,0,1920,1080};
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[0],NULL,&fundo);
+    SDL_RenderCopy(settings->gameRenderer,settings->textures.niveisTextures[0],NULL,&fundo);
 }
 
 

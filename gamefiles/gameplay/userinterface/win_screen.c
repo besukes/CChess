@@ -13,7 +13,7 @@ void desenhaStats(GameStruct * game ,CChessSettings * settings,SDL_Event event){
 
 void desenhaEndGameUI(CChessSettings * settings){
     SDL_SetRenderDrawBlendMode(settings->gameRenderer, SDL_BLENDMODE_BLEND);
-    SDL_SetRenderDrawColor(settings->gameRenderer, 255, 255, 255, 240); 
+    SDL_SetRenderDrawColor(settings->gameRenderer, 255, 255, 255, 246); 
     SDL_Rect quadrado;
     quadrado.x = 560; 
     quadrado.y = 140; 
