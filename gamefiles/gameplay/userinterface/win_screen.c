@@ -22,9 +22,9 @@ void desenhaEndGameUI(CChessSettings * settings){
     SDL_RenderFillRect(settings->gameRenderer, &quadrado);
 }
 
-void desenhaAnimacaoCheckmate(int temp_inicial, CChessSettings * settings){
+void desenhaAnimacaoCheckmate(int temp_inicial, CChessSettings * settings, int limite){
     SDL_Rect quadrado;
-    quadrado.x = 30 * (settings->ticks - temp_inicial)/670; 
+    quadrado.x =  2*( (settings->ticks - temp_inicial)/10 ) - 150; 
     quadrado.y = 140; 
     quadrado.w = 1800;  
     quadrado.h = 900;
@@ -33,10 +33,11 @@ void desenhaAnimacaoCheckmate(int temp_inicial, CChessSettings * settings){
 
 void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event){
     int temp_inicial = settings->ticks_checkmate, tempo_animacao = temp_inicial + 2000;
+    int limite = 100;
     while(settings->ticks < tempo_animacao){
         SDL_RenderClear(settings->gameRenderer);
         desenhaInterfaceJogo(game,settings,event);
-        desenhaAnimacaoCheckmate(temp_inicial,settings);
+        desenhaAnimacaoCheckmate(temp_inicial,settings,limite);
         SDL_RenderPresent(settings->gameRenderer);
         SDL_PollEvent(&event);
         settings->ticks = SDL_GetTicks();
