@@ -3,9 +3,6 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <stdio.h>
-#include "pl_mpeg.h"
-
-#define PL_MPEG_IMPLEMENTATION
 
 
 
@@ -28,24 +25,22 @@ void desenhaEndGameUI(CChessSettings * settings){
 
 
 void desenhaAnimacaoCheckmate(int temp_inicial, CChessSettings * settings){
-    double tempo_decorrido = (double)(settings->ticks - temp_inicial) / 2000.0;
-    plm_decode(settings->videoPlayer->plm, tempo_decorrido);
+    int indx = ((settings->ticks - temp_inicial) / 32 ) % 60;
+    SDL_RenderCopy(settings->gameRenderer, settings->cosmeticos.gif_checkmate[indx], NULL, NULL);
 }
+
 
 void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event){
     int temp_inicial = settings->ticks_checkmate, tempo_animacao = temp_inicial + 2000;
-    desenhaInterfaceJogo(game,settings,event);
-    if(settings->ticks < tempo_animacao){
+    while(settings->ticks < tempo_animacao){
+        SDL_RenderClear(settings->gameRenderer);
+        desenhaInterfaceJogo(game,settings,event);
         desenhaAnimacaoCheckmate(temp_inicial,settings);
+        SDL_RenderPresent(settings->gameRenderer);
+        SDL_PollEvent(&event);
+        settings->ticks = SDL_GetTicks();
     }
-    else{
-        if(settings->videoPlayer->plm != NULL){
-            plm_destroy(settings->videoPlayer->plm);
-            SDL_DestroyTexture(settings->videoPlayer->texture);
-            free(settings->videoPlayer);
-            settings->videoPlayer = NULL;
-        }
-        desenhaEndGameUI(settings);
-        desenhaStats(game,settings,event);  
-    }
+    desenhaInterfaceJogo(game,settings,event);
+    desenhaEndGameUI(settings);
+    desenhaStats(game,settings,event);
 }

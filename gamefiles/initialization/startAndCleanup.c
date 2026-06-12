@@ -71,5 +71,8 @@ void free_allocated_memory(GameStruct * game , CChessSettings * user){
     for(int i = 0; i < 20; i++){
         SDL_DestroyTexture(user->textures.miscTextures[i]);
     }
+    for(int i = 0; i < 60; i++){
+        SDL_DestroyTexture(user->cosmeticos.gif_checkmate[i]);
+    }
     SDL_DestroyRenderer(user->gameRenderer);
 }

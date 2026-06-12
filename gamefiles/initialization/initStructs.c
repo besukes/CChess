@@ -7,13 +7,16 @@
 
 
 
+
 //No futuro sera suposto ler o ficheiro de jogo do utilizador
 void initCosmeticos(CChessSettings * settings){
     settings->cosmeticos.efeito_checkSelecionado = 0;
     settings->cosmeticos.efeito_checkmateSelecionado = 6;
     settings->cosmeticos.musicaSelecionada = 0;
     settings->cosmeticos.tabuleiroSelecionado = 0;
+    settings->cosmeticos.gif_checkmate = gif_utilizador_checkmate(settings, settings->cosmeticos.efeito_checkmateSelecionado);
 }
+
 
 CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer){
     CChessSettings settings;

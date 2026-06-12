@@ -5,6 +5,7 @@ LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 
 SRC =	gamefiles/universal/corefunctions.c \
 		gamefiles/universal/chess_important.c \
+		gamefiles/universal/animations.c \
 		gamefiles/gameplay/interfacelogic/main.c \
 		gamefiles/gameplay/interfacelogic/events.c \
 		gamefiles/gameplay/interfacelogic/handleGameplay.c \
@@ -17,7 +18,6 @@ SRC =	gamefiles/universal/corefunctions.c \
 		gamefiles/gameplay/userinterface/themes.c \
 		gamefiles/gameplay/userinterface/win_screen.c \
 		library/loadAssets.c \
-		library/animations.c \
 		chess_engine/possibleMoves.c \
 		chess_engine/checkAndCheckmate.c \
 		chess_engine/en_passant.c \
