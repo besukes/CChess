@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
+#include "pl_mpeg.h"
 
 typedef int Boolean; //Forma mais intuitiva de perceber quando as variáveis são usadas como valores lógicos.
 
@@ -86,12 +87,22 @@ typedef struct GameStruct{
     PecasComidasLL lastmoves;
 }GameStruct;
 
+
+/*Struct que guarda as informações de um player de vídeo*/
+typedef struct {
+    plm_t *plm;
+    SDL_Texture *texture;
+    int largura;
+    int altura;
+    Uint32 ticks_inicial;
+} VideoPlayer;
+
+
 /*Struct que guarda as escolhas de cosméticos do utilizador*/
 typedef struct InGame_Cosmetics{
     int tabuleiroSelecionado; //Tabuleiro selecionado pelo utilizador
     int musicaSelecionada; //Música selecionada pelo utilizador
     int efeito_checkmateSelecionado; //Efeito de checkmate selecionado pelo utilizador
-    SDL_Texture * * gif_checkmate; //Animação de checkmate selecionada pelo utilizador
     int efeito_checkSelecionado; //Efeito de check selecionado pelo utilizador
 }InGame_Cosmetics;
 
@@ -119,6 +130,7 @@ typedef struct CChessSettings{
     Niveis nivelDificuldade; //Nível de dificuldade do jogo (para o modo singleplayer , que ainda não existe)
     int nivelSelecionado;
     InGame_Cosmetics cosmeticos; //Guarda as escolhas de cosméticos do utilizador (para o modo singleplayer , que ainda não existe)
+    VideoPlayer * videoPlayer; //Guarda as informações do player de vídeo
 }CChessSettings;
 
 

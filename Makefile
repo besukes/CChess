@@ -17,6 +17,7 @@ SRC =	gamefiles/universal/corefunctions.c \
 		gamefiles/gameplay/userinterface/themes.c \
 		gamefiles/gameplay/userinterface/win_screen.c \
 		library/loadAssets.c \
+		library/animations.c \
 		chess_engine/possibleMoves.c \
 		chess_engine/checkAndCheckmate.c \
 		chess_engine/en_passant.c \

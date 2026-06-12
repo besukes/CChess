@@ -3,6 +3,10 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <stdio.h>
+#include "pl_mpeg.h"
+
+#define PL_MPEG_IMPLEMENTATION
+
 
 
 
@@ -24,8 +28,8 @@ void desenhaEndGameUI(CChessSettings * settings){
 
 
 void desenhaAnimacaoCheckmate(int temp_inicial, CChessSettings * settings){
-    int indx = ((settings->ticks - temp_inicial) / 32 ) % 60;
-    SDL_RenderCopy(settings->gameRenderer, settings->cosmeticos.gif_checkmate[indx], NULL, NULL);
+    double tempo_decorrido = (double)(settings->ticks - temp_inicial) / 2000.0;
+    plm_decode(settings->videoPlayer->plm, tempo_decorrido);
 }
 
 void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event){
@@ -35,6 +39,12 @@ void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event eve
         desenhaAnimacaoCheckmate(temp_inicial,settings);
     }
     else{
+        if(settings->videoPlayer->plm != NULL){
+            plm_destroy(settings->videoPlayer->plm);
+            SDL_DestroyTexture(settings->videoPlayer->texture);
+            free(settings->videoPlayer);
+            settings->videoPlayer = NULL;
+        }
         desenhaEndGameUI(settings);
         desenhaStats(game,settings,event);  
     }
