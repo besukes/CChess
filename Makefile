@@ -5,9 +5,9 @@ LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 
 SRC =	gamefiles/universal/corefunctions.c \
 		gamefiles/universal/chess_important.c \
-		gamefiles/gameplay/main.c \
-		gamefiles/gameplay/events.c \
-		gamefiles/gameplay/handleGameplay.c \
+		gamefiles/gameplay/interfacelogic/main.c \
+		gamefiles/gameplay/interfacelogic/events.c \
+		gamefiles/gameplay/interfacelogic/handleGameplay.c \
 		gamefiles/initialization/startAndCleanup.c \
 		gamefiles/initialization/initStructs.c \
 		gamefiles/initialization/initTabuleiro.c \
