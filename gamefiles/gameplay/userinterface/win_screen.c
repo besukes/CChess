@@ -22,27 +22,20 @@ void desenhaEndGameUI(CChessSettings * settings){
     SDL_RenderFillRect(settings->gameRenderer, &quadrado);
 }
 
-void desenhaAnimacaoCheckmate(int temp_inicial, CChessSettings * settings, int limite){
-    SDL_Rect quadrado;
-    quadrado.x =  2*( (settings->ticks - temp_inicial)/10 ) - 150; 
-    quadrado.y = 140; 
-    quadrado.w = 1800;  
-    quadrado.h = 900;
-   SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[2],NULL,&quadrado);
+
+void desenhaAnimacaoCheckmate(int temp_inicial, CChessSettings * settings){
+    int indx = ((settings->ticks - temp_inicial) / 32 ) % 60;
+    SDL_RenderCopy(settings->gameRenderer, settings->cosmeticos.gif_checkmate[indx], NULL, NULL);
 }
 
 void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event){
     int temp_inicial = settings->ticks_checkmate, tempo_animacao = temp_inicial + 2000;
-    int limite = 100;
-    while(settings->ticks < tempo_animacao){
-        SDL_RenderClear(settings->gameRenderer);
-        desenhaInterfaceJogo(game,settings,event);
-        desenhaAnimacaoCheckmate(temp_inicial,settings,limite);
-        SDL_RenderPresent(settings->gameRenderer);
-        SDL_PollEvent(&event);
-        settings->ticks = SDL_GetTicks();
-    }
     desenhaInterfaceJogo(game,settings,event);
-    desenhaEndGameUI(settings);
-    desenhaStats(game,settings,event);
+    if(settings->ticks < tempo_animacao){
+        desenhaAnimacaoCheckmate(temp_inicial,settings);
+    }
+    else{
+        desenhaEndGameUI(settings);
+        desenhaStats(game,settings,event);  
+    }
 }

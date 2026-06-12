@@ -86,13 +86,21 @@ typedef struct GameStruct{
     PecasComidasLL lastmoves;
 }GameStruct;
 
+/*Struct que guarda as escolhas de cosméticos do utilizador*/
+typedef struct InGame_Cosmetics{
+    int tabuleiroSelecionado; //Tabuleiro selecionado pelo utilizador
+    int musicaSelecionada; //Música selecionada pelo utilizador
+    int efeito_checkmateSelecionado; //Efeito de checkmate selecionado pelo utilizador
+    SDL_Texture * * gif_checkmate; //Animação de checkmate selecionada pelo utilizador
+    int efeito_checkSelecionado; //Efeito de check selecionado pelo utilizador
+}InGame_Cosmetics;
 
 /*Guarda as texturas que o jogo utiliza no seu decorrer , tal como o tema das peças*/
 typedef struct AssetsCChess{
     Themes temaSelecionado; //Tema selecionado pelo utilizador
     SDL_Texture * chessPieces[12]; //Texturas das peças de xadrez do CChess
     SDL_Texture * tabTextures[5]; //Texturas dos tabuleiros de xadrez do CChess
-     SDL_Texture * niveisTextures[10]; //Texturas misc do CChess
+    SDL_Texture * niveisTextures[10]; //Texturas misc do CChess
     SDL_Texture * miscTextures[20]; //Texturas misc do CChess
 }AssetsCChess;
 
@@ -109,6 +117,8 @@ typedef struct CChessSettings{
     int ticks; //Número de ticks que já passaram desde o começo do jogo (importante para o timer)
     int ticks_checkmate; //Número de ticks que já passaram desde o começo da animação de checkmate (importante para o timer)
     Niveis nivelDificuldade; //Nível de dificuldade do jogo (para o modo singleplayer , que ainda não existe)
+    int nivelSelecionado;
+    InGame_Cosmetics cosmeticos; //Guarda as escolhas de cosméticos do utilizador (para o modo singleplayer , que ainda não existe)
 }CChessSettings;
 
 
