@@ -102,6 +102,7 @@ typedef struct AssetsCChess{
     SDL_Texture * chessPieces[12]; //Texturas das peças de xadrez do CChess
     SDL_Texture * tabTextures[5]; //Texturas dos tabuleiros de xadrez do CChess
     SDL_Texture * niveisTextures[10]; //Texturas misc do CChess
+    SDL_Texture * buttonsTextures[20]; //Texturas dos botões do CChess
     SDL_Texture * miscTextures[20]; //Texturas misc do CChess
 }AssetsCChess;
 
@@ -153,7 +154,7 @@ void initTexturasJogo(AssetsCChess * assets,SDL_Renderer * sdl_renderer);
 
 
 //Modulo handleGameplay.c
-void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event event);
+void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event * event);
 void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event);
 void handleJogadaThemes(CChessSettings * settings,SDL_Event event);
 void handleWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event);
@@ -185,7 +186,7 @@ void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,i
 
 //Modulo events.c
 
-void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event event);
+void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event * event);
 void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event);
 
 

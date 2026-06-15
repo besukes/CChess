@@ -5,23 +5,23 @@
 
 
 
-void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event event){
+void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * event){
     switch(settings->screenAtual){
         case Menu :
             handleJogadaMenuPrincipal(settings,event);
-            desenhaInterfaceMenu(settings,event);
+            desenhaInterfaceMenu(settings,*event);
         break;
         case Chess :
-            handleJogadaChess(game,settings,event);
-            desenhaInterfaceJogo(game,settings,event);
+            handleJogadaChess(game,settings,*event);
+            desenhaInterfaceJogo(game,settings,*event);
         break;
         case Theme :
-            handleJogadaThemes(settings,event);
-            desenhaMenuThemes(settings,event);
+            handleJogadaThemes(settings,*event);
+            desenhaMenuThemes(settings,*event);
         break;
         case WinScreen :
-            handleWinScreen(game,settings,event);
-            desenhaWinScreen(game,settings,event);
+            handleWinScreen(game,settings,*event);
+            desenhaWinScreen(game,settings,*event);
         break;
     }
 }
@@ -33,13 +33,13 @@ void interfaceCChess(GameStruct * game ,CChessSettings * settings){
     //enquanto o utilizador nao clicar no botao para sair ele continua no jogo
     while(event.type != SDL_QUIT && game->jogada!= Leave){
         SDL_PollEvent(&event);
-        settings->ticks = SDL_GetTicks();
         SDL_RenderClear(settings->gameRenderer);
+        settings->ticks = SDL_GetTicks();
         if(event.type == SDL_MOUSEMOTION){
             settings->posMouseX = event.motion.x;
             settings->posMouseY = event.motion.y;
         }
-        handleTipoMenu(game,settings,event);
+        handleTipoMenu(game,settings,&event);
         SDL_RenderPresent(settings->gameRenderer);
     }
 }

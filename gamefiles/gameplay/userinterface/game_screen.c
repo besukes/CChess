@@ -22,5 +22,6 @@ void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event
     for( int i = 0; i < 6; i++){
         desenhaTipoPiece(game->estadoJogo.tabuleirojogo[1][i],(Pieces)(i),settings,game,6);
     }
-
+    SDL_Rect go_back = {1750,950,100,100};
+    SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[0],NULL,&go_back);
 }

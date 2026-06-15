@@ -5,29 +5,23 @@
 
 
 
-void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event event){
-   SDL_Point point = {settings->posMouseX,settings->posMouseY};
-   SDL_Rect botaoJogar = {700,400,500,100};
-   if(SDL_PointInRect(&point,&botaoJogar))
-   {
-     if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
-     {
-        settings->screenAtual = Chess;
-     }
-   }
+void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event * event){
+    int mouseX = event->button.x , mouseY = event->button.y;
+    SDL_Point point = {mouseX,mouseY};
+    SDL_Rect botaoOffline = {710,640,500,100};
+    if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT){
+        if(SDL_PointInRect(&point,&botaoOffline))  settings->screenAtual = Chess;
+        else if(dentroDoBotao(mouseX,mouseY,1750,1850,1000,1050)) event->type = SDL_QUIT;
+    }
 }
 
-
-void resetGrabbedPiece(GameStruct * game){
-    
-}
 
 
 void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event){
     if(event.type == SDL_MOUSEBUTTONDOWN){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown ==0){
             game->isKeyPressedDown = 1;
-            efetuaEventoClique(game,settings,event);
+            efetuaEventoClique(game,settings,&event);
             game->jogada = Valid;
         }
     }
@@ -36,10 +30,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
             game->isKeyPressedDown = 0;
             efetuaEventoSoltar(game,settings,event);
             if(game->jogada == Invalid) ;
-            else{
-                game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
-            }
-            resetGrabbedPiece(game);
+            else game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
         }
     }
 }

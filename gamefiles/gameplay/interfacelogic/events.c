@@ -7,8 +7,8 @@
 
 
 
-void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event event){
-    int mouseX = event.button.x , mouseY = event.button.y;
+void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event * event){
+    int mouseX = event->button.x , mouseY = event->button.y;
     uint64_bit click = click_table_position(mouseX,mouseY);
     if(click != 0){
         Pieces piece = comparePiece(game->estadoJogo ,game->turnoJogador, click);
@@ -17,11 +17,11 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
         if(piece==Empty) game->jogada = Invalid;
     }
     else{
-        if(dentroDoBotao(mouseX,mouseY,20,20,20,20)){
-
+        if(dentroDoBotao(mouseX,mouseY,1750,1850,1000,1050)){ 
+            settings->screenAtual = Menu;
         }
         else if(1){
-
+            
         }
     }
 }
