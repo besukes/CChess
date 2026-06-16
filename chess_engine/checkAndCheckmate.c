@@ -52,10 +52,10 @@ int isCheckMate(GameStruct * game , uint64_bit pos_king , CorPiece cor){
             while( tries !=0 && in_check){
                 GameStruct game_aux = *game;
                 initgame_aux(&game_aux,cor,piece_atual,pos_piece);
-                Boolean castles = 0 , enpassant = 0;
+                Boolean castles = 0 , enpassant = 0 , promotion = 0;
                 int casa_destino = __builtin_ctzll(tries);
                 uint64_bit drop = 1ULL<<casa_destino;
-                if(isPseudoValidMove(&game_aux,drop,&castles,&enpassant)){
+                if(isPseudoValidMove(&game_aux,drop,&castles,&enpassant,&promotion)){
                     atualizaJogada(&game_aux,drop,castles,enpassant);
                     in_check = is_in_check(&(game_aux.estadoJogo),(game_aux.estadoJogo.tabuleirojogo[cor][King]),cor);
                 }

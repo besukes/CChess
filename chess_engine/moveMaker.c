@@ -5,8 +5,8 @@
 
 void promotePiece(GameStruct * game , Pieces piece){
     CorPiece turno = game->turnoJogador;
-    uint64_bit * bitboard_pawns = game->estadoJogo.tabuleirojogo[turno][Pawn];
-    uint64_bit * bitboard_nova_piece = game->estadoJogo.tabuleirojogo[turno][piece];
+    uint64_bit * bitboard_pawns = &(game->estadoJogo.tabuleirojogo[turno][Pawn]);
+    uint64_bit * bitboard_nova_piece = &(game->estadoJogo.tabuleirojogo[turno][piece]);
     *bitboard_pawns &= ~(game->pieceCoords);
     *bitboard_nova_piece |= game->pieceCoords;
 }
@@ -15,17 +15,18 @@ void promotePiece(GameStruct * game , Pieces piece){
 
 void clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
     game->pawnPromoted = 0;
-    int offset = posTabuleiro(game->pieceCoords)%8;
-    if(dentroDoBotao(mouseX,mouseY,100*offset,150*offset,100,150)){ //Queen
+    int offsetY = ( (posTabuleiro(game->pieceCoords) / 8 ) < 1) ? 1000 : 0;
+    int offsetX = posTabuleiro(game->pieceCoords)%8;
+    if(dentroDoBotao(mouseX,mouseY,100*offsetX,150*offsetX,100 + offsetY,150 + offsetY)){ //Queen
         promotePiece(game,Queen);
     }
-    else if(dentroDoBotao(mouseX,mouseY,150*offset,200*offset,100,150)){ //Rook
+    else if(dentroDoBotao(mouseX,mouseY,150*offsetX,200*offsetX,100 + offsetY,150 + offsetY)){ //Rook
         promotePiece(game,Rook);
     }
-    else if(dentroDoBotao(mouseX,mouseY,100*offset,150*offset,150,200)){ //Bishop
+    else if(dentroDoBotao(mouseX,mouseY,100*offsetX,150*offsetX,150+ offsetY,200+ offsetY)){ //Bishop
         promotePiece(game,Bishop);
     }
-    else if(dentroDoBotao(mouseX,mouseY,150*offset,200*offset,150,200)){ //Knight
+    else if(dentroDoBotao(mouseX,mouseY,150*offsetX,200*offsetX,150+ offsetY,200+ offsetY)){ //Knight
         promotePiece(game,Horse);
     }
     else game->pawnPromoted = 1; //Invalid click
