@@ -3,6 +3,34 @@
 
 
 
+void promotePiece(GameStruct * game , Pieces piece){
+    CorPiece turno = game->turnoJogador;
+    uint64_bit * bitboard_pawns = game->estadoJogo.tabuleirojogo[turno][Pawn];
+    uint64_bit * bitboard_nova_piece = game->estadoJogo.tabuleirojogo[turno][piece];
+    *bitboard_pawns &= ~(game->pieceCoords);
+    *bitboard_nova_piece |= game->pieceCoords;
+}
+
+
+
+void clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
+    game->pawnPromoted = 0;
+    int offset = posTabuleiro(game->pieceCoords)%8;
+    if(dentroDoBotao(mouseX,mouseY,100*offset,150*offset,100,150)){ //Queen
+        promotePiece(game,Queen);
+    }
+    else if(dentroDoBotao(mouseX,mouseY,150*offset,200*offset,100,150)){ //Rook
+        promotePiece(game,Rook);
+    }
+    else if(dentroDoBotao(mouseX,mouseY,100*offset,150*offset,150,200)){ //Bishop
+        promotePiece(game,Bishop);
+    }
+    else if(dentroDoBotao(mouseX,mouseY,150*offset,200*offset,150,200)){ //Knight
+        promotePiece(game,Horse);
+    }
+    else game->pawnPromoted = 1; //Invalid click
+}
+
 
 
 void efetuaJogada(uint64_bit * selected_piece , uint64_bit * todas_pieces , uint64_bit original_coords , uint64_bit click , uint64_bit * mesmacor){
@@ -49,6 +77,7 @@ void checkTurno(CorPiece turno , uint64_bit * * oposta , uint64_bit * * mesma_co
         *ep = &shiftl;
     }
 }
+
 
 void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean enpassant){
     CorPiece turno = game->turnoJogador;

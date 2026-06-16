@@ -1,4 +1,5 @@
 //////////////TO-DO-LIST//////////////////
 1-- userinterface.c
 2-- add gemini to contributors for images
+3-- desenhar quadrado com pecas para promover peao durante jogo
 

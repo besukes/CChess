@@ -24,7 +24,7 @@ void desenhaMisc(CChessSettings * settings,SDL_Event event){
     SDL_Rect cchess = {490,(-60),900,500};
 
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[0],NULL,&fundo);
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[3],NULL,&cchess);
+    SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[2],NULL,&cchess);
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[1],NULL,&shop);
 }
 

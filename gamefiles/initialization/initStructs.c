@@ -61,5 +61,6 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     game.turnoJogador = brancas;
     game.pieceCoords = 0;
     game.lastmoves = NULL;
+    game.pawnPromoted = 0;
     return game;
 }

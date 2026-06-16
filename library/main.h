@@ -83,7 +83,8 @@ typedef struct GameStruct{
     uint64_bit pieceCoords; //Guarda a posição de onde a peça que está a ser segurada veio , caso esteja
     CorPiece turnoJogador; //Guarda o turno do utilizador 
     TipoJogada jogada; //Guarda a jogada do utilizador
-    PecasComidasLL lastmoves;
+    PecasComidasLL lastmoves; //Guarda a peça que foi comida na jogada anterior , para depois desfazer a jogada , caso seja necessário
+    Boolean pawnPromoted; //Guarda se o peão está a ser promovido
 }GameStruct;
 
 
@@ -202,7 +203,7 @@ void updateBitboard_ClickEvent(CorPiece turno,Pieces piece,EstadoJogo * estado,u
 
 //Modulo possibleMoves.c
 
-int isPseudoValidMove(GameStruct * game , uint64_bit drop,Boolean * castle,Boolean * enpassant);
+int isPseudoValidMove(GameStruct * game , uint64_bit drop,Boolean * castle,Boolean * enpassant , Boolean * promote);
 uint64_bit get_knight_attacks(uint64_bit piece_pos);
 uint64_bit get_pawn_attacks(uint64_bit piece_pos,CorPiece cor);
 uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites);
@@ -251,6 +252,7 @@ uint64_bit shiftr(uint64_bit pos,int shift);
 uint64_bit shiftl(uint64_bit pos,int shift);
 uint64_bit get_same_colour_bitboard(EstadoJogo * estado , CorPiece cor);
 uint64_bit initQuadrado(void);
+void clickPromotingPiece(GameStruct * game , int mouseX , int mouseY);
 
 
 
