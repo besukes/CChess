@@ -135,6 +135,7 @@ typedef uint64_bit (*ShiftFunction)(uint64_bit,int);
 
 CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer);
 GameStruct initGameStruct(SDL_Renderer * sdl_renderer);
+EstadoJogo initEstadoJogo(void);
 
 
 

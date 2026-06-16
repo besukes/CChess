@@ -12,6 +12,12 @@ void desenharPiece(Pieces tipoPiece , int linha , int coluna , CChessSettings * 
 }
 
 
+void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettings * settings , int offset)
+{
+    SDL_Rect centro = {mouseX-62,mouseY-62,125,125};
+    SDL_RenderCopyEx(settings->gameRenderer,settings->textures.chessPieces[tipoPiece + offset], NULL, &centro, 0, NULL, SDL_FLIP_NONE);
+}
+
 
 void desenhaTipoPiece(uint64_bit pos_pieces,Pieces tipoPiece , CChessSettings * settings, GameStruct * game, int offset){
     int counter=0 , linha , coluna;
@@ -19,7 +25,7 @@ void desenhaTipoPiece(uint64_bit pos_pieces,Pieces tipoPiece , CChessSettings * 
     while(pos_pieces!=0){
         if(casaAtual & pos_pieces){
             linha = counter/8; coluna = counter%8;
-            if( game->isKeyPressedDown && game->pieceSelecionada == tipoPiece && game->pieceCoords == (1ULL<<counter))
+            if( game->isKeyPressedDown && game->pieceSelecionada == tipoPiece && game->pieceCoords == (1ULL<<counter) && !game->pawnPromoted)
                 desenharPieceDrag(tipoPiece,settings->posMouseX,settings->posMouseY,settings,offset);
             else
             desenharPiece(tipoPiece,linha,coluna,settings, offset);
@@ -29,11 +35,3 @@ void desenhaTipoPiece(uint64_bit pos_pieces,Pieces tipoPiece , CChessSettings * 
     }
 }
 
-
-
-
-void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettings * settings , int offset)
-{
-    SDL_Rect centro = {mouseX-62,mouseY-62,125,125};
-    SDL_RenderCopyEx(settings->gameRenderer,settings->textures.chessPieces[tipoPiece + offset], NULL, &centro, 0, NULL, SDL_FLIP_NONE);
-}

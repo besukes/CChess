@@ -109,3 +109,16 @@ void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,i
     *atk |= func(pos_rei&~coluna1,7);
     *atk |= func(pos_rei&~coluna2,9);
 }
+
+
+
+void resetGame(GameStruct * game){
+    game->estadoJogo = initEstadoJogo();
+    game->isKeyPressedDown = 0;
+    game->jogada = Valid;
+    game->pieceSelecionada = Empty;
+    game->turnoJogador = brancas;
+    game->pieceCoords = 0;
+    game->lastmoves = NULL;
+    game->pawnPromoted = 0;
+}

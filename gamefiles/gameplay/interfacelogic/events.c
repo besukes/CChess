@@ -10,7 +10,11 @@
 void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event * event){
     int mouseX = event->button.x , mouseY = event->button.y;
     uint64_bit click = click_table_position(mouseX,mouseY);
-    if(click != 0){
+    if(game->pawnPromoted){
+        clickPromotingPiece(game,mouseX,mouseY);
+        game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
+    }
+    else if(click != 0){
         Pieces piece = comparePiece(game->estadoJogo ,game->turnoJogador, click);
         game->pieceCoords = click;
         game->pieceSelecionada = piece;
@@ -19,6 +23,7 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
     else{
         if(dentroDoBotao(mouseX,mouseY,1750,1850,1000,1050)){ 
             settings->screenAtual = Menu;
+            resetGame(game);
         }
         else if(1){
             
@@ -33,27 +38,24 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
     int mouseX = event.button.x , mouseY = event.button.y;
     Boolean castles = 0, enpassant = 0 , promote = 0;
     uint64_bit click = click_table_position(mouseX,mouseY);
-    if(game->pawnPromoted){
-        clickPromotingPiece(game,mouseX,mouseY);
-    }
-    else if(click != 0 && isPseudoValidMove(game,click,&castles,&enpassant,&promote)){
-            int check_antes = game->estadoJogo.king_in_check[game->turnoJogador];
-            atualizaJogada(game,click,castles,enpassant);
-            game->jogada = check_or_mate(game,castles,click);
-            if(game->jogada==Invalid){
-                undoMove(game,click,castles);
-                game->estadoJogo.king_in_check[game->turnoJogador] = check_antes;
-            }
-            else if(game->jogada == Checkmate){
-                settings->screenAtual = WinScreen;
-                settings->ticks_checkmate = settings->ticks;
-            }
-            else {
-                notInCheck(game);
-                update_en_passant(game);
-                game->pawnPromoted = promote;
-                if(promote) game->pieceCoords = click; //para depois se desenhar o quadrado de promoção na posição correta
-            }
+    if(click != 0 && isPseudoValidMove(game,click,&castles,&enpassant,&promote) && !game->pawnPromoted){
+        int check_antes = game->estadoJogo.king_in_check[game->turnoJogador];
+        atualizaJogada(game,click,castles,enpassant);
+        game->jogada = check_or_mate(game,castles,click);
+        if(game->jogada==Invalid){
+            undoMove(game,click,castles);
+            game->estadoJogo.king_in_check[game->turnoJogador] = check_antes;
+        }
+        else if(game->jogada == Checkmate){
+            settings->screenAtual = WinScreen;
+            settings->ticks_checkmate = settings->ticks;
+        }
+        else {
+            notInCheck(game);
+            update_en_passant(game);
+            game->pawnPromoted = promote;
+            if(promote) game->pieceCoords = click; //para depois se desenhar o quadrado de promoção na posição correta
+        }
     }
     else{
         game->jogada = Invalid;

@@ -15,18 +15,19 @@ void promotePiece(GameStruct * game , Pieces piece){
 
 void clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
     game->pawnPromoted = 0;
-    int offsetY = ( (posTabuleiro(game->pieceCoords) / 8 ) < 1) ? 1000 : 0;
+    int tamSquareX = 130;
+    int offsetY = ( (posTabuleiro(game->pieceCoords) / 8 ) < 1) ? 800 : 0;
     int offsetX = posTabuleiro(game->pieceCoords)%8;
-    if(dentroDoBotao(mouseX,mouseY,100*offsetX,150*offsetX,100 + offsetY,150 + offsetY)){ //Queen
+    if(dentroDoBotao(mouseX,mouseY,305 + tamSquareX*offsetX,392 + tamSquareX*offsetX,105 + offsetY,192 + offsetY)){ //Queen
         promotePiece(game,Queen);
     }
-    else if(dentroDoBotao(mouseX,mouseY,150*offsetX,200*offsetX,100 + offsetY,150 + offsetY)){ //Rook
+    else if(dentroDoBotao(mouseX,mouseY,393 + tamSquareX*offsetX,475 + tamSquareX*offsetX,105 + offsetY,192 + offsetY)){ //Rook
         promotePiece(game,Rook);
     }
-    else if(dentroDoBotao(mouseX,mouseY,100*offsetX,150*offsetX,150+ offsetY,200+ offsetY)){ //Bishop
+    else if(dentroDoBotao(mouseX,mouseY,305 + tamSquareX*offsetX,392 + tamSquareX*offsetX,187 + offsetY,275 + offsetY)){ //Bishop
         promotePiece(game,Bishop);
     }
-    else if(dentroDoBotao(mouseX,mouseY,150*offsetX,200*offsetX,150+ offsetY,200+ offsetY)){ //Knight
+    else if(dentroDoBotao(mouseX,mouseY,393 + tamSquareX*offsetX,475 + tamSquareX*offsetX,187 + offsetY,275 + offsetY)){ //Knight
         promotePiece(game,Horse);
     }
     else game->pawnPromoted = 1; //Invalid click
