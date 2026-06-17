@@ -14,6 +14,7 @@ void loadTexturasPieces(SDL_Texture * chessPieces[12],SDL_Renderer * sdl_rendere
     }
 }
 
+
 void loadButtons(SDL_Texture * buttonsTextures[20],SDL_Renderer * sdl_renderer){
     buttonsTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/buttons/go_back_arrow_white.png");
     buttonsTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/buttons/multiplayer_button.png");
