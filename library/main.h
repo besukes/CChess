@@ -182,6 +182,7 @@ Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique);
 void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor);
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH);
 void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,int),uint64_bit pos , uint64_bit colunaA , uint64_bit colunaH);
+void resetGame(GameStruct * game);
 
 
 
@@ -198,6 +199,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
 
 void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean enpassant);
 void updateBitboard_ClickEvent(CorPiece turno,Pieces piece,EstadoJogo * estado,uint64_bit click);
+int clickPromotingPiece(GameStruct * game , int mouseX , int mouseY);
 
 
 
@@ -253,7 +255,6 @@ uint64_bit shiftr(uint64_bit pos,int shift);
 uint64_bit shiftl(uint64_bit pos,int shift);
 uint64_bit get_same_colour_bitboard(EstadoJogo * estado , CorPiece cor);
 uint64_bit initQuadrado(void);
-void clickPromotingPiece(GameStruct * game , int mouseX , int mouseY);
 
 
 

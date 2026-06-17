@@ -13,7 +13,8 @@ void promotePiece(GameStruct * game , Pieces piece){
 
 
 
-void clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
+int clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
+    int ret = 1;
     game->pawnPromoted = 0;
     int tamSquareX = 130;
     int offsetY = ( (posTabuleiro(game->pieceCoords) / 8 ) < 1) ? 800 : 0;
@@ -30,7 +31,11 @@ void clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
     else if(dentroDoBotao(mouseX,mouseY,393 + tamSquareX*offsetX,475 + tamSquareX*offsetX,187 + offsetY,275 + offsetY)){ //Knight
         promotePiece(game,Horse);
     }
-    else game->pawnPromoted = 1; //Invalid click
+    else{//Invalid click
+        game->pawnPromoted = 1;
+        ret = 0;
+    }
+    return ret;
 }
 
 

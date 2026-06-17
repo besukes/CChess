@@ -11,8 +11,8 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
     int mouseX = event->button.x , mouseY = event->button.y;
     uint64_bit click = click_table_position(mouseX,mouseY);
     if(game->pawnPromoted){
-        clickPromotingPiece(game,mouseX,mouseY);
-        game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
+        int did_promote = clickPromotingPiece(game,mouseX,mouseY);
+        if(did_promote) game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
     }
     else if(click != 0){
         Pieces piece = comparePiece(game->estadoJogo ,game->turnoJogador, click);
