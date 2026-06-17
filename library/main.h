@@ -122,6 +122,8 @@ typedef struct CChessSettings{
     Niveis nivelDificuldade; //Nível de dificuldade do jogo (para o modo singleplayer , que ainda não existe)
     int nivelSelecionado;
     InGame_Cosmetics cosmeticos; //Guarda as escolhas de cosméticos do utilizador (para o modo singleplayer , que ainda não existe)
+    int num_imgsLoaded;
+    int num_imgsTotais;
 }CChessSettings;
 
 
@@ -150,7 +152,7 @@ void init_other_bitboards(EstadoJogo * es);
 
 //Modulo loadAssets.c
 
-void initTexturasJogo(AssetsCChess * assets,SDL_Renderer * sdl_renderer);
+void initTexturasJogo(CChessSettings * settings , AssetsCChess * assets,SDL_Renderer * sdl_renderer);
 
 
 
@@ -312,3 +314,4 @@ void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event eve
 //Modulo animations.c
 
 SDL_Texture ** gif_utilizador_checkmate(CChessSettings * settings, int efeito_checkmateSelecionado);
+void loading_screen(CChessSettings * settings,int perc);

@@ -36,7 +36,7 @@ void pathAnimacaoCheckmate(char * str , int efeito_checkmateSelecionado){
 }
 
 
-void loading_screen(CChessSettings * settings,float perc){
+void loading_screen(CChessSettings * settings,int perc){
     SDL_RenderClear(settings->gameRenderer);
 
     SDL_Rect fundo = {0,0,1920,1080};
@@ -49,23 +49,24 @@ void loading_screen(CChessSettings * settings,float perc){
     SDL_RenderDrawRect(settings->gameRenderer, &barBorder);
 
     SDL_SetRenderDrawColor(settings->gameRenderer, 80, 180, 255, 255);
-    SDL_Rect barFill = {612,1000, (int)(696 * perc), 36};
+    SDL_Rect barFill = {612,1000, (6.7)* perc, 36};
     SDL_RenderFillRect(settings->gameRenderer, &barFill);
+    SDL_RenderPresent(settings->gameRenderer);
+    SDL_Delay(10);
 }
 
 
 SDL_Texture ** gif_utilizador_checkmate(CChessSettings * settings, int efeito_checkmateSelecionado){
-    loading_screen(settings,(float)(0));
+    loading_screen(settings,settings->num_imgsLoaded);
     char str[256];
     pathAnimacaoCheckmate(str,efeito_checkmateSelecionado);
     IMG_Animation* gif = IMG_LoadAnimation(str);
     int n_frames = gif->count;
     SDL_Texture * * textures = malloc(sizeof(SDL_Texture*) * n_frames);
     for(int i = 0; i < n_frames; i++) {
+        settings->num_imgsLoaded++;
         textures[i] = SDL_CreateTextureFromSurface(settings->gameRenderer, gif->frames[i]);
-        loading_screen(settings,(float)((i+1)/n_frames));
-        SDL_RenderPresent(settings->gameRenderer);
-        SDL_Delay(10);
+        loading_screen(settings,settings->num_imgsLoaded);
     }
     IMG_FreeAnimation(gif);
     return textures;

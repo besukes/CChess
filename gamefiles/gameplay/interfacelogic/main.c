@@ -29,7 +29,6 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
 
 void interfaceCChess(GameStruct * game ,CChessSettings * settings){
     SDL_Event event;
-    initTexturasJogo(&(settings->textures),settings->gameRenderer);
     //enquanto o utilizador nao clicar no botao para sair ele continua no jogo
     while(event.type != SDL_QUIT && game->jogada!= Leave){
         SDL_PollEvent(&event);

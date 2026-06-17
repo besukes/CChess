@@ -30,6 +30,7 @@ void desenhaMisc(CChessSettings * settings,SDL_Event event){
 
 
 void desenhaInterfaceMenu(CChessSettings * settings,SDL_Event event){
+    SDL_RenderClear(settings->gameRenderer);
     SDL_SetRenderDrawColor(settings->gameRenderer, 0, 0, 0, 180); 
     SDL_SetRenderDrawBlendMode(settings->gameRenderer, SDL_BLENDMODE_BLEND);
 

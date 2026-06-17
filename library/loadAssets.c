@@ -6,8 +6,9 @@
 
 
 
-void loadTexturasPieces(SDL_Texture * chessPieces[12],SDL_Renderer * sdl_renderer){
+void loadTexturasPieces(CChessSettings * settings ,SDL_Texture * chessPieces[12],SDL_Renderer * sdl_renderer){
     for(int i=0;i<12;i++){
+        settings->num_imgsLoaded++;
         char str[30];
         sprintf(str,"assets/pieces/%d.png",i+1);
         chessPieces[i] = IMG_LoadTexture(sdl_renderer,str);
@@ -23,9 +24,7 @@ void loadButtons(SDL_Texture * buttonsTextures[20],SDL_Renderer * sdl_renderer){
     buttonsTextures[4] = IMG_LoadTexture(sdl_renderer,"assets/buttons/story_button.png");
 }
 
-void initTexturasJogo(AssetsCChess * assets,SDL_Renderer * sdl_renderer){
-    loadTexturasPieces(assets->chessPieces,sdl_renderer);
-
+void initTexturasJogo(CChessSettings * settings ,AssetsCChess * assets,SDL_Renderer * sdl_renderer){
     //assets->tabTextures[0] = IMG_LoadTexture(sdl_renderer,"");
     assets->tabTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/tab_1.png");
 
@@ -37,7 +36,12 @@ void initTexturasJogo(AssetsCChess * assets,SDL_Renderer * sdl_renderer){
     assets->miscTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/misc/shop.png");
     assets->miscTextures[2] = IMG_LoadTexture(sdl_renderer,"assets/misc/CChess_name.png");
     assets->miscTextures[3] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/checkerboard.png");
+    
+    settings->num_imgsLoaded+= 6;
+    loading_screen(settings,settings->num_imgsLoaded);
 
+    loadTexturasPieces(settings,assets->chessPieces,sdl_renderer);
     
     loadButtons(assets->buttonsTextures,sdl_renderer);
+    settings->num_imgsLoaded+=5;
 }
