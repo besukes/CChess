@@ -17,8 +17,8 @@ O jogo utiliza a biblioteca **SDL2** e extensões associadas para criar uma apli
 ## Estrutura do Projeto
 ```bash
 .
-├── chess_engine/   # Ficheiros relativos a movimentação de peças + CChess IA
-├── src/            # Ficheiros fonte do jogo
+├── chess_engine/  # Ficheiros relativos a movimentação de peças + CChess IA
+├── src/           # Ficheiros fonte do jogo
 ├── sfx/           # Ficheiros de áudio utilizados
 ├── musica/        # Música que implementamos para tocar ao longo do jogo
 ├── library/       # Headers (.h) e ficheiros relativos a texturas
