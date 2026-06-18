@@ -25,7 +25,7 @@ typedef enum {
     Empty //There is no piece
 } Pieces;
 
-
+/*Bitboard que cada indice representa o numero de left shifts que temos de fazer para chegar a essa posição no tabuleiro */
 typedef enum casas_board{
     A1,B1,C1,D1,E1,F1,G1,H1,
     A2,B2,C2,D2,E2,F2,G2,H2,
@@ -74,10 +74,31 @@ typedef struct PecasComidas{
     struct PecasComidas * prox;
 } * PecasComidasLL;
 
+/*Define o tipo de ultimates/poderes que existem no jogo*/
+typedef enum {None , FieryQueen , JumpingHorse , FearlessPawn , THEROOK , HolyGrace , 
+              GeekKing , TimeTravelerKing , MistyKnight
+             } TypeUltimate;
+
+/*Struct responsável por guardar os poderes de cada piece*/
+typedef struct Ultimates{
+    Boolean * power_on; //Define se o poder está ativado nesse turno , ou não , para cada respectiva piece
+    TypeUltimate * ultimate; //Define o poder da piece atual , para cada piece
+    uint64_bit * position_pieces; //Define a posição da piece à qual corresponde a ultimate;
+}Ultimates;
+
+/*Struct responsável por guardar as informações da última ultimate usada*/
+typedef struct UltimatesActive{
+    TypeUltimate ultimate_used; //Define o tipo de ultimate Usada (só pode ser tipos que afetam o tabuleiro em vários turnos)
+    int turns_duration; //Define o tempo que esta ultimate vai durar no tabuleiro
+    uint64_bit ult_affected_positions; //Define as posições afetadas pela ultimate , no tabuleiro
+}UltimatesActive;
+
 /*Struct que guarda o estado do jogo , tal como o turno do jogador , a peça que está a ser segurada(caso esteja a ser premida a tecla ,
 que é da responsabilidade do bool isKeyPressedDown) e também a jogada do utilizador */
 typedef struct GameStruct{
     EstadoJogo estadoJogo; //Estado atual do jogo
+    Ultimates pieces_power[2][6]; //Guarda os poderes selecionados de cada piece
+    UltimatesActive * active_ultimate;
     Boolean isKeyPressedDown; //Verifica se o utilizador está a premir a tecla
     Pieces pieceSelecionada; //Guarda a peça que o utilizador está a ser segurada , caso esteja
     uint64_bit pieceCoords; //Guarda a posição de onde a peça que está a ser segurada veio , caso esteja
@@ -119,11 +140,13 @@ typedef struct CChessSettings{
     UserScreen screenAtual; //Tela atual em que o utilizador se encontra
     int ticks; //Número de ticks que já passaram desde o começo do jogo (importante para o timer)
     int ticks_checkmate; //Número de ticks que já passaram desde o começo da animação de checkmate (importante para o timer)
-    Niveis nivelDificuldade; //Nível de dificuldade do jogo (para o modo singleplayer , que ainda não existe)
-    int nivelSelecionado;
+    Niveis nivelDificuldade; //Nível de dificuldade do jogo (para o modo carreira , que ainda não existe)
+    int nivelSelecionado; //Nível selecionado para cada fase do jogo
     InGame_Cosmetics cosmeticos; //Guarda as escolhas de cosméticos do utilizador (para o modo singleplayer , que ainda não existe)
-    int num_imgsLoaded;
-    int num_imgsTotais;
+    int num_imgsLoaded; //Número de imagens já carregadas ao inicializar o programa
+    int num_imgsTotais; //Número de imagens totais que necessitam ser carregadas
+    TypeUltimate * ultimates_owned; //Poderes que o utilizador possui comprados
+    Ultimates pieces_power[2][6]; //Guarda os poderes selecionados de cada piece
 }CChessSettings;
 
 
@@ -185,6 +208,9 @@ void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit 
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH);
 void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,int),uint64_bit pos , uint64_bit colunaA , uint64_bit colunaH);
 void resetGame(GameStruct * game);
+int strToNumber(char * str);
+char * skipWhileSpace(char * str);
+int compareString(char comparing[],char compared[]);
 
 
 
@@ -315,3 +341,9 @@ void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event eve
 
 SDL_Texture ** gif_utilizador_checkmate(CChessSettings * settings, int efeito_checkmateSelecionado);
 void loading_screen(CChessSettings * settings,int perc);
+
+
+
+//Modulo gamefiles.c
+
+void initGameFiles(CChessSettings * settings);

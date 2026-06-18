@@ -10,10 +10,10 @@
 
 //No futuro sera suposto ler o ficheiro de jogo do utilizador
 void initCosmeticos(CChessSettings * settings){
-    settings->cosmeticos.efeito_checkSelecionado = 0;
+    /*settings->cosmeticos.efeito_checkSelecionado = 0;
     settings->cosmeticos.efeito_checkmateSelecionado = 3;
     settings->cosmeticos.musicaSelecionada = 0;
-    settings->cosmeticos.tabuleiroSelecionado = 0;
+    settings->cosmeticos.tabuleiroSelecionado = 0;*/
     settings->cosmeticos.gif_checkmate = gif_utilizador_checkmate(settings, settings->cosmeticos.efeito_checkmateSelecionado);
 }
 
@@ -25,15 +25,16 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer){
     settings.screenAtual = Menu;
     settings.posMouseX = 0;
     settings.posMouseY = 0;
-    settings.textures.temaSelecionado = CChess;
+    /*settings.textures.temaSelecionado = CChess;
     settings.nivelDificuldade = Floresta;
-    settings.nivelSelecionado = 0;
+    settings.nivelSelecionado = 0;*/
     settings.ticks = 0;
     settings.ticks_checkmate = 0;
     settings.num_imgsTotais = 100;
     settings.num_imgsLoaded = 0;
     initTexturasJogo(&settings,&settings.textures,sdl_renderer);
     initCosmeticos(&settings);
+    initGameFiles(&settings);
     return settings;
 }
 

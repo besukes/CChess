@@ -122,3 +122,42 @@ void resetGame(GameStruct * game){
     game->lastmoves = NULL;
     game->pawnPromoted = 0;
 }
+
+
+int compareString(char comparing[],char compared[]){
+    int i;
+    for(i=0; comparing[i] != '\0' && comparing[i] !=' ' && comparing[i] != '\n' && compared[i] != '\0' && comparing[i] == compared[i] ; i++);
+    if(compared[i] == '\0') return 1;
+    return 0;
+}
+
+char * skipWhileSpace(char * str){
+    int i;
+    for(i=0;str[i]=='\0' || str[i]==' ' || str[i]=='\n';i++);
+    return (str + i);
+}
+
+
+int numberChars(char * str){
+    int i=0;
+    while(str[i] != '\0' && str[i]!= ' '  && str[i]!= '\n') i++;
+    return i;
+}
+
+
+int exponente(int base , int expo){
+    int numbr = 1;
+    for(int i=0;i<expo;i++){
+        numbr*=base;
+    }
+    return numbr;
+}
+
+
+int strToNumber(char * str){
+    int n_char = numberChars(str) , numbr = 0;
+    for(;n_char>0;n_char--){
+        numbr += (*str - 48)*exponente(10,n_char-1);
+    }
+    return numbr;
+}

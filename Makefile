@@ -3,20 +3,21 @@ CC = gcc
 CFLAGS = -Wall -ggdb -I. -Ilibrary -Igamefiles/gameplay -Ichess_engine
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 
-SRC =	gamefiles/universal/corefunctions.c \
-		gamefiles/universal/chess_important.c \
-		gamefiles/universal/animations.c \
-		gamefiles/gameplay/interfacelogic/main.c \
-		gamefiles/gameplay/interfacelogic/events.c \
-		gamefiles/gameplay/interfacelogic/handleGameplay.c \
-		gamefiles/initialization/startAndCleanup.c \
-		gamefiles/initialization/initStructs.c \
-		gamefiles/initialization/initTabuleiro.c \
-		gamefiles/gameplay/userinterface/draw_pieces.c \
-		gamefiles/gameplay/userinterface/game_screen.c \
-		gamefiles/gameplay/userinterface/menu.c \
-		gamefiles/gameplay/userinterface/themes.c \
-		gamefiles/gameplay/userinterface/win_screen.c \
+SRC =	src/universal/corefunctions.c \
+		src/universal/chess_important.c \
+		src/universal/animations.c \
+		src/gameplay/interfacelogic/main.c \
+		src/gameplay/interfacelogic/events.c \
+		src/gameplay/interfacelogic/handleGameplay.c \
+		src/initialization/startAndCleanup.c \
+		src/initialization/initStructs.c \
+		src/initialization/initTabuleiro.c \
+		src/initialization/gamefiles.c \
+		src/gameplay/userinterface/draw_pieces.c \
+		src/gameplay/userinterface/offline.c \
+		src/gameplay/userinterface/menu.c \
+		src/gameplay/userinterface/themes.c \
+		src/gameplay/userinterface/win_screen.c \
 		library/loadAssets.c \
 		chess_engine/possibleMoves.c \
 		chess_engine/checkAndCheckmate.c \
