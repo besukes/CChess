@@ -1,6 +1,6 @@
 # CChess (SDL2)
 
-Este projeto foi iniciado no dia **30 de maio de 2026** por três caloiros de Engenharia Informática naUMinho e consiste num jogo sobre o jogo clássico de xadrez com outras implementações diferentes e criativas.
+Este projeto foi iniciado no dia **30 de maio de 2026** por três caloiros de Engenharia Informática na UMinho e consiste num jogo sobre o jogo clássico de xadrez com outras implementações diferentes e criativas.
 
 O jogo utiliza a biblioteca **SDL2** e extensões associadas para criar uma aplicação gráfica em janela, com suporte a imagens, áudio e texto.
 
@@ -17,7 +17,7 @@ O jogo utiliza a biblioteca **SDL2** e extensões associadas para criar uma apli
 ## Estrutura do Projeto
 ```bash
 .
-├── gamefiles/     # Ficheiros relativos a movimentação de peças + CChess IA
+├── src/     # Ficheiros relativos a movimentação de peças + CChess IA
 ├── chess_engine/  # Ficheiros fonte do jogo
 ├── sfx/           # Ficheiros de áudio utilizados
 ├── musica/        # Música que implementamos para tocar ao longo do jogo
@@ -67,7 +67,7 @@ make clean
 Após compilação:
 
 ```bash
-./CChess
+./cchess
 ```
 
 ## Cŕeditos
