@@ -82,8 +82,7 @@ typedef enum {None , FieryQueen , JumpingHorse , FearlessPawn , THEROOK , HolyGr
 /*Struct responsável por guardar os poderes de cada piece*/
 typedef struct Ultimates{
     Boolean * power_on; //Define se o poder está ativado nesse turno , ou não , para cada respectiva piece
-    TypeUltimate * ultimate; //Define o poder da piece atual , para cada piece
-    uint64_bit * position_pieces; //Define a posição da piece à qual corresponde a ultimate;
+    TypeUltimate ultimate; //Define o poder da piece atual , para cada piece
 }Ultimates;
 
 /*Struct responsável por guardar as informações da última ultimate usada*/
@@ -98,7 +97,7 @@ que é da responsabilidade do bool isKeyPressedDown) e também a jogada do utili
 typedef struct GameStruct{
     EstadoJogo estadoJogo; //Estado atual do jogo
     Ultimates pieces_power[2][6]; //Guarda os poderes selecionados de cada piece
-    UltimatesActive * active_ultimate;
+    UltimatesActive * active_ultimate; //Guarda as ultimates que estão ativadas neste momento no tabuleiro
     Boolean isKeyPressedDown; //Verifica se o utilizador está a premir a tecla
     Pieces pieceSelecionada; //Guarda a peça que o utilizador está a ser segurada , caso esteja
     uint64_bit pieceCoords; //Guarda a posição de onde a peça que está a ser segurada veio , caso esteja
@@ -145,8 +144,10 @@ typedef struct CChessSettings{
     InGame_Cosmetics cosmeticos; //Guarda as escolhas de cosméticos do utilizador (para o modo singleplayer , que ainda não existe)
     int num_imgsLoaded; //Número de imagens já carregadas ao inicializar o programa
     int num_imgsTotais; //Número de imagens totais que necessitam ser carregadas
+    TypeUltimate * ultimates_unlocked; //Poderes que o utilizador possui desbloqueados para comprar
     TypeUltimate * ultimates_owned; //Poderes que o utilizador possui comprados
-    Ultimates pieces_power[2][6]; //Guarda os poderes selecionados de cada piece
+    Ultimates selected_pieces_power[6]; //Guarda os poderes selecionados de cada piece
+    int ccoins_qntd; //Guarda a quantidad de moedas do utilizador
 }CChessSettings;
 
 

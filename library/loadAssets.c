@@ -32,10 +32,11 @@ void initTexturasJogo(CChessSettings * settings ,AssetsCChess * assets,SDL_Rende
     assets->niveisTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/fundonivel/nivel1.png");
 
 
-    assets->miscTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/misc/menu_inicial.png");
-    assets->miscTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/misc/shop.png");
-    assets->miscTextures[2] = IMG_LoadTexture(sdl_renderer,"assets/misc/CChess_name.png");
+    assets->miscTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/menu/menu_inicial.png");
+    assets->miscTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/menu/shop.png");
+    assets->miscTextures[2] = IMG_LoadTexture(sdl_renderer,"assets/menu/CChess_name.png");
     assets->miscTextures[3] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/checkerboard.png");
+    assets->miscTextures[4] = IMG_LoadTexture(sdl_renderer,"assets/menu/coins.png");
     
     settings->num_imgsLoaded+= 6;
     loading_screen(settings,settings->num_imgsLoaded);

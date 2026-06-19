@@ -65,5 +65,6 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     game.pieceCoords = 0;
     game.lastmoves = NULL;
     game.pawnPromoted = 0;
+    game.active_ultimate = NULL;
     return game;
 }

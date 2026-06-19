@@ -14,7 +14,8 @@
 
 
 
-void readOwnedPowers(char * line , CChessSettings * settings){
+
+void readPowersLine(char * line , CChessSettings * settings, int type){
 
 }
 
@@ -31,7 +32,15 @@ void readLine(char * line , CChessSettings * settings){
     }
     else if(compareString(line,"ownedPowers")){
         line+=14;
-        readOwnedPowers(line,settings);
+        readPowersLine(line,settings,0);
+    }
+    else if(compareString(line,"unlockedPowers")){
+        line+=17;
+        readPowersLine(line,settings,1);
+    }
+    else if(compareString(line,"selectedPowers")){
+        line+=17;
+        readPowersLine(line,settings,2);
     }
     else if(compareString(line,"selectedTheme")){
         line+=16;
@@ -50,6 +59,10 @@ void readLine(char * line , CChessSettings * settings){
         settings->cosmeticos.efeito_checkmateSelecionado = strToNumber(line);
     }
     else if(compareString(line,"checkEffect")){
+        line+=14;
+        settings->cosmeticos.efeito_checkSelecionado = strToNumber(line);
+    }
+    else if(compareString(line,"coinsAmount")){
         line+=14;
         settings->cosmeticos.efeito_checkSelecionado = strToNumber(line);
     }
@@ -73,11 +86,14 @@ void writeDefaultGamefiles(FILE * file){
     fprintf(file , "difficultyLevel : 0 \n"
                    "selectedLevel : 0 \n"
                    "ownedPowers : None \n"
+                   "unlockedPowers : None \n"
                    "selectedTheme : 0 \n"
                    "selectedTable : 0 \n"
                    "selectedMusic : 0 \n"
                    "checkmateEffect : 0 \n"
                    "checkEffect : 0 \n"
+                   "selectedPowers : None None None None None None\n"
+                   "coinsAmount : 0\n"
            )
     ;
 }
