@@ -21,7 +21,7 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
         if(piece==Empty) game->jogada = Invalid;
     }
     else{
-        if(dentroDoBotao(mouseX,mouseY,1750,1850,1000,1050)){ 
+        if(dentroDoBotao(mouseX,mouseY,50,250,1000,1050)){ 
             settings->screenAtual = Menu;
             resetGame(game);
         }

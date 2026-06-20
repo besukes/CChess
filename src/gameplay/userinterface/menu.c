@@ -20,7 +20,7 @@ void desenhaButtons(CChessSettings * settings,SDL_Event event){
 
 
 void desenhaCoins(CChessSettings * settings){
-    SDL_Rect coins = {1450,30,290,100};
+    SDL_Rect coins = {1500,42,240,80};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[4],NULL,&coins);
     //necessitamos desenhar o numero de coins
 }
@@ -29,7 +29,7 @@ void desenhaCoins(CChessSettings * settings){
 
 void desenhaMisc(CChessSettings * settings,SDL_Event event){
     SDL_Rect fundo = {0,0,1920,1080};
-    SDL_Rect shop = {1790,30,100,100};
+    SDL_Rect shop = {1780,30,100,100};
     SDL_Rect cchess = {490,(-60),900,500};
 
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[0],NULL,&fundo);

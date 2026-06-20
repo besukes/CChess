@@ -24,19 +24,29 @@ void loadButtons(SDL_Texture * buttonsTextures[20],SDL_Renderer * sdl_renderer){
     buttonsTextures[4] = IMG_LoadTexture(sdl_renderer,"assets/buttons/story_button.png");
 }
 
+
+
+void loadMiscAssets(AssetsCChess * assets,SDL_Renderer * sdl_renderer){
+    assets->miscTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/menu/menu_inicial.png");
+    assets->miscTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/menu/shop.png");
+    assets->miscTextures[2] = IMG_LoadTexture(sdl_renderer,"assets/menu/CChess_name.png");
+    assets->miscTextures[3] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/checkerboard.png");
+    assets->miscTextures[4] = IMG_LoadTexture(sdl_renderer,"assets/menu/coins.png");
+    assets->miscTextures[5] = IMG_LoadTexture(sdl_renderer,"assets/misc/white_moves.png");
+    assets->miscTextures[6] = IMG_LoadTexture(sdl_renderer,"assets/misc/black_moves.png");
+}
+
+
+
 void initTexturasJogo(CChessSettings * settings ,AssetsCChess * assets,SDL_Renderer * sdl_renderer){
     //assets->tabTextures[0] = IMG_LoadTexture(sdl_renderer,"");
     assets->tabTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/tab_1.png");
 
 
     assets->niveisTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/fundonivel/nivel1.png");
+    assets->niveisTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/fundonivel/forest.png");
 
-
-    assets->miscTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/menu/menu_inicial.png");
-    assets->miscTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/menu/shop.png");
-    assets->miscTextures[2] = IMG_LoadTexture(sdl_renderer,"assets/menu/CChess_name.png");
-    assets->miscTextures[3] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/checkerboard.png");
-    assets->miscTextures[4] = IMG_LoadTexture(sdl_renderer,"assets/menu/coins.png");
+    loadMiscAssets(assets,sdl_renderer);
     
     settings->num_imgsLoaded+= 6;
     loading_screen(settings,settings->num_imgsLoaded);

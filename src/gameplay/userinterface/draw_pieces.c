@@ -7,14 +7,14 @@
 
 
 void desenharPiece(Pieces tipoPiece , int linha , int coluna , CChessSettings * settings, int offset){
-    SDL_Rect posicaoPeca = {125*coluna+200, 1080 - (125 * linha+167),125,125};
+    SDL_Rect posicaoPeca = {100*coluna+260, 1080 - (100 * linha + 246),100,100};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.chessPieces[tipoPiece + offset],NULL,&posicaoPeca);
 }
 
 
 void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettings * settings , int offset)
 {
-    SDL_Rect centro = {mouseX-62,mouseY-62,125,125};
+    SDL_Rect centro = {mouseX-51,mouseY-51,100,100};
     SDL_RenderCopyEx(settings->gameRenderer,settings->textures.chessPieces[tipoPiece + offset], NULL, &centro, 0, NULL, SDL_FLIP_NONE);
 }
 
