@@ -22,8 +22,8 @@ typedef enum {
     Bishop, //The piece is the BISHOP
     Queen, //The piece is the QUEEN
     King, //The piece is the KING
+    TheDog, //CChess Dog piece that protects the 3 squares in front of him (Norte , Nordeste , Noroeste)
     Empty, //There is no piece
-    TheDog //CChess Dog piece that protects the 3 squares in front of him (Norte , Nordeste , Noroeste)
 } Pieces;
 
 /*Bitboard que cada indice representa o numero de left shifts que temos de fazer para chegar a essa posição no tabuleiro */
@@ -142,6 +142,14 @@ typedef struct AssetsCChess{
     SDL_Texture * miscTextures[20]; //Texturas misc do CChess
 }AssetsCChess;
 
+/*Struct responsável por guardar as informações do utilizador sobre peças personalizadas e poderes do CChess*/
+typedef struct CustomPieces{
+    TypeUltimate * ultimates_unlocked; //Poderes que o utilizador possui desbloqueados para comprar
+    TypeUltimate * ultimates_owned; //Poderes que o utilizador possui comprados
+    Pieces * extraPieces_unlocked; //Pieces personalizadas que o utilizador possui desbloqueados para comprar
+    Pieces * extraPieces_owned; //Pieces personalizadas que o utilizador compradas
+}CustomPieces;
+
 /*Struct que guarda as definições do jogo CChess mais relevantes , como o renderer responsável para apresentar imagens,
 as texturas do jogo , a fonte das letras do jogo , as posições verticais e horizontais do rato do utilizador , o nª de ticks
 que já se passaram deste o começo do jogo , bem como a tela em que o utilizador se encontra*/
@@ -159,11 +167,10 @@ typedef struct CChessSettings{
     InGame_Cosmetics cosmeticos; //Guarda as escolhas de cosméticos do utilizador (para o modo singleplayer , que ainda não existe)
     int num_imgsLoaded; //Número de imagens já carregadas ao inicializar o programa
     int num_imgsTotais; //Número de imagens totais que necessitam ser carregadas
-    TypeUltimate * ultimates_unlocked; //Poderes que o utilizador possui desbloqueados para comprar
-    TypeUltimate * ultimates_owned; //Poderes que o utilizador possui comprados
-    Ultimates selected_pieces_power[6]; //Guarda os poderes selecionados de cada piece
+    CustomPieces user_custom_items; //Struct que guarda as informações do utilizador quanto a items personalizados
     int ccoins_qntd; //Guarda a quantidade de moedas do utilizador
     PlayerChessTable story_set; //Guarda a informação do utilizador quanto à organização das peças no modo história
+    Ultimates selected_pieces_power[6]; //Guarda os poderes selecionados de cada piece
 }CChessSettings;
 
 
