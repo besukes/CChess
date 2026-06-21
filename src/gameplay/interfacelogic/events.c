@@ -33,8 +33,8 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
 
 
 
-void eventoCheckmate(CChessSettings * settings){
-    settings->screenAtual = WinScreen;
+void eventoFimJogo(CChessSettings * settings, UserScreen screen){
+    settings->screenAtual = screen;
     settings->ticks_checkmate = settings->ticks;
 }
 
@@ -43,7 +43,8 @@ void eventoCheckmate(CChessSettings * settings){
 void eventoPromotePiece(GameStruct * game , CChessSettings * settings,uint64_bit click){
     game->jogada = check_or_mate(game,0,click);
     game->promotedSucessfully = 0;
-    if(game->jogada == Checkmate) eventoCheckmate(settings);
+    if(game->jogada == Checkmate) eventoFimJogo(settings,WinScreen);
+    else if(game->jogada == Stalemate) eventoFimJogo(settings,DrawScreen);
     else if(game->jogada == Invalid) game->jogada = Valid; //Apenas para prevenir bugs
 }
 
@@ -62,7 +63,8 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
                 undoMove(game,click,castles);
                 game->estadoJogo.king_in_check[game->turnoJogador] = check_antes;
             }
-            else if(game->jogada == Checkmate) eventoCheckmate(settings);
+            else if(game->jogada == Checkmate) eventoFimJogo(settings,WinScreen);
+            else if(game->jogada == Stalemate) eventoFimJogo(settings,DrawScreen);
             else {
                 notInCheck(game);
                 update_en_passant(game);

@@ -31,7 +31,7 @@ void desenhaAnimacaoCheckmate(int temp_inicial, CChessSettings * settings){
 
 
 void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event){
-    int temp_inicial = settings->ticks_checkmate, tempo_animacao = temp_inicial + 2000;
+    int temp_inicial = settings->ticks_checkmate, tempo_animacao = temp_inicial + 1800;
     while(settings->ticks < tempo_animacao){
         SDL_RenderClear(settings->gameRenderer);
         desenhaInterfaceJogo(game,settings,event);

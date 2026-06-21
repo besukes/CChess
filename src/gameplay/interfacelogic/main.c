@@ -23,6 +23,9 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
             handleWinScreen(game,settings,*event);
             desenhaWinScreen(game,settings,*event);
         break;
+        case DrawScreen :
+        
+        break;
     }
 }
 

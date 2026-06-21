@@ -22,7 +22,8 @@ typedef enum {
     Bishop, //The piece is the BISHOP
     Queen, //The piece is the QUEEN
     King, //The piece is the KING
-    Empty //There is no piece
+    Empty, //There is no piece
+    TheDog //CChess Dog piece that protects the 3 squares in front of him (Norte , Nordeste , Noroeste)
 } Pieces;
 
 /*Bitboard que cada indice representa o numero de left shifts que temos de fazer para chegar a essa posição no tabuleiro */
@@ -43,6 +44,16 @@ typedef enum { brancas , pretas } CorPiece;
 //Representa os diferentes castle types
 typedef enum { Short , Long} CastleTypes;
 
+//Representa uma peça extra do jogo CChess no tabuleiro
+typedef struct ExtraPieces{
+    Pieces tipo_piece; //Tipo de extra piece do tabuleiro do jogo
+    CorPiece cor_piece; //Cor da extra piece do tabuleiro do jogo
+    uint64_bit bitboard_extra_piece; //Posicao desta extra piece no jogo
+}ExtraPieces;
+
+//A memória da ordem das peças que o utilizador utiliza no jogo estará guardada como um par (TipoPiece,PosPiece)
+typedef ExtraPieces PlayerChessTable;
+
 /*Struct que define um estado de um jogo de xadrez.
 Guarda as posições de todas as peças , bem como as posições afetadas por elas.
 Guarda também informações sobre se um dado king está em check/checkmate ou não*/
@@ -52,15 +63,17 @@ typedef struct EstadoJogo{
     int king_in_check[2]; //Informa se o reis estão em check
     int canCastle[2][2]; //Matriz de possibilidades de dar castle
     uint64_bit enpassant; //Guarda a posição possível de se fazer enpassant
-    uint64_bit tabuleirojogo[2][6]; //Guarda as informações do tabuleiro
+    uint64_bit tabuleirojogo[2][6]; //Guarda as informações do tabuleiro das peças regulares de xadrez
+    int indx_extra_pieces; //Guarda o número de extra pieces presentes no jogo atual
+    ExtraPieces * tabuleiroExtraPieces; //Guarda as informações do tabuleiro das peças extras do CChess
     uint64_bit bitboard_brancas; // Bitboard das peças brancas
     uint64_bit bitboard_pretas; // Bitboard das peças pretas
     uint64_bit bitboard_todas_pieces; //Bitboard que guarda as posições ocupadas por todas as peças no jogo
 }EstadoJogo;
 
-typedef enum { Menu , Chess , Theme , WinScreen} UserScreen; //Define em qual tela está o utilizador
+typedef enum { Menu , Chess , Theme , WinScreen , DrawScreen} UserScreen; //Define em qual tela está o utilizador
 
-typedef enum { Invalid , Leave , Valid , Checkmate , TooLarge} TipoJogada; //Define o tipo de jogada que o utilizador efetuou
+typedef enum { Invalid , Leave , Valid , Checkmate , TooLarge , Stalemate} TipoJogada; //Define o tipo de jogada que o utilizador efetuou
 
 typedef enum { CChess , ChessDotCom , LiChess} Themes; //Define o tema de peças que o utilizador está a utilizar
 
@@ -96,7 +109,8 @@ typedef struct UltimatesActive{
 que é da responsabilidade do bool isKeyPressedDown) e também a jogada do utilizador */
 typedef struct GameStruct{
     EstadoJogo estadoJogo; //Estado atual do jogo
-    Ultimates pieces_power[2][6]; //Guarda os poderes selecionados de cada piece
+    Ultimates pieces_power[2][6]; //Guarda os poderes selecionados de cada piece do xadrez original
+    Ultimates extra_pieces_power[2][6]; //Guarda os poderes selecionados de cada piece extra do CChess
     UltimatesActive * active_ultimate; //Guarda as ultimates que estão ativadas neste momento no tabuleiro
     Boolean isKeyPressedDown; //Verifica se o utilizador está a premir a tecla
     Pieces pieceSelecionada; //Guarda a peça que o utilizador está a ser segurada , caso esteja
@@ -148,7 +162,8 @@ typedef struct CChessSettings{
     TypeUltimate * ultimates_unlocked; //Poderes que o utilizador possui desbloqueados para comprar
     TypeUltimate * ultimates_owned; //Poderes que o utilizador possui comprados
     Ultimates selected_pieces_power[6]; //Guarda os poderes selecionados de cada piece
-    int ccoins_qntd; //Guarda a quantidad de moedas do utilizador
+    int ccoins_qntd; //Guarda a quantidade de moedas do utilizador
+    PlayerChessTable story_set; //Guarda a informação do utilizador quanto à organização das peças no modo história
 }CChessSettings;
 
 
@@ -208,7 +223,6 @@ int minimum(int n1,int n2);
 Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique);
 void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor);
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH);
-void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,int),uint64_bit pos , uint64_bit colunaA , uint64_bit colunaH);
 void resetGame(GameStruct * game);
 int strToNumber(char * str);
 char * skipWhileSpace(char * str);
@@ -243,6 +257,7 @@ uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites);
 uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites);
 uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game,CorPiece cor_turno);
 uint64_bit get_king_moves(uint64_bit pos);
+uint64_bit get_dog_protected_squares(uint64_bit pos_dog ,CorPiece turno);
 
 
 
@@ -350,3 +365,8 @@ void loading_screen(CChessSettings * settings,int perc);
 //Modulo gamefiles.c
 
 void initGameFiles(CChessSettings * settings);
+
+
+//Modulo custom_interactions.c 
+
+int is_protected_square(GameStruct * game , uint64_bit click);

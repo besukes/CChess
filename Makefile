@@ -24,7 +24,8 @@ SRC =	src/universal/corefunctions.c \
 		chess_engine/en_passant.c \
 		chess_engine/moveMaker.c \
 		chess_engine/undoMove.c \
-		chess_engine/castle_logic.c 
+		chess_engine/castle_logic.c \
+		chess_engine/custom_interactions.c \
 
 OBJ = $(SRC:%.c=build/%.o)
 

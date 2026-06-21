@@ -85,15 +85,16 @@ void readGameFilesSettings(struct dirent * entry , CChessSettings * settings){
 void writeDefaultGamefiles(FILE * file){
     fprintf(file , "difficultyLevel : 0 \n"
                    "selectedLevel : 0 \n"
-                   "ownedPowers : None \n"
-                   "unlockedPowers : None \n"
+                   "ownedPowers : 0 \n"
+                   "unlockedPowers : 0 \n"
                    "selectedTheme : 0 \n"
                    "selectedTable : 0 \n"
                    "selectedMusic : 0 \n"
                    "checkmateEffect : 0 \n"
                    "checkEffect : 0 \n"
-                   "selectedPowers : None None None None None None \n"
                    "coinsAmount : 0 \n"
+                   "piecesPlace : 0 x 0 0 0 0 0 x      x x 7 5 x 2 x \n"
+                   "selectedPowers : 0 0 0 0 0 0 0 0   0 0 0 0 0 0 0 \n"
            )
     ;
 }

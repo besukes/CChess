@@ -86,6 +86,21 @@ uint64_bit get_knight_attacks(uint64_bit piece_pos){
 }
 
 
+void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,int),uint64_bit pos_rei , uint64_bit colunaA , uint64_bit colunaH){
+    uint64_bit coluna1,coluna2;
+    if(func==&shiftl){
+        coluna1 = colunaA;
+        coluna2 = colunaH;
+    }else{
+        coluna1 = colunaH;
+        coluna2 = colunaA;
+    }
+    *atk |= func(pos_rei,8);
+    *atk |= func(pos_rei&~coluna1,7);
+    *atk |= func(pos_rei&~coluna2,9);
+}
+
+
 uint64_bit get_king_moves(uint64_bit pos){
     int posTab = posTabuleiro(pos);
     uint64_bit at = 0 , colunaA = 0 , colunaH = 0;
@@ -101,6 +116,25 @@ uint64_bit get_king_moves(uint64_bit pos){
     return at;
 }
 
+
+
+uint64_bit get_dog_attacks(uint64_bit pos_dog){
+    return get_king_moves(pos_dog);
+}
+
+
+uint64_bit get_dog_protected_squares(uint64_bit pos_dog ,CorPiece turno){
+    int posTab = posTabuleiro(pos_dog);
+    uint64_bit prot = 0 , colunaA = 0 , colunaH = 0;
+    getColunasAH(&colunaA,&colunaH);
+    uint64_bit (*shift_pos)(uint64_bit,int) = (turno==brancas) ? &shiftl : &shiftr;
+    Boolean black_dog_1st_line = 56<=posTab && posTab<64 && turno==pretas ,
+            white_dog_8th_line = 56<=posTab && posTab<64 && turno==brancas;
+    if(!(black_dog_1st_line || white_dog_8th_line)) {
+        king_line_dependant_moves(&prot,shift_pos,pos_dog,colunaA,colunaH);
+    }
+    return prot;
+}
 
 
 uint64_bit get_possible_pawn_moves(uint64_bit pos,uint64_bit bitboard_pieces,CorPiece turno,uint64_bit (*func)(uint64_bit,int),GameStruct * game){
@@ -138,6 +172,9 @@ uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game , Cor
         break;
         case King :
             return get_king_moves(pos);
+        break;
+        case TheDog :
+            return get_dog_attacks(pos);
         break;
         default :
             return 0ULL;

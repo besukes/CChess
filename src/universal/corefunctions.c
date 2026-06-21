@@ -96,22 +96,6 @@ void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH){
 
 
 
-void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,int),uint64_bit pos_rei , uint64_bit colunaA , uint64_bit colunaH){
-    uint64_bit coluna1,coluna2;
-    if(func==&shiftl){
-        coluna1 = colunaA;
-        coluna2 = colunaH;
-    }else{
-        coluna1 = colunaH;
-        coluna2 = colunaA;
-    }
-    *atk |= func(pos_rei,8);
-    *atk |= func(pos_rei&~coluna1,7);
-    *atk |= func(pos_rei&~coluna2,9);
-}
-
-
-
 void resetGame(GameStruct * game){
     game->estadoJogo = initEstadoJogo();
     game->isKeyPressedDown = 0;

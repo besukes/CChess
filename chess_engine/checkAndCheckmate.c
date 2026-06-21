@@ -37,7 +37,7 @@ void initgame_aux(GameStruct * game_aux , CorPiece cor_pieces_teste , Pieces pie
 
 
 int isCheckMate(GameStruct * game , uint64_bit pos_king , CorPiece cor){
-    return 1; // Testes de checkmate , importante remover depois
+    //return 1; // Testes de checkmate , importante remover depois
     int in_check = 1;
     CorPiece cor_atual = game->turnoJogador;
     game->turnoJogador = cor;
@@ -86,11 +86,13 @@ TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click){
         verifica_direito_castle(game,turno);
     }
 
+    Boolean cant_move_opp_king = isCheckMate(game,pos_king_op,turno_op);
     if(is_in_check(&(game->estadoJogo),pos_king_op,turno_op)){
-        if(isCheckMate(game,pos_king_op,turno_op)){
+        if(cant_move_opp_king){
             return Checkmate;
         }
         game->estadoJogo.king_in_check[turno_op] = 1;
     }
+    else if(cant_move_opp_king) return Stalemate;
     return j;
 }

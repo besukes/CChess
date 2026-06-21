@@ -33,8 +33,8 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer){
     settings.num_imgsTotais = 100;
     settings.num_imgsLoaded = 0;
     initTexturasJogo(&settings,&settings.textures,sdl_renderer);
-    initCosmeticos(&settings);
     initGameFiles(&settings);
+    initCosmeticos(&settings);
     return settings;
 }
 
@@ -45,6 +45,8 @@ EstadoJogo initEstadoJogo(void){
     es.king_in_check[pretas] = 0;
     es.enpassant = 0;
     es.stalemate = 0;
+    es.tabuleiroExtraPieces = NULL;
+    es.indx_extra_pieces = 0;
     for(int i=0;i<2;i++){
         es.canCastle[i][0] = 1;
         es.canCastle[i][1] = 1;

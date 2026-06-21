@@ -55,7 +55,7 @@ void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor
     Pieces piece_comida , selected = game->pieceSelecionada;
     for(i=0;i<6 && !(game->estadoJogo.tabuleirojogo[cor_oposta][i] & click);i++);
     if(i==6) printf("[ERROR] In function fetch_change_board\n");
-    else{
+    else if(!is_protected_square(game,click)){
         piece_comida = (Pieces)i;
         addHeadLinkedList(&(game->lastmoves),piece_comida,click,cor_oposta);
         game->estadoJogo.tabuleirojogo[cor_oposta][i] &= ~(click);
