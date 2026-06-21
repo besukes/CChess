@@ -93,8 +93,6 @@ void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean
     checkTurno(turno,&bitboard_cor_oposta,&bitboard_cor_turno,&square,game,&ep);
     if(castles){
         castle_King(game,click,square,bitboard_cor_turno);
-        game->estadoJogo.canCastle[turno][Short] = 0;
-        game->estadoJogo.canCastle[turno][Long] = 0;
     }
     else if(enpassant){
         enpassant_move(game,bitboard_cor_oposta,bitboard_cor_turno,ep);
