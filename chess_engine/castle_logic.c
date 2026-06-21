@@ -12,18 +12,31 @@ int is_open_castle_path(uint64_bit bitboard_todas_pieces,uint64_bit path , uint6
 int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor, uint64_bit drop){
     uint64_t destino_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7)  : (1ULL << 62 | 1ULL<<63),
              destino_long  = (cor == brancas) ? (1ULL << 2 | 1ULL <<1 | 1ULL)  : (1ULL << 58 | 1ULL << 57 | 1ULL << 56);
+    uint64_t path_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7 | 1ULL<<5)  : ( 1ULL << 61 | 1ULL << 62 | 1ULL<<63),
+             path_long  = (cor == brancas) ? ( 1ULL << 3 | 1ULL << 2 | 1ULL <<1 | 1ULL)  : (1ULL << 59 | 1ULL << 58 | 1ULL << 57 | 1ULL << 56);
     Boolean castelShort = ( (destino_short & drop) != 0) && 
-                is_open_castle_path(game->estadoJogo.bitboard_todas_pieces,destino_short,game->estadoJogo.tabuleirojogo[cor][Rook]),
+                is_open_castle_path(game->estadoJogo.bitboard_todas_pieces,path_short,game->estadoJogo.tabuleirojogo[cor][Rook]),
             castelLong = ( (destino_long & drop) != 0) && 
-                is_open_castle_path(game->estadoJogo.bitboard_todas_pieces,destino_long,game->estadoJogo.tabuleirojogo[cor][Rook]);
+                is_open_castle_path(game->estadoJogo.bitboard_todas_pieces,path_long,game->estadoJogo.tabuleirojogo[cor][Rook]);
     return (                                      !game->estadoJogo.king_in_check[cor] &&
             ( (castelShort && game->estadoJogo.canCastle[cor][Short]) || (castelLong && game->estadoJogo.canCastle[cor][Long]) ) );
 }
 
 
-
+//Necessita ser feita
 int invalidCastle(GameStruct * game , Boolean castles , uint64_bit click){
-    return 0;
+    CorPiece turno = game->turnoJogador;
+    int pos = posTabuleiro(click) , offset = 0 , indx = 0;
+    casas_board casa_rook = (pos%8 > 4) ? F1 : D1;
+    if(turno == pretas){
+        offset = 1; indx = 7;
+    }
+    uint64_bit rook_castle = game->estadoJogo.tabuleirojogo[offset][Rook] & (1ULL << (casa_rook + 8*indx)),
+               king_pos = game->estadoJogo.tabuleirojogo[offset][King];
+    return( is_in_check(&game->estadoJogo,king_pos,turno)
+            || is_in_check(&game->estadoJogo,rook_castle,turno)
+            || ( (king_pos & game->estadoJogo.tabuleirojogo[offset][Rook] )!= 0)
+    );
 }
 
 

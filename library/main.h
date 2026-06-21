@@ -105,6 +105,7 @@ typedef struct GameStruct{
     TipoJogada jogada; //Guarda a jogada do utilizador
     PecasComidasLL lastmoves; //Guarda a peça que foi comida na jogada anterior , para depois desfazer a jogada , caso seja necessário
     Boolean pawnPromoted; //Guarda se o peão está a ser promovido
+    Boolean promotedSucessfully; //Guarda se o peão foi promovido num clique
 }GameStruct;
 
 
@@ -262,6 +263,7 @@ void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettin
 TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click);
 int isCheckMate(GameStruct * game , uint64_bit pos_king , CorPiece cor);
 void notInCheck(GameStruct * game);
+Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor);
 
 
 

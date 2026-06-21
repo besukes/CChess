@@ -41,7 +41,7 @@ void desenhaMenu(GameStruct * ngame , CChessSettings * settings){
 
 
 void desenhaNivelTitle(CChessSettings * settings){
-    SDL_Rect title = {(-67),(-40),1000,210};
+    SDL_Rect title = {1240,(-5),600,210};
     if(settings->nivelDificuldade == 0){
         SDL_RenderCopy(settings->gameRenderer,settings->textures.niveisTextures[1],NULL,&title);
     }
@@ -64,7 +64,7 @@ void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event
     desenhaMenu(game,settings);
     if(game->pawnPromoted) desenhaPromotion(game,settings);
 
-    SDL_Rect turn = {1240,(-5),600,210};
+    SDL_Rect turn = {300,(-40),700,210};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[5 + game->turnoJogador],NULL,&turn);
     desenhaNivelTitle(settings);
 }
