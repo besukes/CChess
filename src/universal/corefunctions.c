@@ -155,9 +155,20 @@ int exponente(int base , int expo){
 
 
 int strToNumber(char * str){
+    int numbr = 0;
+    while (*str != '\0' && *str != ' ' && *str != '\n') {
+        numbr = (numbr * 10) + (*str - '0'); 
+        str++;
+    }
+    return numbr;
+}
+
+
+int strToNumber_esp(char * str){
     int n_char = numberChars(str) , numbr = 0;
     for(;n_char>0;n_char--){
         numbr += (*str - 48)*exponente(10,n_char-1);
+        str++;
     }
     return numbr;
 }

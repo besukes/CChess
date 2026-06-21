@@ -92,8 +92,8 @@ void writeDefaultGamefiles(FILE * file){
                    "selectedMusic : 0 \n"
                    "checkmateEffect : 0 \n"
                    "checkEffect : 0 \n"
-                   "selectedPowers : None None None None None None\n"
-                   "coinsAmount : 0\n"
+                   "selectedPowers : None None None None None None \n"
+                   "coinsAmount : 0 \n"
            )
     ;
 }
