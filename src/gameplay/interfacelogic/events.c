@@ -76,3 +76,31 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
         game->jogada = Invalid;
     }
 }
+
+
+
+void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Event * event, Boolean valido_turno){
+    int mouseX = event->button.x , mouseY = event->button.y;
+    uint64_bit click = click_table_position(mouseX,mouseY);
+    if(!valido_turno || (click == 0) ){
+        if(dentroDoBotao(mouseX,mouseY,50,250,1000,1050)){  //Botao sair
+                settings->screenAtual = Menu;
+                resetGame(game);
+        }
+        else if(1){
+            
+        }
+    }
+    else{
+        if(game->pawnPromoted){
+            int did_promote = clickPromotingPiece(game,mouseX,mouseY);
+            if(did_promote) game->promotedSucessfully = 1;
+        }
+        else{
+            Pieces piece = comparePiece(game->estadoJogo ,game->turnoJogador, click);
+            game->pieceCoords = click;
+            game->pieceSelecionada = piece;
+            if(piece==Empty) game->jogada = Invalid;
+        }
+    }
+}

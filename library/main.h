@@ -71,7 +71,7 @@ typedef struct EstadoJogo{
     uint64_bit bitboard_todas_pieces; //Bitboard que guarda as posições ocupadas por todas as peças no jogo
 }EstadoJogo;
 
-typedef enum { Menu , Chess , Theme , WinScreen , DrawScreen} UserScreen; //Define em qual tela está o utilizador
+typedef enum { Menu , Chess , Story , Theme , WinScreen , DrawScreen} UserScreen; //Define em qual tela está o utilizador
 
 typedef enum { Invalid , Leave , Valid , Checkmate , TooLarge , Stalemate} TipoJogada; //Define o tipo de jogada que o utilizador efetuou
 
@@ -209,7 +209,8 @@ void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event * event);
 void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event);
 void handleJogadaThemes(CChessSettings * settings,SDL_Event event);
 void handleWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event);
-
+void handleStoryScreen(GameStruct* game , CChessSettings * settings,SDL_Event * event);
+void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event event);
 
 
 
@@ -242,6 +243,7 @@ int compareString(char comparing[],char compared[]);
 
 void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event * event);
 void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event);
+void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Event * event, Boolean valido_turno);
 
 
 

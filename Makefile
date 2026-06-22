@@ -13,6 +13,7 @@ SRC =	src/universal/corefunctions.c \
 		src/initialization/initStructs.c \
 		src/initialization/initTabuleiro.c \
 		src/initialization/gamefiles.c \
+		src/initialization/storygame.c \
 		src/gameplay/userinterface/draw_pieces.c \
 		src/gameplay/userinterface/offline.c \
 		src/gameplay/userinterface/menu.c \

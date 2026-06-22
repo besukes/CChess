@@ -26,6 +26,10 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
         case DrawScreen :
         
         break;
+        case Story :
+            handleStoryScreen(game,settings,&event);
+            desenhaStoryScreen(game,settings,*event);
+        break;
     }
 }
 
