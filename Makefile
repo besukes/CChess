@@ -16,6 +16,7 @@ SRC =	src/universal/corefunctions.c \
 		src/initialization/storygame.c \
 		src/gameplay/userinterface/draw_pieces.c \
 		src/gameplay/userinterface/offline.c \
+		src/gameplay/userinterface/story.c \
 		src/gameplay/userinterface/menu.c \
 		src/gameplay/userinterface/themes.c \
 		src/gameplay/userinterface/win_screen.c \
