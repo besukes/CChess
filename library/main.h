@@ -384,3 +384,8 @@ int is_protected_square(GameStruct * game , uint64_bit click);
 //Modulo story.c
 
 void desenhaStoryScreen(GameStruct * game,CChessSettings * settings ,SDL_Event * event);
+
+
+//Modulo storylogic.c
+
+void initStoryGame(GameStruct * game , CChessSettings * settings , int level);
