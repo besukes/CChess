@@ -1,7 +1,7 @@
 CC = gcc
 
-CFLAGS = -Wall -ggdb -I. -Ilibrary -Igamefiles/gameplay -Ichess_engine
-LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
+CFLAGS = -Wall -ggdb -Wextra -Wconversion -g3 -fsanitize=address,undefined -I. -Ilibrary -Igamefiles/gameplay -Ichess_engine
+LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm -fsanitize=address,undefined
 
 SRC =	src/universal/corefunctions.c \
 		src/universal/chess_important.c \

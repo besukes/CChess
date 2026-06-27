@@ -18,6 +18,22 @@ void initCosmeticos(CChessSettings * settings){
 }
 
 
+void zeroCustomPieces(CustomPieces * sets){
+    sets->indx_ult_unlocked = 0;
+    sets->ultimates_unlocked = NULL;
+
+    sets->indx_ult_owned = 0;
+    sets->ultimates_owned = NULL;
+
+    sets->indx_ep_unlocked = 0;
+    sets->extraPieces_unlocked = NULL;
+
+    sets->indx_ep_owned = 0;
+    sets->extraPieces_owned = NULL;
+}
+
+
+
 CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer){
     CChessSettings settings;
     settings.fonteJogo = NULL; //temos de mudar
@@ -25,13 +41,15 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer){
     settings.screenAtual = Menu;
     settings.posMouseX = 0;
     settings.posMouseY = 0;
-    /*settings.textures.temaSelecionado = CChess;
-    settings.nivelDificuldade = Floresta;
-    settings.nivelSelecionado = 0;*/
     settings.ticks = 0;
     settings.ticks_checkmate = 0;
     settings.num_imgsTotais = 100;
     settings.num_imgsLoaded = 0;
+    settings.story_st_line = NULL;
+    settings.indx_starting_line = 0;
+    settings.selected_pieces_power = NULL;
+    settings.indx_selected_ults = 0;
+    zeroCustomPieces(&settings.user_custom_items);
     initTexturasJogo(&settings,&settings.textures,sdl_renderer);
     initGameFiles(&settings);
     initCosmeticos(&settings);

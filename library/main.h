@@ -42,7 +42,7 @@ typedef enum casas_board{
 typedef enum { brancas , pretas } CorPiece;
 
 //Representa os diferentes castle types
-typedef enum { Short , Long} CastleTypes;
+typedef enum { Short , Long } CastleTypes;
 
 //Representa uma peça extra do jogo CChess no tabuleiro
 typedef struct ExtraPieces{
@@ -91,6 +91,12 @@ typedef struct PecasComidas{
 typedef enum {None , FieryQueen , JumpingHorse , FearlessPawn , THEROOK , HolyGrace , 
               GeekKing , TimeTravelerKing , MistyKnight
              } TypeUltimate;
+
+/*Struct responsável por guardar os poderes de cada piece*/
+typedef struct UltimatesSettings{
+    Pieces ultimate_refers_piece; //Define a piece respectiva desta ultimate
+    TypeUltimate ultimate; //Define o power up da piece
+}UltimatesSettings;
 
 /*Struct responsável por guardar os poderes de cada piece*/
 typedef struct Ultimates{
@@ -144,9 +150,13 @@ typedef struct AssetsCChess{
 
 /*Struct responsável por guardar as informações do utilizador sobre peças personalizadas e poderes do CChess*/
 typedef struct CustomPieces{
+    int indx_ult_unlocked; //index para o array dinamicamente alocado
     TypeUltimate * ultimates_unlocked; //Poderes que o utilizador possui desbloqueados para comprar
-    TypeUltimate * ultimates_owned; //Poderes que o utilizador possui comprados
+    int indx_ult_owned; //index para o array dinamicamente alocado
+    TypeUltimate * ultimates_owned; //Poderes que o utilizador possui comprados]
+    int indx_ep_unlocked; //index para o array dinamicamente alocado
     Pieces * extraPieces_unlocked; //Pieces personalizadas que o utilizador possui desbloqueados para comprar
+    int indx_ep_owned; //index para o array dinamicamente alocado
     Pieces * extraPieces_owned; //Pieces personalizadas que o utilizador compradas
 }CustomPieces;
 
@@ -169,8 +179,10 @@ typedef struct CChessSettings{
     int num_imgsTotais; //Número de imagens totais que necessitam ser carregadas
     CustomPieces user_custom_items; //Struct que guarda as informações do utilizador quanto a items personalizados
     int ccoins_qntd; //Guarda a quantidade de moedas do utilizador
-    PlayerChessTable story_set; //Guarda a informação do utilizador quanto à organização das peças no modo história
-    Ultimates selected_pieces_power[6]; //Guarda os poderes selecionados de cada piece
+    int indx_starting_line; //index para o array dinamicamente alocado
+    PlayerChessTable * story_st_line; //Guarda a informação do utilizador quanto à organização das peças no modo história
+    int indx_selected_ults; //index para o array dinamicamente alocado
+    UltimatesSettings * selected_pieces_power; //Guarda os poderes selecionados de cada piece
 }CChessSettings;
 
 
@@ -235,6 +247,7 @@ void resetGame(GameStruct * game);
 int strToNumber(char * str);
 char * skipWhileSpace(char * str);
 int compareString(char comparing[],char compared[]);
+int numberChars(char * str);
 
 
 

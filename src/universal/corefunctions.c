@@ -117,7 +117,8 @@ int compareString(char comparing[],char compared[]){
 
 char * skipWhileSpace(char * str){
     int i;
-    for(i=0;str[i]=='\0' || str[i]==' ' || str[i]=='\n';i++);
+    for(i=0;str[i] == ' ';i++);
+    if(str[i] == '\0' || str[i] == '\n') return NULL;
     return (str + i);
 }
 

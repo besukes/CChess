@@ -14,9 +14,59 @@
 
 
 
+void readStartingLine(char * line ,CChessSettings * settings){
+    int counter = 0;
+    while(*line != ' ' && *line != '\0' && *line != '\n'){
+        if(*line != 'x'){
+            PlayerChessTable * table = settings->story_st_line , * atual;
+            int indx = settings->indx_starting_line;
+            table = realloc(table,(size_t)indx);
+
+            atual = table + indx - 1;
+            atual->cor_piece = brancas;
+            atual->bitboard_extra_piece = (1ULL<<counter);
+            atual->tipo_piece = (Pieces)strToNumber(line);
+
+            settings->story_st_line = table;
+        }
+        int n = numberChars(line);
+        line = skipWhileSpace(line+n);
+        counter++;
+        if(line == NULL) break;
+    }
+}
+
 
 void readPowersLine(char * line , CChessSettings * settings, int type){
+    int counter = 0;
+    while(*line != ' ' && *line != '\0' && *line != '\n'){
+        if(type==1){
+            int indx = ++settings->user_custom_items.indx_ult_unlocked;
+            TypeUltimate * temp = realloc(settings->user_custom_items.ultimates_unlocked,(size_t)indx);
+            *(temp + indx - 1) = (TypeUltimate) strToNumber(line);
 
+            settings->user_custom_items.ultimates_unlocked = temp;
+        }
+        else if(type==2){
+            int indx = ++settings->indx_selected_ults;
+            UltimatesSettings * temp = realloc(settings->selected_pieces_power,(size_t)indx);
+            (temp + indx - 1)->ultimate_refers_piece = (Pieces)counter;
+            (temp + indx - 1)->ultimate = (TypeUltimate) strToNumber(line);
+
+            settings->selected_pieces_power = temp;
+        }
+        else{
+            int indx = ++settings->user_custom_items.indx_ult_owned;
+            TypeUltimate * temp = settings->user_custom_items.ultimates_owned;
+            temp = realloc(temp,(size_t)indx);
+            *(temp + indx - 1) = (TypeUltimate) strToNumber(line);
+            settings->user_custom_items.ultimates_owned = temp;
+        }
+        int n = numberChars(line);
+        line = skipWhileSpace(line+n);
+        counter++;
+        if(line == NULL) break;
+    }
 }
 
 
@@ -66,11 +116,15 @@ void readLine(char * line , CChessSettings * settings){
         line+=14;
         settings->cosmeticos.efeito_checkSelecionado = strToNumber(line);
     }
+    else if(compareString(line,"piecesPlace")){
+        line+=14;
+        readStartingLine(line,settings);
+    }
 }
 
 
 
-void readGameFilesSettings(struct dirent * entry , CChessSettings * settings){
+void readGameFilesSettings(CChessSettings * settings){
     char path[267];
     snprintf(path,sizeof(path),"gamefiles/GameUserSettings.ini");
     FILE * file = fopen(path,"r");
@@ -93,8 +147,8 @@ void writeDefaultGamefiles(FILE * file){
                    "checkmateEffect : 0 \n"
                    "checkEffect : 0 \n"
                    "coinsAmount : 0 \n"
-                   "piecesPlace : 0 x 0 0 0 0 0 x      x x 7 5 x 2 x \n"
-                   "selectedPowers : 0 0 0 0 0 0 0 0   0 0 0 0 0 0 0 \n"
+                   "piecesPlace : x x 7 5 x 2 x x 0 x 0 0 0 0 0 x \n"
+                   "selectedPowers : 0 0 0 0 0 0 0 \n"
            )
     ;
 }
@@ -125,7 +179,7 @@ void initGameFiles(CChessSettings * settings){
         while((entry = readdir(dir)) != NULL && !found){
             if(strcmp(entry->d_name,"GameUserSettings.ini") == 0){
                 found=1;
-                readGameFilesSettings(entry,settings);
+                readGameFilesSettings(settings);
             }
         }
          if(!found) addGamefilesFile(settings);

@@ -27,6 +27,7 @@ int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor, 
 int invalidCastle(GameStruct * game , Boolean castles , uint64_bit click){
     CorPiece turno = game->turnoJogador;
     int pos = posTabuleiro(click) , offset = 0 , indx = 0;
+    if(pos == (-1)) return 0;
     casas_board casa_rook = (pos%8 > 4) ? F1 : D1;
     if(turno == pretas){
         offset = 1; indx = 7;
