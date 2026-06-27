@@ -76,6 +76,16 @@ void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit 
 }
 
 
+void freeLinkedList(PecasComidasLL list){
+    PecasComidasLL cur = list;
+    while(cur){
+        PecasComidasLL next = cur->prox;
+        free(cur);
+        cur = next;
+    }
+}
+
+
 void removeHeadLinkedList(PecasComidasLL * list){
     PecasComidasLL u = *list;
     *list = (*list)->prox;

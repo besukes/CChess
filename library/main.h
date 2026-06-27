@@ -242,6 +242,7 @@ int dentroDoBotao(int mx , int my , int inf_x , int sup_x , int inf_y , int sup_
 int minimum(int n1,int n2);
 Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique);
 void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor);
+void freeLinkedList(PecasComidasLL list);
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH);
 void resetGame(GameStruct * game);
 int strToNumber(char * str);
@@ -298,7 +299,7 @@ void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettin
 //Modulo checkAndCheckmate.c
 
 TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click);
-int isCheckMate(GameStruct * game , uint64_bit pos_king , CorPiece cor);
+int isCheckMate(GameStruct * game, CorPiece cor);
 void notInCheck(GameStruct * game);
 Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor);
 

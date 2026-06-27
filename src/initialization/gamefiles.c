@@ -19,8 +19,8 @@ void readStartingLine(char * line ,CChessSettings * settings){
     while(*line != ' ' && *line != '\0' && *line != '\n'){
         if(*line != 'x'){
             PlayerChessTable * table = settings->story_st_line , * atual;
-            int indx = settings->indx_starting_line;
-            table = realloc(table,(size_t)indx);
+            int indx = ++ settings->indx_starting_line;
+            table = realloc(table,indx*sizeof(PlayerChessTable));
 
             atual = table + indx - 1;
             atual->cor_piece = brancas;
@@ -42,14 +42,14 @@ void readPowersLine(char * line , CChessSettings * settings, int type){
     while(*line != ' ' && *line != '\0' && *line != '\n'){
         if(type==1){
             int indx = ++settings->user_custom_items.indx_ult_unlocked;
-            TypeUltimate * temp = realloc(settings->user_custom_items.ultimates_unlocked,(size_t)indx);
+            TypeUltimate * temp = realloc(settings->user_custom_items.ultimates_unlocked,indx*sizeof(TypeUltimate));
             *(temp + indx - 1) = (TypeUltimate) strToNumber(line);
 
             settings->user_custom_items.ultimates_unlocked = temp;
         }
         else if(type==2){
             int indx = ++settings->indx_selected_ults;
-            UltimatesSettings * temp = realloc(settings->selected_pieces_power,(size_t)indx);
+            UltimatesSettings * temp = realloc(settings->selected_pieces_power,indx*sizeof(UltimatesSettings));
             (temp + indx - 1)->ultimate_refers_piece = (Pieces)counter;
             (temp + indx - 1)->ultimate = (TypeUltimate) strToNumber(line);
 
@@ -58,7 +58,7 @@ void readPowersLine(char * line , CChessSettings * settings, int type){
         else{
             int indx = ++settings->user_custom_items.indx_ult_owned;
             TypeUltimate * temp = settings->user_custom_items.ultimates_owned;
-            temp = realloc(temp,(size_t)indx);
+            temp = realloc(temp,indx*sizeof(TypeUltimate));
             *(temp + indx - 1) = (TypeUltimate) strToNumber(line);
             settings->user_custom_items.ultimates_owned = temp;
         }

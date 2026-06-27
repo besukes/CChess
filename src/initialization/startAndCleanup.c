@@ -46,15 +46,17 @@ SDL_Renderer * sdl_initializer(void){
     return renderer;
 }
 
-void freeLinkedList(PecasComidasLL list){
-    PecasComidasLL cur = list;
-    while(cur){
-        PecasComidasLL next = cur->prox;
-        free(cur);
-        cur = next;
-    }
-}
 
+
+void freeUserSettings(CChessSettings * user){
+    free(user->selected_pieces_power);
+    free(user->story_st_line);
+
+    free(user->user_custom_items.extraPieces_owned);
+    free(user->user_custom_items.extraPieces_unlocked);
+    free(user->user_custom_items.ultimates_owned);
+    free(user->user_custom_items.ultimates_unlocked);
+}
 
 
 void free_allocated_memory(GameStruct * game , CChessSettings * user){
@@ -74,8 +76,10 @@ void free_allocated_memory(GameStruct * game , CChessSettings * user){
     for(int i = 0; i < 60; i++){
         SDL_DestroyTexture(user->cosmeticos.gif_checkmate[i]);
     }
+    free(user->cosmeticos.gif_checkmate);
     for(int i = 0; i < 5; i++){
         SDL_DestroyTexture(user->textures.buttonsTextures[i]);
     }
     SDL_DestroyRenderer(user->gameRenderer);
+    freeUserSettings(user);
 }
