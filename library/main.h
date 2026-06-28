@@ -3,6 +3,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
+
 typedef int Boolean; //Forma mais intuitiva de perceber quando as variáveis são usadas como valores lógicos.
 
 /*Coordenadas cartesianas*/
@@ -71,7 +72,7 @@ typedef struct EstadoJogo{
     uint64_bit bitboard_todas_pieces; //Bitboard que guarda as posições ocupadas por todas as peças no jogo
 }EstadoJogo;
 
-typedef enum { Menu , Chess , Story , Theme , WinScreen , DrawScreen} UserScreen; //Define em qual tela está o utilizador
+typedef enum { Menu , Chess , Story , Theme , WinScreen , DrawScreen , Settings , Multiplayer} UserScreen; //Define em qual tela está o utilizador
 
 typedef enum { Invalid , Leave , Valid , Checkmate , TooLarge , Stalemate} TipoJogada; //Define o tipo de jogada que o utilizador efetuou
 
@@ -154,8 +155,6 @@ typedef struct CustomPieces{
     TypeUltimate * ultimates_unlocked; //Poderes que o utilizador possui desbloqueados para comprar
     int indx_ult_owned; //index para o array dinamicamente alocado
     TypeUltimate * ultimates_owned; //Poderes que o utilizador possui comprados]
-    int indx_ep_unlocked; //index para o array dinamicamente alocado
-    Pieces * extraPieces_unlocked; //Pieces personalizadas que o utilizador possui desbloqueados para comprar
     int indx_ep_owned; //index para o array dinamicamente alocado
     Pieces * extraPieces_owned; //Pieces personalizadas que o utilizador compradas
 }CustomPieces;
@@ -249,6 +248,8 @@ int strToNumber(char * str);
 char * skipWhileSpace(char * str);
 int compareString(char comparing[],char compared[]);
 int numberChars(char * str);
+char * skip_to_value(char * line);
+int get_number(char * line, int max , int def);
 
 
 

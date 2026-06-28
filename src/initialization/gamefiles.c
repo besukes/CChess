@@ -12,6 +12,27 @@
     #define create_dir(path) mkdir(path, 0777)
 #endif
 
+#define MIN_ALLOWED 0
+
+#define MAX_PIECES 6
+#define DEFAULT_PIECES 7
+
+#define MAX_ULTIMATES 8
+#define DEFAULT_ULTIMATES 0
+
+
+void readExtraPieces(char * line ,CChessSettings * settings){
+    while(*line != ' ' && *line != '\0' && *line != '\n'){
+        int indx = ++settings->user_custom_items.indx_ep_owned;
+        Pieces * p = settings->user_custom_items.extraPieces_owned;
+        p = realloc(p,indx*sizeof(Pieces));
+        *(p+indx-1) = (Pieces) get_number(line,MAX_PIECES,DEFAULT_PIECES);
+        settings->user_custom_items.extraPieces_owned = p;
+        int n = numberChars(line);
+        line=skipWhileSpace(line+n);
+        if(line==NULL) break;
+    }
+}
 
 
 void readStartingLine(char * line ,CChessSettings * settings){
@@ -25,7 +46,7 @@ void readStartingLine(char * line ,CChessSettings * settings){
             atual = table + indx - 1;
             atual->cor_piece = brancas;
             atual->bitboard_extra_piece = (1ULL<<counter);
-            atual->tipo_piece = (Pieces)strToNumber(line);
+            atual->tipo_piece = (Pieces)get_number(line,MAX_PIECES,DEFAULT_PIECES);
 
             settings->story_st_line = table;
         }
@@ -43,7 +64,7 @@ void readPowersLine(char * line , CChessSettings * settings, int type){
         if(type==1){
             int indx = ++settings->user_custom_items.indx_ult_unlocked;
             TypeUltimate * temp = realloc(settings->user_custom_items.ultimates_unlocked,indx*sizeof(TypeUltimate));
-            *(temp + indx - 1) = (TypeUltimate) strToNumber(line);
+            *(temp + indx - 1) = (TypeUltimate) get_number(line,MAX_ULTIMATES,DEFAULT_ULTIMATES);
 
             settings->user_custom_items.ultimates_unlocked = temp;
         }
@@ -51,7 +72,7 @@ void readPowersLine(char * line , CChessSettings * settings, int type){
             int indx = ++settings->indx_selected_ults;
             UltimatesSettings * temp = realloc(settings->selected_pieces_power,indx*sizeof(UltimatesSettings));
             (temp + indx - 1)->ultimate_refers_piece = (Pieces)counter;
-            (temp + indx - 1)->ultimate = (TypeUltimate) strToNumber(line);
+            (temp + indx - 1)->ultimate = (TypeUltimate) get_number(line,MAX_ULTIMATES,DEFAULT_ULTIMATES);
 
             settings->selected_pieces_power = temp;
         }
@@ -59,7 +80,7 @@ void readPowersLine(char * line , CChessSettings * settings, int type){
             int indx = ++settings->user_custom_items.indx_ult_owned;
             TypeUltimate * temp = settings->user_custom_items.ultimates_owned;
             temp = realloc(temp,indx*sizeof(TypeUltimate));
-            *(temp + indx - 1) = (TypeUltimate) strToNumber(line);
+            *(temp + indx - 1) = (TypeUltimate) get_number(line,MAX_ULTIMATES,DEFAULT_ULTIMATES);
             settings->user_custom_items.ultimates_owned = temp;
         }
         int n = numberChars(line);
@@ -71,55 +92,78 @@ void readPowersLine(char * line , CChessSettings * settings, int type){
 
 
 
-void readLine(char * line , CChessSettings * settings){
-    if(compareString(line,"difficultyLevel")){
-        line+=18;
-        settings->nivelDificuldade = strToNumber(line);
-    }
-    else if(compareString(line,"selectedLevel")){
-        line+=16;
-        settings->nivelDificuldade = strToNumber(line);
-    }
-    else if(compareString(line,"ownedPowers")){
-        line+=14;
+void readLineAux(char * line , CChessSettings * settings){
+    if(compareString(line,"ownedPowers")){
+        line = skip_to_value(line);
+        
         readPowersLine(line,settings,0);
     }
     else if(compareString(line,"unlockedPowers")){
-        line+=17;
+        line = skip_to_value(line);
+
         readPowersLine(line,settings,1);
     }
     else if(compareString(line,"selectedPowers")){
-        line+=17;
+        line = skip_to_value(line);
+
         readPowersLine(line,settings,2);
     }
-    else if(compareString(line,"selectedTheme")){
-        line+=16;
-        settings->textures.temaSelecionado = strToNumber(line);
-    }
-    else if(compareString(line,"selectedTable")){
-        line+=16;
-        settings->cosmeticos.tabuleiroSelecionado = strToNumber(line);
-    }
-    else if(compareString(line,"selectedMusic")){
-        line+=16;
-        settings->cosmeticos.musicaSelecionada = strToNumber(line);
-    }
-    else if(compareString(line,"checkmateEffect")){
-        line+=18;
-        settings->cosmeticos.efeito_checkmateSelecionado = strToNumber(line);
-    }
-    else if(compareString(line,"checkEffect")){
-        line+=14;
-        settings->cosmeticos.efeito_checkSelecionado = strToNumber(line);
-    }
-    else if(compareString(line,"coinsAmount")){
-        line+=14;
-        settings->cosmeticos.efeito_checkSelecionado = strToNumber(line);
-    }
     else if(compareString(line,"piecesPlace")){
-        line+=14;
+        line = skip_to_value(line);
+
         readStartingLine(line,settings);
     }
+    else if(compareString(line,"extraPiecesOwned")){
+        line = skip_to_value(line);
+
+        readExtraPieces(line,settings);
+    }
+}
+
+
+
+void readLine(char * line , CChessSettings * settings){
+    if(compareString(line,"difficultyLevel")){
+        line = skip_to_value(line);
+
+        settings->nivelDificuldade = get_number(line,6,0);
+    }
+    else if(compareString(line,"selectedLevel")){
+        line = skip_to_value(line);
+
+        settings->nivelDificuldade = get_number(line,15,0);
+    }
+    else if(compareString(line,"selectedTheme")){
+        line = skip_to_value(line);
+
+        settings->textures.temaSelecionado = get_number(line,2,0);
+    }
+    else if(compareString(line,"selectedTable")){
+        line = skip_to_value(line);
+
+        settings->cosmeticos.tabuleiroSelecionado = get_number(line,3,0);;
+    }
+    else if(compareString(line,"selectedMusic")){
+        line = skip_to_value(line);
+
+        settings->cosmeticos.musicaSelecionada = get_number(line,3,0);;
+    }
+    else if(compareString(line,"checkmateEffect")){
+        line = skip_to_value(line);
+
+        settings->cosmeticos.efeito_checkmateSelecionado = get_number(line,7,0);;
+    }
+    else if(compareString(line,"checkEffect")){
+        line = skip_to_value(line);
+
+        settings->cosmeticos.efeito_checkSelecionado = get_number(line,7,0);;
+    }
+    else if(compareString(line,"coinsAmount")){
+        line = skip_to_value(line);
+
+        settings->cosmeticos.efeito_checkSelecionado = get_number(line,INT32_MAX,0);;
+    }
+    else readLineAux(line,settings);
 }
 
 
@@ -149,6 +193,7 @@ void writeDefaultGamefiles(FILE * file){
                    "coinsAmount : 0 \n"
                    "piecesPlace : x x 7 5 x 2 x x 0 x 0 0 0 0 0 x \n"
                    "selectedPowers : 0 0 0 0 0 0 0 \n"
+                   "extraPiecesOwned : 7 \n"
            )
     ;
 }

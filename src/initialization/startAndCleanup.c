@@ -53,7 +53,6 @@ void freeUserSettings(CChessSettings * user){
     free(user->story_st_line);
 
     free(user->user_custom_items.extraPieces_owned);
-    free(user->user_custom_items.extraPieces_unlocked);
     free(user->user_custom_items.ultimates_owned);
     free(user->user_custom_items.ultimates_unlocked);
 }

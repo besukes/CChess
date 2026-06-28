@@ -8,9 +8,15 @@
 void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event * event){
     int mouseX = event->button.x , mouseY = event->button.y;
     SDL_Point point = {mouseX,mouseY};
-    SDL_Rect botaoOffline = {710,640,500,100};
+    SDL_Rect botaoOffline = {710,640,500,100},
+             botaoStory = {710,400,500,100},
+             botaoMultiplayer = {710,520,500,100},
+             botaoSettings = {710,760,500,100};
     if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT){
         if(SDL_PointInRect(&point,&botaoOffline))  settings->screenAtual = Chess;
+        else if(SDL_PointInRect(&point,&botaoStory)) settings->screenAtual = Story;
+        else if(SDL_PointInRect(&point,&botaoMultiplayer)) settings->screenAtual = Multiplayer;
+        else if(SDL_PointInRect(&point,&botaoSettings)) settings->screenAtual = Settings;
         else if(dentroDoBotao(mouseX,mouseY,1750,1850,1000,1050)) event->type = SDL_QUIT;
     }
 }

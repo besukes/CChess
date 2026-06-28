@@ -25,9 +25,6 @@ void zeroCustomPieces(CustomPieces * sets){
     sets->indx_ult_owned = 0;
     sets->ultimates_owned = NULL;
 
-    sets->indx_ep_unlocked = 0;
-    sets->extraPieces_unlocked = NULL;
-
     sets->indx_ep_owned = 0;
     sets->extraPieces_owned = NULL;
 }

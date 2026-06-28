@@ -167,3 +167,18 @@ int strToNumber_esp(char * str){
     }
     return numbr;
 }
+
+
+char * skip_to_value(char * line){
+    for(;*line<'0' || *line>'9';line++){
+        if(*line == '\0' || *line == '\n') return NULL;
+    }
+    return line;
+}
+
+
+int get_number(char * line, int max , int def){
+    int numbr = strToNumber(line);
+    if(numbr < 0 || numbr>max ) numbr = def;
+    return numbr;
+}
