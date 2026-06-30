@@ -361,7 +361,7 @@ void undoMove(GameStruct * game , uint64_bit click , Boolean castles);
 //Modulo castle_logic.c
 
 int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor , uint64_bit drop);
-int invalidCastle(GameStruct * game , Boolean castles , uint64_bit click);
+int invalidCastle(GameStruct * game , uint64_bit click);
 void verifica_direito_castle(GameStruct * game ,CorPiece turno);
 void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit * mesmaCor);
 
@@ -423,7 +423,7 @@ int is_protected_square(GameStruct * game , uint64_bit click);
 
 //Modulo story.c
 
-void desenhaStoryScreen(GameStruct * game,CChessSettings * settings ,SDL_Event * event);
+void desenhaStoryScreen(GameStruct * game,CChessSettings * settings);
 
 
 //Modulo storylogic.c

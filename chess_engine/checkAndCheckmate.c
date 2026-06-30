@@ -80,7 +80,7 @@ TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click){
     if(is_in_check(&(game->estadoJogo),game->estadoJogo.tabuleirojogo[turno][King],turno)){
         return Invalid;
     }
-    else if(invalidCastle(game,castles,click)){
+    else if(invalidCastle(game,click)){
         return Invalid;
     }
     else{

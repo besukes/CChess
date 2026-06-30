@@ -47,14 +47,17 @@ void handleStoryScreen(GameStruct * game , CChessSettings * settings,SDL_Event *
     int mouseX = event->button.x , mouseY = event->button.y;
     SDL_Point point = {mouseX,mouseY};
     SDL_Rect lvl1 = {710,640,500,100};
-    if(1){
+    if(0){
         settings->nivelDificuldade++;
     }
-    else if(1){
+    else if(0){
         initStoryGame(game,settings,1);
     }
-    else if(2){
+    else if(0){
         initStoryGame(game,settings,2);
+    }
+    else if(dentroDoBotao(mouseX,mouseY,50,250,1000,1050)){
+        settings->screenAtual = Menu;
     }
 }
 
@@ -64,14 +67,17 @@ void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event ev
     Boolean valido_turno = game->turnoJogador == brancas;
     if(game->piece_animation.is_moving_piece ) return;
 
-    if(event.type == SDL_MOUSEBUTTONDOWN){
+    if(!valido_turno){
+        
+    }
+    else if(event.type == SDL_MOUSEBUTTONDOWN){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown == 0 ){
             game->isKeyPressedDown = 1;
             efetuaEventoClickStory(game,settings,&event,valido_turno);
             game->jogada = Valid;
         }
     }
-    else if(event.type == SDL_MOUSEBUTTONUP && valido_turno){
+    else if(event.type == SDL_MOUSEBUTTONUP){
         if(event.button.button == SDL_BUTTON_LEFT){
             game->isKeyPressedDown = 0;
             efetuaEventoSoltar(game,settings,event);

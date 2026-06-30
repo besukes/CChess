@@ -10,21 +10,25 @@ int is_open_castle_path(uint64_bit bitboard_todas_pieces,uint64_bit path , uint6
 
 
 int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor, uint64_bit drop){
-    uint64_t destino_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7)  : (1ULL << 62 | 1ULL<<63),
-             destino_long  = (cor == brancas) ? (1ULL << 2 | 1ULL <<1 | 1ULL)  : (1ULL << 58 | 1ULL << 57 | 1ULL << 56);
-    uint64_t path_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7 | 1ULL<<5)  : ( 1ULL << 61 | 1ULL << 62 | 1ULL<<63),
-             path_long  = (cor == brancas) ? ( 1ULL << 3 | 1ULL << 2 | 1ULL <<1 | 1ULL)  : (1ULL << 59 | 1ULL << 58 | 1ULL << 57 | 1ULL << 56);
+    uint64_bit destino_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7)  : (1ULL << 62 | 1ULL<<63),
+               destino_long  = (cor == brancas) ? (1ULL << 2 | 1ULL <<1 | 1ULL)  : (1ULL << 58 | 1ULL << 57 | 1ULL << 56);
+    uint64_bit path_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7 | 1ULL<<5)  : ( 1ULL << 61 | 1ULL << 62 | 1ULL<<63),
+               path_long  = (cor == brancas) ? ( 1ULL << 3 | 1ULL << 2 | 1ULL <<1 | 1ULL)  : (1ULL << 59 | 1ULL << 58 | 1ULL << 57 | 1ULL << 56);
+    uint64_bit extra_pos_short = (cor == brancas) ? ( (1ULL << 7) & game->estadoJogo.tabuleirojogo[cor][Rook] )
+                                              : ( (1ULL << 63) & game->estadoJogo.tabuleirojogo[cor][Rook] ),
+               extra_pos_long = (cor == brancas) ? ( 1ULL & game->estadoJogo.tabuleirojogo[cor][Rook] )
+                                              : ( (1ULL << 56) & game->estadoJogo.tabuleirojogo[cor][Rook] );
     Boolean castelShort = ( (destino_short & drop) != 0) && 
-                is_open_castle_path(game->estadoJogo.bitboard_todas_pieces,path_short,game->estadoJogo.tabuleirojogo[cor][Rook]),
+                is_open_castle_path(game->estadoJogo.bitboard_todas_pieces,path_short,extra_pos_short),
             castelLong = ( (destino_long & drop) != 0) && 
-                is_open_castle_path(game->estadoJogo.bitboard_todas_pieces,path_long,game->estadoJogo.tabuleirojogo[cor][Rook]);
+                is_open_castle_path(game->estadoJogo.bitboard_todas_pieces,path_long,extra_pos_long);
     return (                                      !game->estadoJogo.king_in_check[cor] &&
             ( (castelShort && game->estadoJogo.canCastle[cor][Short]) || (castelLong && game->estadoJogo.canCastle[cor][Long]) ) );
 }
 
 
 //Necessita ser feita
-int invalidCastle(GameStruct * game , Boolean castles , uint64_bit click){
+int invalidCastle(GameStruct * game , uint64_bit click){
     CorPiece turno = game->turnoJogador;
     int pos = posTabuleiro(click) , offset = 0 , indx = 0;
     if(pos == (-1)) return 0;
