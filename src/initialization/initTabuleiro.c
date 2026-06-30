@@ -5,14 +5,8 @@
 
 void initPieces(uint64_bit pt[6],int index,int tipo,casas_board pos,int difPos){
     pt[index] = 0;
-    if(tipo==0){
-        pt[index] |= (1ULL << pos);
-        pt[index] |= (1ULL << (pos + difPos));
-    }
-    else{
-        pt[index] |= (1ULL << (56 + pos));
-        pt[index] |= (1ULL << (56 + pos + difPos));
-    }
+    pt[index] |= (1ULL << (tipo + pos));
+    pt[index] |= (1ULL << (tipo + pos + difPos));
 }
 
 
@@ -54,7 +48,7 @@ void init_other_bitboards(EstadoJogo * es){
     es->bitboard_pretas = 0;
     for(int i = 0 ; i < 6 ; i++){
         es->bitboard_brancas |= es->tabuleirojogo[0][i];
-        es->bitboard_pretas |= es->tabuleirojogo[1][i];
+        es->bitboard_pretas  |= es->tabuleirojogo[1][i];
     }
     es->bitboard_todas_pieces = es->bitboard_brancas | es->bitboard_pretas;
 }

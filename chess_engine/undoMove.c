@@ -24,10 +24,14 @@ void restauraCastle(uint64_bit * rei_tab,uint64_bit * mesma_cor, uint64_bit clic
         nova_rook = (1ULL<< (8*offset + D1));
         antiga_pos_rook = (1ULL<<(8*offset + A1));
     }
-    *mesma_cor = (*mesma_cor & ~nova_rook & ~(*rei_tab)) | antiga_pos_rook;
+    uint64_bit rei_atual = *rei_tab;
     *rei_tab = (1ULL<<(8*offset + E1));
+    *mesma_cor = (*mesma_cor & ~nova_rook & ~rei_atual) | antiga_pos_rook | *rei_tab;
     game->estadoJogo.tabuleirojogo[turno][Rook] &= ~nova_rook;
     game->estadoJogo.tabuleirojogo[turno][Rook] |= antiga_pos_rook;
+
+    uint64_bit cor_oposta = (turno == brancas) ? game->estadoJogo.bitboard_pretas : game->estadoJogo.bitboard_brancas;
+    game->estadoJogo.bitboard_todas_pieces = *mesma_cor | cor_oposta;
 }
 
 

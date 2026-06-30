@@ -69,7 +69,7 @@ EstadoJogo initEstadoJogoOffline(void){
         es.canCastle[i][1] = 1;
     }
     initTabuleiro(&(es.tabuleirojogo[0][0]),0);
-    initTabuleiro(&(es.tabuleirojogo[1][0]),5);
+    initTabuleiro(&(es.tabuleirojogo[1][0]),56);
     init_other_bitboards(&es);
     return es;
 }
