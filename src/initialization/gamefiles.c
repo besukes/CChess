@@ -21,6 +21,31 @@
 #define DEFAULT_ULTIMATES 0
 
 
+
+
+void checkResolutionUser(char * line , CChessSettings * settings){
+    int u = get_number(line,3,0);
+    switch(u){
+        case 0:
+            SDL_SetWindowFullscreen(settings->window,SDL_WINDOW_FULLSCREEN);
+        break;
+        case 1:
+            SDL_SetWindowSize(settings->window,1280,720);
+            SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
+        break;
+        case 2:
+            SDL_SetWindowSize(settings->window,1600,900);
+            SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
+        break;
+        case 3:
+            SDL_SetWindowSize(settings->window,1920,1080);
+            SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
+        break;
+        default:break;
+    }
+}
+
+
 void readExtraPieces(char * line ,CChessSettings * settings){
     while(*line != ' ' && *line != '\0' && *line != '\n'){
         int indx = ++settings->user_custom_items.indx_ep_owned;
@@ -92,7 +117,7 @@ void readPowersLine(char * line , CChessSettings * settings, int type){
 
 
 
-void readLineAux(char * line , CChessSettings * settings){
+void readLineAuxAux(char * line , CChessSettings * settings){
     if(compareString(line,"ownedPowers")){
         line = skip_to_value(line);
         
@@ -118,6 +143,33 @@ void readLineAux(char * line , CChessSettings * settings){
 
         readExtraPieces(line,settings);
     }
+    else if(compareString(line,"resolutionOption")){
+        line = skip_to_value(line);
+        checkResolutionUser(line,settings);
+    }
+}
+
+
+
+void readLineAux(char * line , CChessSettings * settings){
+    if(compareString(line,"coinsAmount")){
+        line = skip_to_value(line);
+
+        settings->cosmeticos.efeito_checkSelecionado = get_number(line,INT32_MAX,0);
+    }
+    else if(compareString(line,"offlineTutorial")){
+        line = skip_to_value(line);
+        settings->tutorials.tutorial_offline_done = get_number(line,1,0);
+    }
+    else if(compareString(line,"storyTutorial")){
+        line = skip_to_value(line);
+        settings->tutorials.tutorial_story_done = get_number(line,1,0);
+    }
+    else if(compareString(line,"mtplyTutorial")){
+        line = skip_to_value(line);
+        settings->tutorials.tutorial_multiplayer_done = get_number(line,1,0);
+    }
+    else readLineAuxAux(line,settings);
 }
 
 
@@ -141,27 +193,22 @@ void readLine(char * line , CChessSettings * settings){
     else if(compareString(line,"selectedTable")){
         line = skip_to_value(line);
 
-        settings->cosmeticos.tabuleiroSelecionado = get_number(line,3,0);;
+        settings->cosmeticos.tabuleiroSelecionado = get_number(line,3,0);
     }
     else if(compareString(line,"selectedMusic")){
         line = skip_to_value(line);
 
-        settings->cosmeticos.musicaSelecionada = get_number(line,3,0);;
+        settings->cosmeticos.musicaSelecionada = get_number(line,3,0);
     }
     else if(compareString(line,"checkmateEffect")){
         line = skip_to_value(line);
 
-        settings->cosmeticos.efeito_checkmateSelecionado = get_number(line,7,0);;
+        settings->cosmeticos.efeito_checkmateSelecionado = get_number(line,7,0);
     }
     else if(compareString(line,"checkEffect")){
         line = skip_to_value(line);
 
-        settings->cosmeticos.efeito_checkSelecionado = get_number(line,7,0);;
-    }
-    else if(compareString(line,"coinsAmount")){
-        line = skip_to_value(line);
-
-        settings->cosmeticos.efeito_checkSelecionado = get_number(line,INT32_MAX,0);;
+        settings->cosmeticos.efeito_checkSelecionado = get_number(line,7,0);
     }
     else readLineAux(line,settings);
 }
@@ -194,6 +241,10 @@ void writeDefaultGamefiles(FILE * file){
                    "piecesPlace : x x 7 5 x 2 x x 0 x 0 0 0 0 0 x \n"
                    "selectedPowers : 0 0 0 0 0 0 0 \n"
                    "extraPiecesOwned : 7 \n"
+                   "resolutionOption : 0 \n"
+                   "offlineTutorial : 0 \n"
+                   "storyTutorial : 0 \n"
+                   "mtplyTutorial : 0 \n"
            )
     ;
 }
@@ -227,7 +278,12 @@ void initGameFiles(CChessSettings * settings){
                 readGameFilesSettings(settings);
             }
         }
-         if(!found) addGamefilesFile(settings);
+        if(!found) addGamefilesFile(settings);
+        closedir(dir);
     }
-    closedir(dir);
+}
+
+
+void writeNewGameFiles(CChessSettings * settings){
+    
 }

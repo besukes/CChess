@@ -3,6 +3,11 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
+/*Struct que serve apenas no startAndCleanup.c para retornar os endereços de memória do nosso renderer e window*/
+typedef struct SDL_Initializators{
+    SDL_Renderer * renderer; //renderer do jogo
+    SDL_Window * window; //window do jogo
+}SDL_Initializators;
 
 typedef int Boolean; //Forma mais intuitiva de perceber quando as variáveis são usadas como valores lógicos.
 
@@ -89,6 +94,13 @@ typedef struct PecasComidas{
     struct PecasComidas * prox;
 } * PecasComidasLL;
 
+/*Guarda informações sobre os tutoriais já realizados pelo utilizador no jogo*/
+typedef struct TutorialsDone{
+    Boolean tutorial_offline_done; //Informa se já realizou o tutorial do modo offline
+    Boolean tutorial_story_done; //Informa se já realizou o tutorial do modo história
+    Boolean tutorial_multiplayer_done; //Informa se já realizou o tutorial do modo multiplayer
+}TutorialsDone;
+
 /*Define o tipo de ultimates/poderes que existem no jogo*/
 typedef enum {None , FieryQueen , JumpingHorse , FearlessPawn , THEROOK , HolyGrace , 
               GeekKing , TimeTravelerKing , MistyKnight
@@ -113,9 +125,17 @@ typedef struct UltimatesActive{
     uint64_bit ult_affected_positions; //Define as posições afetadas pela ultimate , no tabuleiro
 }UltimatesActive;
 
+/*Struct responsável por guardar informações sobre movimentos de pieces durante o jogo*/
+typedef struct MovingAnimation{
+    Boolean is_moving_piece; //Indica se uma piece esta a ser movida
+    uint64_bit current_position; //Indica a posicao atual da piece movida
+    uint64_bit end_position; //Indica a posicao final para onde a peca quer se mover
+}MovingAnimation;
+
 /*Struct que guarda o estado do jogo , tal como o turno do jogador , a peça que está a ser segurada(caso esteja a ser premida a tecla ,
 que é da responsabilidade do bool isKeyPressedDown) e também a jogada do utilizador */
 typedef struct GameStruct{
+    Boolean game_needs_initialization; //Indica se o jogo precisa ser inicializado consoante a tela do utilizador
     EstadoJogo estadoJogo; //Estado atual do jogo
     Ultimates pieces_power[2][6]; //Guarda os poderes selecionados de cada piece do xadrez original
     Ultimates extra_pieces_power[2][6]; //Guarda os poderes selecionados de cada piece extra do CChess
@@ -128,6 +148,7 @@ typedef struct GameStruct{
     PecasComidasLL lastmoves; //Guarda a peça que foi comida na jogada anterior , para depois desfazer a jogada , caso seja necessário
     Boolean pawnPromoted; //Guarda se o peão está a ser promovido
     Boolean promotedSucessfully; //Guarda se o peão foi promovido num clique
+    MovingAnimation piece_animation; //Struct que guarda informações sobre uma peça estar a mover se para um quadrado
 }GameStruct;
 
 
@@ -166,6 +187,7 @@ que já se passaram deste o começo do jogo , bem como a tela em que o utilizado
 typedef struct CChessSettings{
     AssetsCChess textures; //Texturas do jogo CChess
     SDL_Renderer * gameRenderer; //Renderer responsável por guardar a janela e onde desenhamos os objetos
+    SDL_Window * window; //Window atual do utilizador
     TTF_Font * fonteJogo; //Fonte das letras do nosso jogo
     int posMouseX; //Posição horizontal do rato do utilizador , em termos de píxeis
     int posMouseY; //Posição vertical do rato do utilizador , em termos de píxeis
@@ -183,6 +205,7 @@ typedef struct CChessSettings{
     PlayerChessTable * story_st_line; //Guarda a informação do utilizador quanto à organização das peças no modo história
     int indx_selected_ults; //index para o array dinamicamente alocado
     UltimatesSettings * selected_pieces_power; //Guarda os poderes selecionados de cada piece
+    TutorialsDone tutorials; //Guarda booleans que informam sobre o estado do utilizador quanto aos tutoriais de cada modo de jogo
 }CChessSettings;
 
 
@@ -194,9 +217,10 @@ typedef uint64_bit (*ShiftFunction)(uint64_bit,int);
 
 //Modulo initStructs.c
 
-CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer);
+CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * window);
 GameStruct initGameStruct(SDL_Renderer * sdl_renderer);
 EstadoJogo initEstadoJogo(void);
+void initializeOfflineGame(GameStruct * game);
 
 
 
@@ -228,7 +252,7 @@ void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event ev
 
 //Modulo startAndCleanup.c
 
-SDL_Renderer * sdl_initializer(void);
+SDL_Initializators sdl_initializer(void);
 void free_allocated_memory(GameStruct * game , CChessSettings * user);
 
 
@@ -244,7 +268,6 @@ Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique);
 void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor);
 void freeLinkedList(PecasComidasLL list);
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH);
-void resetGame(GameStruct * game);
 int strToNumber(char * str);
 char * skipWhileSpace(char * str);
 int compareString(char comparing[],char compared[]);
@@ -390,6 +413,7 @@ void loading_screen(CChessSettings * settings,int perc);
 //Modulo gamefiles.c
 
 void initGameFiles(CChessSettings * settings);
+void writeNewGameFiles(CChessSettings * settings);
 
 
 //Modulo custom_interactions.c 

@@ -23,7 +23,7 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
     else{
         if(dentroDoBotao(mouseX,mouseY,50,250,1000,1050)){ 
             settings->screenAtual = Menu;
-            resetGame(game);
+            game->game_needs_initialization = 1;
         }
         else if(1){
             
@@ -85,7 +85,7 @@ void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Ev
     if(!valido_turno || (click == 0) ){
         if(dentroDoBotao(mouseX,mouseY,50,250,1000,1050)){  //Botao sair
                 settings->screenAtual = Menu;
-                resetGame(game);
+                game->game_needs_initialization = 1;
         }
         else if(1){
             

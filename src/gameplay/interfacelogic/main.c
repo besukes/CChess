@@ -12,6 +12,7 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
             desenhaInterfaceMenu(settings,*event);
         break;
         case Chess :
+            if(game->game_needs_initialization) initializeOfflineGame(game);
             handleJogadaChess(game,settings,*event);
             desenhaInterfaceJogo(game,settings,*event);
         break;
@@ -51,10 +52,11 @@ void interfaceCChess(GameStruct * game ,CChessSettings * settings){
 }
 
 int main(void){
-    SDL_Renderer * sdl_renderer = sdl_initializer();
-    CChessSettings settings = initCChessSettings(sdl_renderer);
-    GameStruct game = initGameStruct(sdl_renderer);
+    SDL_Initializators init = sdl_initializer();
+    CChessSettings settings = initCChessSettings(init.renderer,init.window);
+    GameStruct game = initGameStruct(init.renderer);
     interfaceCChess(&game,&settings);
+    writeNewGameFiles(&settings);
     free_allocated_memory(&game,&settings);
     return 0;
 }

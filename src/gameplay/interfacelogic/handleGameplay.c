@@ -24,6 +24,8 @@ void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event * event){
 
 
 void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event){
+    if(game->piece_animation.is_moving_piece) return;
+
     if(event.type == SDL_MOUSEBUTTONDOWN){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown ==0){
             game->isKeyPressedDown = 1;
@@ -60,8 +62,10 @@ void handleStoryScreen(GameStruct * game , CChessSettings * settings,SDL_Event *
 
 void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event event){
     Boolean valido_turno = game->turnoJogador == brancas;
+    if(game->piece_animation.is_moving_piece ) return;
+
     if(event.type == SDL_MOUSEBUTTONDOWN){
-        if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown == 0){
+        if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown == 0 ){
             game->isKeyPressedDown = 1;
             efetuaEventoClickStory(game,settings,&event,valido_turno);
             game->jogada = Valid;

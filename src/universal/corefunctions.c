@@ -105,19 +105,6 @@ void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH){
 
 
 
-
-void resetGame(GameStruct * game){
-    game->estadoJogo = initEstadoJogo();
-    game->isKeyPressedDown = 0;
-    game->jogada = Valid;
-    game->pieceSelecionada = Empty;
-    game->turnoJogador = brancas;
-    game->pieceCoords = 0;
-    game->lastmoves = NULL;
-    game->pawnPromoted = 0;
-}
-
-
 int compareString(char comparing[],char compared[]){
     int i;
     for(i=0; comparing[i] != '\0' && comparing[i] !=' ' && comparing[i] != '\n' && compared[i] != '\0' && comparing[i] == compared[i] ; i++);

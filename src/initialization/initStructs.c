@@ -5,15 +5,16 @@
 #include <stdio.h>
 
 
+void initMovingAnimation(MovingAnimation * mov){
+    mov->current_position = 0;
+    mov->end_position = 0;
+    mov->is_moving_piece = 0;
+}
 
 
 
 //No futuro sera suposto ler o ficheiro de jogo do utilizador
 void initCosmeticos(CChessSettings * settings){
-    /*settings->cosmeticos.efeito_checkSelecionado = 0;
-    settings->cosmeticos.efeito_checkmateSelecionado = 3;
-    settings->cosmeticos.musicaSelecionada = 0;
-    settings->cosmeticos.tabuleiroSelecionado = 0;*/
     settings->cosmeticos.gif_checkmate = gif_utilizador_checkmate(settings, settings->cosmeticos.efeito_checkmateSelecionado);
 }
 
@@ -31,10 +32,11 @@ void zeroCustomPieces(CustomPieces * sets){
 
 
 
-CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer){
+CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * window){
     CChessSettings settings;
     settings.fonteJogo = NULL; //temos de mudar
     settings.gameRenderer = sdl_renderer;
+    settings.window = window;
     settings.screenAtual = Menu;
     settings.posMouseX = 0;
     settings.posMouseY = 0;
@@ -53,7 +55,7 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer){
     return settings;
 }
 
-EstadoJogo initEstadoJogo(void){
+EstadoJogo initEstadoJogoOffline(void){
     EstadoJogo es;
     es.checkMate = 0;
     es.king_in_check[brancas] = 0;
@@ -74,7 +76,7 @@ EstadoJogo initEstadoJogo(void){
 
 GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     GameStruct game;
-    game.estadoJogo = initEstadoJogo();
+    game.game_needs_initialization = 1;
     game.isKeyPressedDown = 0;
     game.jogada = Valid;
     game.pieceSelecionada = Empty;
@@ -84,5 +86,25 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     game.pawnPromoted = 0;
     game.active_ultimate = NULL;
     game.promotedSucessfully = 0;
+    initMovingAnimation(&game.piece_animation);
     return game;
+}
+
+
+
+void initializeOfflineGame(GameStruct * game){
+    game->estadoJogo = initEstadoJogoOffline();
+    game->game_needs_initialization = 0;
+    game->isKeyPressedDown = 0;
+    game->jogada = Valid;
+    game->pieceSelecionada = Empty;
+    game->turnoJogador = brancas;
+    game->pieceCoords = 0;
+    freeLinkedList(game->lastmoves);
+    game->lastmoves = NULL;
+    game->pawnPromoted = 0;
+    free(game->active_ultimate);
+    game->active_ultimate = NULL;
+    game->promotedSucessfully = 0;
+    initMovingAnimation(&game->piece_animation);
 }

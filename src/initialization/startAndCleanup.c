@@ -33,7 +33,7 @@ void setResolution(int * resX,int * resY,int * optn){
     }
 }
 
-SDL_Renderer * sdl_initializer(void){
+SDL_Initializators sdl_initializer(void){
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* window;
     int optn = getOption(),resX , resY;
@@ -43,7 +43,8 @@ SDL_Renderer * sdl_initializer(void){
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     //para não precisar de dar scale às imagens no ecrã
     SDL_RenderSetLogicalSize(renderer, 1920, 1080);
-    return renderer;
+    SDL_Initializators init = {.renderer = renderer , .window = window};
+    return init;
 }
 
 
