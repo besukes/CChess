@@ -74,45 +74,5 @@ SDL_Texture ** gif_utilizador_checkmate(CChessSettings * settings, int efeito_ch
 
 
 
-void updateMovingAnimation(GameStruct * game , CChessSettings * settings , uint64_bit click){
-    MovingAnimation * mov = &game->piece_animation;
-    mov->is_moving_piece = 1;
-    int current_pos = posTabuleiro(game->pieceCoords), 
-        end_pos = posTabuleiro(click);
-    int current_line = current_pos / 8, current_col = current_pos % 8,
-        end_line = end_pos / 8, end_col = end_pos % 8;
-    mov->current_position.x = 100 * current_col + 260;
-    mov->current_position.y = 1080 - (100 * current_line + 246);
-    mov->end_position.x = 100 * end_col + 260;
-    mov->end_position.y = 1080 - (100 * end_line + 246);
-    mov->ticks_animation_start = settings->ticks;
-    mov->bitboard_end = click;
-}
 
 
-
-int getPositionAnimation(GameStruct * game , CChessSettings * settings , int offset , int type){
-    static float time_animation = 500.0f; //Duração da animação em milissegundos
-    int distf = (type)? game->piece_animation.end_position.x : game->piece_animation.end_position.y;
-    int disti = (type)? game->piece_animation.current_position.x : game->piece_animation.current_position.y;
-    float delta_dist = distf - disti , deltaTime = settings->ticks - game->piece_animation.ticks_animation_start;
-    float pos = (float)offset + ( (deltaTime/time_animation) * delta_dist);
-    return ((int)pos);
-}
-
-
-void verificaAnimations(GameStruct * game , CChessSettings * settings){
-    if(game->piece_animation.is_moving_piece){
-        if(settings->ticks - game->piece_animation.ticks_animation_start > 500){
-                initMovingAnimation(&game->piece_animation);
-        }
-        else {
-            int posX = posTabuleiro(game->pieceCoords)%8,
-                posY = posTabuleiro(game->pieceCoords)/8;
-            int offsety = 1080 - (100 * posY + 246),
-                offsetx = 100*posX+260;
-            game->piece_animation.current_position.x = getPositionAnimation(game,settings,offsetx,1);
-            game->piece_animation.current_position.y = getPositionAnimation(game,settings,offsety,0);
-        }
-    }
-}

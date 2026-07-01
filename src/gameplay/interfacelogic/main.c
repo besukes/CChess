@@ -12,7 +12,6 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
         break;
         case Chess :
             if(game->game_needs_initialization) initializeOfflineGame(game);
-            verificaAnimations(game,settings);
             handleJogadaChess(game,settings,*event);
             desenhaInterfaceJogo(game,settings,*event);
         break;

@@ -5,16 +5,6 @@
 #include <stdio.h>
 
 
-void initMovingAnimation(MovingAnimation * mov){
-    mov->current_position.x = 0;
-    mov->current_position.y = 0;
-    mov->end_position.x = 0;
-    mov->end_position.y = 0;
-    mov->is_moving_piece = 0;
-    mov->ticks_animation_start = 0;
-    mov->bitboard_end = 0;
-}
-
 
 
 //No futuro sera suposto ler o ficheiro de jogo do utilizador
@@ -90,7 +80,6 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     game.pawnPromoted = 0;
     game.active_ultimate = NULL;
     game.promotedSucessfully = 0;
-    initMovingAnimation(&game.piece_animation);
     return game;
 }
 
@@ -110,5 +99,4 @@ void initializeOfflineGame(GameStruct * game){
     free(game->active_ultimate);
     game->active_ultimate = NULL;
     game->promotedSucessfully = 0;
-    initMovingAnimation(&game->piece_animation);
 }

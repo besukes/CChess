@@ -1,0 +1,94 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*Struct responsável por guardar informações sobre movimentos de pieces durante o jogo*/
+typedef struct MovingAnimation{
+    Boolean is_moving_piece; //Indica se uma piece esta a ser movida
+    Coordenadas starting_position; //Indica a posição inicial da piece movida
+    Coordenadas current_position; //Indica a posicao atual da piece movida
+    Coordenadas end_position; //Indica a posicao final para onde a peca quer se mover
+    uint64_bit bitboard_end; //Guarda o bitboard da posicao final da piece
+    int ticks_animation_start; //Indica em que tick a animação começou
+}MovingAnimation;
+
+
+void initMovingAnimation(MovingAnimation * mov){
+    mov->starting_position.x = 0;
+    mov->starting_position.y = 0;
+    mov->current_position.x = 0;
+    mov->current_position.y = 0;
+    mov->end_position.x = 0;
+    mov->end_position.y = 0;
+    mov->is_moving_piece = 0;
+    mov->ticks_animation_start = 0;
+    mov->bitboard_end = 0;
+}
+
+void updateMovingAnimation(GameStruct * game , CChessSettings * settings , uint64_bit click){
+    MovingAnimation * mov = &game->piece_animation;
+    mov->is_moving_piece = 1;
+    int current_pos = posTabuleiro(game->pieceCoords), 
+        end_pos = posTabuleiro(click);
+    int current_line = current_pos / 8, current_col = current_pos % 8,
+        end_line = end_pos / 8, end_col = end_pos % 8;
+    mov->starting_position.x = 100 * current_col + 260;
+    mov->starting_position.y = 1080 - (100 * current_line + 246);
+
+    mov->current_position.x = 100 * current_col + 260;
+    mov->current_position.y = 1080 - (100 * current_line + 246);
+
+    mov->end_position.x = 100 * end_col + 260;
+    mov->end_position.y = 1080 - (100 * end_line + 246);
+
+    mov->ticks_animation_start = settings->ticks;
+    mov->bitboard_end = click;
+}
+
+int getPositionAnimation(GameStruct * game , CChessSettings * settings , int offset , int type){
+    static float time_animation = 400.0f; //Duração da animação em milissegundos
+    int distf = (type)? game->piece_animation.end_position.x : game->piece_animation.end_position.y;
+    int disti = (type)? game->piece_animation.starting_position.x : game->piece_animation.starting_position.y;
+    float delta_dist = distf - disti , deltaTime = settings->ticks - game->piece_animation.ticks_animation_start;
+
+    float progresso = (deltaTime/time_animation);
+    if (progresso > 1.0f) progresso = 1.0f;
+    if (progresso < 0.0f) progresso = 0.0f;
+
+    float pos = (float)offset + ( (deltaTime/time_animation) * delta_dist);
+    return ((int)pos);
+}
+
+
+void verificaAnimations(GameStruct * game , CChessSettings * settings){
+    if(game->piece_animation.is_moving_piece){
+        if(settings->ticks - game->piece_animation.ticks_animation_start > 400){
+                initMovingAnimation(&game->piece_animation);
+        }
+        else {
+            int posX = posTabuleiro(game->pieceCoords)%8,
+                posY = posTabuleiro(game->pieceCoords)/8;
+            int offsety = 1080 - (100 * posY + 246),
+                offsetx = 100*posX+260;
+            game->piece_animation.current_position.x = getPositionAnimation(game,settings,offsetx,1);
+            game->piece_animation.current_position.y = getPositionAnimation(game,settings,offsety,0);
+        }
+    }
+}
+
+MovingAnimation piece_animation; //Struct que guarda informações sobre uma peça estar a mover se para um quadrado
+
+
+int isMovingPiece(GameStruct * game , Pieces tipoPiece , int counter){
+    int col = game->piece_animation.end_position.x , line = game->piece_animation.end_position.y;
+    Boolean matches_piece = ((1ULL<<counter) & game->piece_animation.bitboard_end )!= 0;
+    return (game->pieceSelecionada == tipoPiece && matches_piece);
+}
+
+void desenharPieceMoving(CChessSettings * settings , Pieces tipoPiece , MovingAnimation piece_animation, int offset){
+    SDL_Rect posicaoPeca = {piece_animation.current_position.x, piece_animation.current_position.y,100,100};
+    SDL_RenderCopy(settings->gameRenderer,settings->textures.chessPieces[tipoPiece + offset],NULL,&posicaoPeca);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

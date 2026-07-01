@@ -125,14 +125,6 @@ typedef struct UltimatesActive{
     uint64_bit ult_affected_positions; //Define as posições afetadas pela ultimate , no tabuleiro
 }UltimatesActive;
 
-/*Struct responsável por guardar informações sobre movimentos de pieces durante o jogo*/
-typedef struct MovingAnimation{
-    Boolean is_moving_piece; //Indica se uma piece esta a ser movida
-    Coordenadas current_position; //Indica a posicao atual da piece movida
-    Coordenadas end_position; //Indica a posicao final para onde a peca quer se mover
-    uint64_bit bitboard_end; //Guarda o bitboard da posicao final da piece
-    int ticks_animation_start; //Indica em que tick a animação começou
-}MovingAnimation;
 
 /*Struct que guarda o estado do jogo , tal como o turno do jogador , a peça que está a ser segurada(caso esteja a ser premida a tecla ,
 que é da responsabilidade do bool isKeyPressedDown) e também a jogada do utilizador */
@@ -150,7 +142,6 @@ typedef struct GameStruct{
     PecasComidasLL lastmoves; //Guarda a peça que foi comida na jogada anterior , para depois desfazer a jogada , caso seja necessário
     Boolean pawnPromoted; //Guarda se o peão está a ser promovido
     Boolean promotedSucessfully; //Guarda se o peão foi promovido num clique
-    MovingAnimation piece_animation; //Struct que guarda informações sobre uma peça estar a mover se para um quadrado
 }GameStruct;
 
 
@@ -223,7 +214,6 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * win
 GameStruct initGameStruct(SDL_Renderer * sdl_renderer);
 EstadoJogo initEstadoJogo(void);
 void initializeOfflineGame(GameStruct * game);
-void initMovingAnimation(MovingAnimation * mov);
 
 
 
@@ -410,8 +400,6 @@ void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event eve
 
 SDL_Texture ** gif_utilizador_checkmate(CChessSettings * settings, int efeito_checkmateSelecionado);
 void loading_screen(CChessSettings * settings,int perc);
-void updateMovingAnimation(GameStruct * game , CChessSettings * settings , uint64_bit click);
-void verificaAnimations(GameStruct * game , CChessSettings * settings);
 
 
 
