@@ -137,6 +137,7 @@ typedef struct GameStruct{
     Boolean isKeyPressedDown; //Verifica se o utilizador está a premir a tecla
     Pieces pieceSelecionada; //Guarda a peça que o utilizador está a ser segurada , caso esteja
     uint64_bit pieceCoords; //Guarda a posição de onde a peça que está a ser segurada veio , caso esteja
+    uint64_bit selected_piece_attacks; //Guarda as posições da peça que estão sobre ataque da mesma
     CorPiece turnoJogador; //Guarda o turno do utilizador 
     TipoJogada jogada; //Guarda a jogada do utilizador
     PecasComidasLL lastmoves; //Guarda a peça que foi comida na jogada anterior , para depois desfazer a jogada , caso seja necessário

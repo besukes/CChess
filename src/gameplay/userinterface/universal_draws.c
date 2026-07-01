@@ -2,8 +2,22 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 #include <stdio.h>
 
+/*
+void desenharPiecesAttacks(CChessSettings * settings , uint64_bit attacks){
+    int counter = 0;
+    uint64_bit casa_atual = 1ULL;
+    while(attacks != 0){
+        if(casa_atual & attacks){
+            int linha = counter/8 , coluna = counter % 8;
+            circleRGBA(settings->gameRenderer, 400, 300, 50, 255, 0, 0, 255);
+        }
+        attacks = (attacks>>1);
+        counter++;
+    }
+}*/
 
 
 void desenharPiece(Pieces tipoPiece , int linha , int coluna , CChessSettings * settings, int offset){

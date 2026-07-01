@@ -99,4 +99,5 @@ void initializeOfflineGame(GameStruct * game){
     free(game->active_ultimate);
     game->active_ultimate = NULL;
     game->promotedSucessfully = 0;
+    game->selected_piece_attacks = 0;
 }

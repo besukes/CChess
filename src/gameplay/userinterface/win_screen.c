@@ -38,7 +38,7 @@ void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event eve
         desenhaAnimacaoCheckmate(temp_inicial,settings);
         SDL_RenderPresent(settings->gameRenderer);
         SDL_PollEvent(&event);
-        settings->ticks = SDL_GetTicks();
+        settings->ticks = (int)SDL_GetTicks();
     }
     desenhaInterfaceJogo(game,settings,event);
     desenhaEndGameUI(settings);

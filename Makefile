@@ -14,7 +14,7 @@ SRC =	src/universal/corefunctions.c \
 		src/initialization/initTabuleiro.c \
 		src/initialization/gamefiles.c \
 		src/initialization/storygame.c \
-		src/gameplay/userinterface/draw_pieces.c \
+		src/gameplay/userinterface/universal_draws.c \
 		src/gameplay/userinterface/offline.c \
 		src/gameplay/userinterface/story.c \
 		src/gameplay/userinterface/menu.c \
@@ -55,5 +55,6 @@ check:
 	@pkg-config --exists SDL2_image || { echo "SDL2_image missing"; exit 1; }
 	@pkg-config --exists SDL2_mixer || { echo "SDL2_mixer missing"; exit 1; }
 	@pkg-config --exists SDL2_ttf || { echo "SDL2_ttf missing"; exit 1; }
+	@pkg-config --exists libsdl2-gfx-dev || { echo "SDL2_ttf missing"; exit 1; }
 
 	@echo "All dependencies OK"
