@@ -128,8 +128,10 @@ typedef struct UltimatesActive{
 /*Struct responsável por guardar informações sobre movimentos de pieces durante o jogo*/
 typedef struct MovingAnimation{
     Boolean is_moving_piece; //Indica se uma piece esta a ser movida
-    uint64_bit current_position; //Indica a posicao atual da piece movida
-    uint64_bit end_position; //Indica a posicao final para onde a peca quer se mover
+    Coordenadas current_position; //Indica a posicao atual da piece movida
+    Coordenadas end_position; //Indica a posicao final para onde a peca quer se mover
+    uint64_bit bitboard_end; //Guarda o bitboard da posicao final da piece
+    int ticks_animation_start; //Indica em que tick a animação começou
 }MovingAnimation;
 
 /*Struct que guarda o estado do jogo , tal como o turno do jogador , a peça que está a ser segurada(caso esteja a ser premida a tecla ,
@@ -221,6 +223,7 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * win
 GameStruct initGameStruct(SDL_Renderer * sdl_renderer);
 EstadoJogo initEstadoJogo(void);
 void initializeOfflineGame(GameStruct * game);
+void initMovingAnimation(MovingAnimation * mov);
 
 
 
@@ -407,6 +410,8 @@ void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event eve
 
 SDL_Texture ** gif_utilizador_checkmate(CChessSettings * settings, int efeito_checkmateSelecionado);
 void loading_screen(CChessSettings * settings,int perc);
+void updateMovingAnimation(GameStruct * game , CChessSettings * settings , uint64_bit click);
+void verificaAnimations(GameStruct * game , CChessSettings * settings);
 
 
 

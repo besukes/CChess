@@ -4,7 +4,6 @@
 #include <SDL2/SDL_mixer.h>
 
 
-
 void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * event){
     switch(settings->screenAtual){
         case Menu :
@@ -13,6 +12,7 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
         break;
         case Chess :
             if(game->game_needs_initialization) initializeOfflineGame(game);
+            verificaAnimations(game,settings);
             handleJogadaChess(game,settings,*event);
             desenhaInterfaceJogo(game,settings,*event);
         break;

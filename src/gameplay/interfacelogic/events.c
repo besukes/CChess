@@ -70,6 +70,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
                 update_en_passant(game);
                 game->pawnPromoted = promote;
                 if(promote) game->pieceCoords = click; //para depois se desenhar o quadrado de promoção na posição correta
+                updateMovingAnimation(game,settings,click);
             }
     }
     else{

@@ -1,6 +1,6 @@
 # CChess (SDL2)
 
-Este projeto foi iniciado no dia **30 de maio de 2026** por três caloiros de Engenharia Informática na UMinho e consiste num jogo sobre o jogo clássico de xadrez com outras implementações diferentes e criativas.
+Este projeto foi iniciado no dia **30 de maio de 2026** por dois caloiros de Engenharia Informática na UMinho e consiste num jogo sobre o jogo clássico de xadrez com outras implementações diferentes e criativas.
 
 O jogo utiliza a biblioteca **SDL2** e extensões associadas para criar uma aplicação gráfica em janela, com suporte a imagens, áudio e texto.
 
@@ -73,4 +73,4 @@ Após compilação:
 
 ## Cŕeditos
 
-Este jogo foi feito por Alberto Silva , Leandro Oliveira e Pedro Coutinho.
+Este jogo foi feito por Alberto Silva e Leandro Oliveira.

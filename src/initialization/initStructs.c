@@ -6,9 +6,13 @@
 
 
 void initMovingAnimation(MovingAnimation * mov){
-    mov->current_position = 0;
-    mov->end_position = 0;
+    mov->current_position.x = 0;
+    mov->current_position.y = 0;
+    mov->end_position.x = 0;
+    mov->end_position.y = 0;
     mov->is_moving_piece = 0;
+    mov->ticks_animation_start = 0;
+    mov->bitboard_end = 0;
 }
 
 
