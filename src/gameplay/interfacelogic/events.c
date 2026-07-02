@@ -22,7 +22,9 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
         game->selected_piece_attacks = get_selected_piece_attacks(game,settings,click,piece,turno);
     }
     else{
-        if(dentroDoBotao(mouseX,mouseY,50,250,1000,1050)){ 
+        SDL_Point point = {mouseX,mouseY};
+        SDL_Rect leave = {100,950,100,100};
+        if(SDL_PointInRect(&point,&leave)){ 
             settings->screenAtual = Menu;
             game->game_needs_initialization = 1;
         }
@@ -85,9 +87,11 @@ void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Ev
     int mouseX = event->button.x , mouseY = event->button.y;
     uint64_bit click = click_table_position(mouseX,mouseY);
     if(!valido_turno || (click == 0) ){
-        if(dentroDoBotao(mouseX,mouseY,50,250,1000,1050)){  //Botao sair
-                settings->screenAtual = Menu;
-                game->game_needs_initialization = 1;
+        SDL_Point point = {mouseX,mouseY};
+        SDL_Rect leave = {100,950,100,100};
+        if(SDL_PointInRect(&point,&leave)){ 
+            settings->screenAtual = Menu;
+            game->game_needs_initialization = 1;
         }
         else if(1){
             

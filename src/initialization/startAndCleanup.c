@@ -70,14 +70,14 @@ void free_allocated_memory(GameStruct * game , CChessSettings * user){
     for(int i = 0; i < 2; i++){
         SDL_DestroyTexture(user->textures.niveisTextures[i]);
     }
-    for(int i = 0; i < 8; i++){
+    for(int i = 0; i < 9; i++){
         SDL_DestroyTexture(user->textures.miscTextures[i]);
     }
     for(int i = 0; i < 60; i++){
         SDL_DestroyTexture(user->cosmeticos.gif_checkmate[i]);
     }
     free(user->cosmeticos.gif_checkmate);
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 6; i++){
         SDL_DestroyTexture(user->textures.buttonsTextures[i]);
     }
     SDL_DestroyRenderer(user->gameRenderer);

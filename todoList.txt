@@ -1,4 +1,4 @@
 //////////////TO-DO-LIST//////////////////
 1-- userinterface.c
-2-- add gemini to contributors for images
+
 

@@ -34,6 +34,10 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
             handleSettingsScreen(game,settings,event);
             desenhaSettings(settings,event);
         break;
+        case Multiplayer :
+            handleMultiplayerScreen(settings,event);
+            desenhaMultiplayerScreen(settings);
+        break;
     }
 }
 

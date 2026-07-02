@@ -434,3 +434,13 @@ void initStoryGame(GameStruct * game , CChessSettings * settings , int level);
 //Modulo settings.c
 
 void desenhaSettings(CChessSettings * settings , SDL_Event * event);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//Modulo multiplayer_logic.c
+
+void handleMultiplayerScreen(CChessSettings * settings , SDL_Event * event);
+
+//Modulo multiplayerUI.c
+
+void desenhaMultiplayerScreen(CChessSettings * settings);

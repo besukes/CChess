@@ -13,6 +13,7 @@ O jogo utiliza a biblioteca **SDL2** e extensões associadas para criar uma apli
   * SDL2_image
   * SDL2_mixer
   * SDL2_ttf
+  * SDL2_gfxPrimitives
 
 ## Estrutura do Projeto
 ```bash

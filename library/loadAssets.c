@@ -22,6 +22,7 @@ void loadButtons(SDL_Texture * buttonsTextures[20],SDL_Renderer * sdl_renderer){
     buttonsTextures[2] = IMG_LoadTexture(sdl_renderer,"assets/buttons/offline_button.png");
     buttonsTextures[3] = IMG_LoadTexture(sdl_renderer,"assets/buttons/settings_button.png");
     buttonsTextures[4] = IMG_LoadTexture(sdl_renderer,"assets/buttons/story_button.png");
+    buttonsTextures[5] = IMG_LoadTexture(sdl_renderer,"assets/buttons/go_back.png");
 }
 
 
@@ -35,6 +36,7 @@ void loadMiscAssets(AssetsCChess * assets,SDL_Renderer * sdl_renderer){
     assets->miscTextures[5] = IMG_LoadTexture(sdl_renderer,"assets/misc/white_moves.png");
     assets->miscTextures[6] = IMG_LoadTexture(sdl_renderer,"assets/misc/black_moves.png");
     assets->miscTextures[7] = IMG_LoadTexture(sdl_renderer,"assets/misc/settings.png");
+    assets->miscTextures[8] = IMG_LoadTexture(sdl_renderer,"assets/niveis/not_finished.png");
 }
 
 

@@ -21,6 +21,8 @@ SRC =	src/universal/corefunctions.c \
 		src/gameplay/userinterface/themes.c \
 		src/gameplay/userinterface/win_screen.c \
 		src/gameplay/userinterface/settings.c \
+		src/multiplayer/multiplayer_logic.c \
+		src/multiplayer/multiplayerUI.c \
 		library/loadAssets.c \
 		chess_engine/possibleMoves.c \
 		chess_engine/checkAndCheckmate.c \

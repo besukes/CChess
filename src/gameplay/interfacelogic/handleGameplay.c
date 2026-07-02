@@ -45,17 +45,21 @@ void handleStoryScreen(GameStruct * game , CChessSettings * settings,SDL_Event *
     int mouseX = event->button.x , mouseY = event->button.y;
     SDL_Point point = {mouseX,mouseY};
     SDL_Rect lvl1 = {710,640,500,100};
-    if(0){
-        settings->nivelDificuldade++;
-    }
-    else if(0){
-        initStoryGame(game,settings,1);
-    }
-    else if(0){
-        initStoryGame(game,settings,2);
-    }
-    else if(dentroDoBotao(mouseX,mouseY,50,250,1000,1050)){
-        settings->screenAtual = Menu;
+    SDL_Rect leave = {100,950,100,100};
+    if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT){
+        if(0){
+            settings->nivelDificuldade++;
+        }
+        else if(0){
+            initStoryGame(game,settings,1);
+        }
+        else if(0){
+            initStoryGame(game,settings,2);
+        }
+        else if(SDL_PointInRect(&point,&leave)){ 
+            settings->screenAtual = Menu;
+            game->game_needs_initialization = 1;
+        }
     }
 }
 
