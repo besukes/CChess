@@ -92,3 +92,13 @@ void handleJogadaThemes(CChessSettings * settings,SDL_Event event){
 void handleWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event){
 
 }
+
+
+void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Event * event){
+    int mouseX = event->button.x , mouseY = event->button.y;
+    SDL_Point point = {mouseX,mouseY};
+    SDL_Rect voltar = {1750,890,150,150};
+    if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT){
+        if(SDL_PointInRect(&point,&voltar))  settings->screenAtual = Menu;
+    }
+}

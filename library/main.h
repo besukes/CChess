@@ -241,6 +241,7 @@ void handleJogadaThemes(CChessSettings * settings,SDL_Event event);
 void handleWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event);
 void handleStoryScreen(GameStruct* game , CChessSettings * settings,SDL_Event * event);
 void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event event);
+void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Event * event);
 
 
 
@@ -372,6 +373,7 @@ void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettin
 void desenharPieceAttacks(CChessSettings * settings , uint64_bit passant , uint64_bit attacks , uint64_bit cor_oposta);
 void desenhaCheck(GameStruct * game , CChessSettings * settings);
 void desenhaPromotion(GameStruct * game , CChessSettings * settings);
+void desenhaFundo(CChessSettings * settings , SDL_Texture * texture);
 
 
 
@@ -427,3 +429,8 @@ void desenhaStoryScreen(GameStruct * game,CChessSettings * settings);
 //Modulo storylogic.c
 
 void initStoryGame(GameStruct * game , CChessSettings * settings , int level);
+
+
+//Modulo settings.c
+
+void desenhaSettings(CChessSettings * settings , SDL_Event * event);

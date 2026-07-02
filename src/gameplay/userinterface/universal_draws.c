@@ -89,3 +89,8 @@ void desenhaPromotion(GameStruct * game , CChessSettings * settings){
     SDL_RenderCopy(settings->gameRenderer,settings->textures.chessPieces[Horse + offset_textura],NULL,&knight);
 }
 
+
+void desenhaFundo(CChessSettings * settings , SDL_Texture * texture){
+    SDL_Rect fundo = {0,0,1920,1080};
+    SDL_RenderCopy(settings->gameRenderer,texture,NULL,&fundo);
+}
