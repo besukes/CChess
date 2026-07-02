@@ -343,6 +343,8 @@ uint64_bit shiftr(uint64_bit pos,int shift);
 uint64_bit shiftl(uint64_bit pos,int shift);
 uint64_bit get_same_colour_bitboard(EstadoJogo * estado , CorPiece cor);
 uint64_bit initQuadrado(void);
+uint64_bit get_opposing_colour_bitboard(EstadoJogo * estado , CorPiece cor);
+uint64_bit get_selected_piece_attacks(GameStruct * game , CChessSettings * settings , uint64_bit click , Pieces piece , CorPiece turno);
 
 
 
@@ -362,12 +364,13 @@ void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit *
 
 
 
-//Modulo draw_pieces.c
+//Modulo universal_draws.c
 
 void desenharPiece(Pieces tipoPiece , int linha , int coluna , CChessSettings * settings, int offset);
 void desenhaTipoPiece(uint64_bit pos_pieces,Pieces tipoPiece , CChessSettings * settings, GameStruct * game, int offset);
 void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettings * settings , int offset);
-
+void desenharPieceAttacks(CChessSettings * settings , uint64_bit passant , uint64_bit attacks , uint64_bit cor_oposta);
+void desenhaCheck(GameStruct * game , CChessSettings * settings);
 
 
 

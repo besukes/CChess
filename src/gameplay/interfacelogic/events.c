@@ -6,7 +6,6 @@
 #include <stdio.h>
 
 
-
 void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event * event){
     int mouseX = event->button.x , mouseY = event->button.y;
     uint64_bit click = click_table_position(mouseX,mouseY);
@@ -20,8 +19,7 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
         game->pieceSelecionada = piece;
         if(piece==Empty) game->jogada = Invalid;
         CorPiece turno = game->turnoJogador;
-        game->selected_piece_attacks = ~get_same_colour_bitboard(&game->estadoJogo,turno) 
-                                        & get_piece_attacks(click,piece,game,turno);
+        game->selected_piece_attacks = get_selected_piece_attacks(game,settings,click,piece,turno);
     }
     else{
         if(dentroDoBotao(mouseX,mouseY,50,250,1000,1050)){ 
@@ -73,12 +71,12 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
                 update_en_passant(game);
                 game->pawnPromoted = promote;
                 if(promote) game->pieceCoords = click; //para depois se desenhar o quadrado de promoção na posição correta
-                game->selected_piece_attacks = 0;
             }
     }
     else{
         game->jogada = Invalid;
     }
+    game->selected_piece_attacks = 0;
 }
 
 

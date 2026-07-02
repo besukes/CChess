@@ -52,6 +52,11 @@ void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event
     desenhaFundo(settings);
     SDL_Rect tabuleiro = {260,140,800,800};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.tabTextures[1],NULL,&tabuleiro);
+    if(game->selected_piece_attacks != 0){
+        uint64_bit op = get_opposing_colour_bitboard(&game->estadoJogo,game->turnoJogador);
+        desenharPieceAttacks(settings,game->estadoJogo.enpassant, game->selected_piece_attacks , op);
+    }
+    desenhaCheck(game,settings);
     for(int i = 0 ; i < 6 ; i++){
         desenhaTipoPiece(game->estadoJogo.tabuleirojogo[0][i],(Pieces)i,settings,game,0);
     }

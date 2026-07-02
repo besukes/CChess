@@ -5,19 +5,38 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <stdio.h>
 
-/*
-void desenharPiecesAttacks(CChessSettings * settings , uint64_bit attacks){
+
+
+void desenhaCheck(GameStruct * game , CChessSettings * settings){
+    int type = (-1);
+    if(game->estadoJogo.king_in_check[0]) type = 0;
+    else if(game->estadoJogo.king_in_check[1]) type = 1;
+    else return;
+
+    int pos_tab = posTabuleiro(game->estadoJogo.tabuleirojogo[type][King]);
+
+    int coluna = pos_tab % 8 , linha = pos_tab / 8;
+    SDL_SetRenderDrawColor(settings->gameRenderer, 255 , 0, 0, 100); 
+    SDL_Rect check = {100*coluna+260, 1080 - (100 * linha + 240),100,100};
+    SDL_RenderFillRect(settings->gameRenderer, &check);
+}
+
+
+void desenharPieceAttacks(CChessSettings * settings , uint64_bit passant , uint64_bit attacks , uint64_bit cor_oposta){
     int counter = 0;
     uint64_bit casa_atual = 1ULL;
     while(attacks != 0){
         if(casa_atual & attacks){
             int linha = counter/8 , coluna = counter % 8;
-            circleRGBA(settings->gameRenderer, 400, 300, 50, 255, 0, 0, 255);
+            if(1ULL<<counter & (cor_oposta | passant)){
+                filledCircleRGBA(settings->gameRenderer, 100*coluna+310, 1080 - (100 * linha + 192) , 40 , 0 , 0, 0, 150);
+            }
+            else filledCircleRGBA(settings->gameRenderer, 100*coluna+310, 1080 - (100 * linha + 192) , 10 , 0 , 0, 0, 150);
         }
         attacks = (attacks>>1);
         counter++;
     }
-}*/
+}
 
 
 void desenharPiece(Pieces tipoPiece , int linha , int coluna , CChessSettings * settings, int offset){

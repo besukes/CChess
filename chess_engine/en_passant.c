@@ -44,3 +44,4 @@ void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * m
     game->estadoJogo.tabuleirojogo[op][0] = peoes_opostos;
     game->estadoJogo.enpassant = 0;
 }
+
