@@ -371,6 +371,7 @@ void desenhaTipoPiece(uint64_bit pos_pieces,Pieces tipoPiece , CChessSettings * 
 void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettings * settings , int offset);
 void desenharPieceAttacks(CChessSettings * settings , uint64_bit passant , uint64_bit attacks , uint64_bit cor_oposta);
 void desenhaCheck(GameStruct * game , CChessSettings * settings);
+void desenhaPromotion(GameStruct * game , CChessSettings * settings);
 
 
 

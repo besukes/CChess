@@ -16,7 +16,7 @@ void promotePiece(GameStruct * game , Pieces piece){
 int clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
     int ret = 1;
     game->pawnPromoted = 0;
-    int tamSquareX = 130;
+    int tamSquareX = 115;
     int offsetY = ( (posTabuleiro(game->pieceCoords) / 8 ) < 1) ? 800 : 0;
     int offsetX = posTabuleiro(game->pieceCoords)%8;
     if(dentroDoBotao(mouseX,mouseY,305 + tamSquareX*offsetX,392 + tamSquareX*offsetX,105 + offsetY,192 + offsetY)){ //Queen
