@@ -30,8 +30,12 @@ void desenharPieceAttacks(CChessSettings * settings , uint64_bit passant , uint6
             int linha = counter/8 , coluna = counter % 8;
             if(1ULL<<counter & (cor_oposta | passant)){
                 filledCircleRGBA(settings->gameRenderer, 100*coluna+310, 1080 - (100 * linha + 192) , 40 , 0 , 0, 0, 150);
+                aacircleRGBA(settings->gameRenderer, 100*coluna+310, 1080 - (100 * linha + 192) , 40 , 0 , 0, 0, 150);
             }
-            else filledCircleRGBA(settings->gameRenderer, 100*coluna+310, 1080 - (100 * linha + 192) , 10 , 0 , 0, 0, 150);
+            else {
+                filledCircleRGBA(settings->gameRenderer, 100*coluna+310, 1080 - (100 * linha + 192) , 10 , 0 , 0, 0, 150);
+                aacircleRGBA(settings->gameRenderer, 100*coluna+310, 1080 - (100 * linha + 192) , 10 , 0 , 0, 0, 150);
+            }
         }
         attacks = (attacks>>1);
         counter++;

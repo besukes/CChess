@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 #include <stdio.h>
 
 
@@ -10,13 +11,23 @@
 void desenhaMenu(GameStruct * ngame , CChessSettings * settings){
     SDL_SetRenderDrawColor(settings->gameRenderer, 0, 0, 0, 180); 
     SDL_SetRenderDrawBlendMode(settings->gameRenderer, SDL_BLENDMODE_BLEND);
-    SDL_Rect menu = {1167,0,800,1080};
-    SDL_RenderFillRect(settings->gameRenderer, &menu);
+
+    SDL_Rect rect = {1150,0,5,1080};
+    SDL_RenderFillRect(settings->gameRenderer,&rect);
+
+    roundedBoxRGBA(settings->gameRenderer, 1210 , 50 , 1780 , 170 , 30 , 0, 0, 0, 180);
+
+    roundedBoxRGBA(settings->gameRenderer, 1210 , 210 , 1780 , 597 , 30 , 0, 0, 0, 180);
+
+    roundedBoxRGBA(settings->gameRenderer, 1210 , 637 , 1780 , 920 , 30 , 0, 0, 0, 180);
+    
+    /*SDL_Rect menu = {1167,0,800,1080};
+    SDL_RenderFillRect(settings->gameRenderer, &menu);*/
 }
 
 
 void desenhaNivelTitle(CChessSettings * settings){
-    SDL_Rect title = {1240,(-5),600,210};
+    SDL_Rect title = {1150,30,500,150};
     if(settings->nivelDificuldade == 0){
         SDL_RenderCopy(settings->gameRenderer,settings->textures.niveisTextures[1],NULL,&title);
     }
