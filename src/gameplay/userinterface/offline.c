@@ -9,17 +9,20 @@
 
 
 void desenhaMenu(GameStruct * ngame , CChessSettings * settings){
-    SDL_SetRenderDrawColor(settings->gameRenderer, 0, 0, 0, 180); 
+    SDL_SetRenderDrawColor(settings->gameRenderer, 0, 0, 0, 140); 
     SDL_SetRenderDrawBlendMode(settings->gameRenderer, SDL_BLENDMODE_BLEND);
+    SDL_Rect menu = {1131,0,789,1080};
+    SDL_RenderFillRect(settings->gameRenderer,&menu);
 
-    SDL_Rect rect = {1150,0,5,1080};
+    SDL_SetRenderDrawColor(settings->gameRenderer, 0, 0, 0, 200); 
+    SDL_Rect rect = {1130,0,5,1080};
     SDL_RenderFillRect(settings->gameRenderer,&rect);
 
-    roundedBoxRGBA(settings->gameRenderer, 1210 , 50 , 1780 , 170 , 30 , 0, 0, 0, 180);
+    roundedBoxRGBA(settings->gameRenderer, 1241 , 50 , 1811 , 170 , 30 , 0, 0, 0, 200);
 
-    roundedBoxRGBA(settings->gameRenderer, 1210 , 210 , 1780 , 597 , 30 , 0, 0, 0, 180);
+    roundedBoxRGBA(settings->gameRenderer, 1241 , 210 , 1811 , 597 , 30 , 0, 0, 0, 200);
 
-    roundedBoxRGBA(settings->gameRenderer, 1210 , 637 , 1780 , 920 , 30 , 0, 0, 0, 180);
+    roundedBoxRGBA(settings->gameRenderer, 1241 , 637 , 1811 , 920 , 30 , 0, 0, 0, 200);
     
     /*SDL_Rect menu = {1167,0,800,1080};
     SDL_RenderFillRect(settings->gameRenderer, &menu);*/
@@ -27,7 +30,7 @@ void desenhaMenu(GameStruct * ngame , CChessSettings * settings){
 
 
 void desenhaNivelTitle(CChessSettings * settings){
-    SDL_Rect title = {1150,30,500,150};
+    SDL_Rect title = {1170,30,500,150};
     if(settings->nivelDificuldade == 0){
         SDL_RenderCopy(settings->gameRenderer,settings->textures.niveisTextures[1],NULL,&title);
     }
