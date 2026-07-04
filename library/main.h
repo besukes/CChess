@@ -375,7 +375,8 @@ void desenharPieceAttacks(CChessSettings * settings , uint64_bit passant , uint6
 void desenhaCheck(GameStruct * game , CChessSettings * settings);
 void desenhaPromotion(GameStruct * game , CChessSettings * settings);
 void desenhaFundo(CChessSettings * settings , SDL_Texture * texture);
-void renderTextoCentrado(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, int escala);
+void renderTextoCentradoSombra(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, int escala);
+void renderTextoCentradoBasico(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, float escala);
 
 
 

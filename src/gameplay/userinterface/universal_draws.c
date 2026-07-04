@@ -102,7 +102,7 @@ void desenhaFundo(CChessSettings * settings , SDL_Texture * texture){
 
 
 
-void renderTextoCentrado(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, int escala){
+void renderTextoCentradoSombra(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, int escala){
     SDL_Surface *s = TTF_RenderText_Blended(f, txt, cor);
     SDL_Texture *tx = SDL_CreateTextureFromSurface(r, s);
     int w = s->w * escala, h = s->h * escala;
@@ -112,6 +112,16 @@ void renderTextoCentrado(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Colo
     SDL_SetTextureColorMod(tx, 60, 45, 0);
     SDL_RenderCopy(r, tx, NULL, &sombra);
     SDL_SetTextureColorMod(tx, cor.r, cor.g, cor.b);
+    SDL_RenderCopy(r, tx, NULL, &rect);
+    SDL_DestroyTexture(tx);
+}
+
+void renderTextoCentradoBasico(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, float escala){
+    SDL_Surface *s = TTF_RenderText_Blended(f, txt, cor);
+    SDL_Texture *tx = SDL_CreateTextureFromSurface(r, s);
+    float w = s->w * escala, h = s->h * escala;
+    SDL_FreeSurface(s);
+    SDL_Rect rect = {x - (int)(w / 2), y, (int)w, (int)h};
     SDL_RenderCopy(r, tx, NULL, &rect);
     SDL_DestroyTexture(tx);
 }

@@ -37,6 +37,8 @@ void loadMiscAssets(AssetsCChess * assets,SDL_Renderer * sdl_renderer){
     assets->miscTextures[6] = IMG_LoadTexture(sdl_renderer,"assets/misc/black_moves.png");
     assets->miscTextures[7] = IMG_LoadTexture(sdl_renderer,"assets/misc/settings.png");
     assets->miscTextures[8] = IMG_LoadTexture(sdl_renderer,"assets/niveis/not_finished.png");
+    assets->miscTextures[9] = IMG_LoadTexture(sdl_renderer,"assets/misc/ball_grey.png");
+    assets->miscTextures[10] = IMG_LoadTexture(sdl_renderer,"assets/misc/ball_green.png");
 }
 
 
