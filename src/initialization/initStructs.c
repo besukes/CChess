@@ -46,6 +46,8 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * win
     initTexturasJogo(&settings,&settings.textures,sdl_renderer);
     initGameFiles(&settings);
     initCosmeticos(&settings);
+    TTF_Init();
+    settings.fonteJogo = TTF_OpenFont("assets/ttf/m6x11plus.ttf", 24);
     return settings;
 }
 
@@ -80,6 +82,7 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     game.pawnPromoted = 0;
     game.active_ultimate = NULL;
     game.promotedSucessfully = 0;
+    game.promoted_square = 0;
     return game;
 }
 
@@ -100,4 +103,5 @@ void initializeOfflineGame(GameStruct * game){
     game->active_ultimate = NULL;
     game->promotedSucessfully = 0;
     game->selected_piece_attacks = 0;
+    game->promoted_square = 0;
 }

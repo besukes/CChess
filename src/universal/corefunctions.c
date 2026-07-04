@@ -39,7 +39,7 @@ int posTabuleiro(uint64_bit bitboard){
 
 int calcPosClique(int lower_border_limit , int upper_border_limit , int pos , int square_size , int type){
     int c = (type) ? 0 : 7;
-    for(int i = lower_border_limit ; i <= upper_border_limit ; i+=square_size){
+    for(int i = lower_border_limit ; i < upper_border_limit ; i+=square_size){
         if(i <= pos && pos < i + square_size){
             return c;
         }
@@ -53,7 +53,7 @@ int calcPosClique(int lower_border_limit , int upper_border_limit , int pos , in
 
 uint64_bit click_table_position(int mouseX , int mouseY){
     uint64_bit p = 0;
-    int infHorizontal = 260 , supHorizontal = 1060 ,
+    int infHorizontal = 210 , supHorizontal = 1010 ,
         infVertical = 140 , supVertical = 940;
     int tamanhoQuadrado = 100;
     int cx = calcPosClique(infHorizontal,supHorizontal,mouseX,tamanhoQuadrado,1) , 

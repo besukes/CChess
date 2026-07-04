@@ -11,7 +11,10 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
     uint64_bit click = click_table_position(mouseX,mouseY);
     if(game->pawnPromoted){
         int did_promote = clickPromotingPiece(game,mouseX,mouseY);
-        if(did_promote) game->promotedSucessfully = 1;
+        if(did_promote){
+            game->promotedSucessfully = 1;
+            game->promoted_square = 0;
+        }
     }
     else if(click != 0){
         Pieces piece = comparePiece(game->estadoJogo ,game->turnoJogador, click);
@@ -23,7 +26,7 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
     }
     else{
         SDL_Point point = {mouseX,mouseY};
-        SDL_Rect leave = {100,950,100,100};
+        SDL_Rect leave = {50,950,100,100};
         if(SDL_PointInRect(&point,&leave)){ 
             settings->screenAtual = Menu;
             game->game_needs_initialization = 1;
@@ -72,7 +75,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
                 notInCheck(game);
                 update_en_passant(game);
                 game->pawnPromoted = promote;
-                if(promote) game->pieceCoords = click; //para depois se desenhar o quadrado de promoção na posição correta
+                if(promote) game->promoted_square = click; //para depois se desenhar o quadrado de promoção na posição correta
             }
     }
     else{
@@ -88,7 +91,7 @@ void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Ev
     uint64_bit click = click_table_position(mouseX,mouseY);
     if(!valido_turno || (click == 0) ){
         SDL_Point point = {mouseX,mouseY};
-        SDL_Rect leave = {100,950,100,100};
+        SDL_Rect leave = {50,950,100,100};
         if(SDL_PointInRect(&point,&leave)){ 
             settings->screenAtual = Menu;
             game->game_needs_initialization = 1;

@@ -39,7 +39,7 @@ void desenhaNivelTitle(CChessSettings * settings){
 
 void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event){
     desenhaFundo(settings,settings->textures.niveisTextures[0]);
-    SDL_Rect tabuleiro = {260,140,800,800};
+    SDL_Rect tabuleiro = {210,140,800,800};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.tabTextures[1],NULL,&tabuleiro);
     if(game->selected_piece_attacks != 0){
         uint64_bit op = get_opposing_colour_bitboard(&game->estadoJogo,game->turnoJogador);
@@ -52,13 +52,13 @@ void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event
     for( int i = 0; i < 6; i++){
         desenhaTipoPiece(game->estadoJogo.tabuleirojogo[1][i],(Pieces)(i),settings,game,6);
     }
-    SDL_Rect go_back = {100,950,100,100};
+    SDL_Rect go_back = {50,950,100,100};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[0],NULL,&go_back);
 
     desenhaMenu(game,settings);
     if(game->pawnPromoted) desenhaPromotion(game,settings);
 
-    SDL_Rect turn = {300,(-40),700,210};
+    SDL_Rect turn = {250,(-40),700,210};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[5 + game->turnoJogador],NULL,&turn);
     desenhaNivelTitle(settings);
 }

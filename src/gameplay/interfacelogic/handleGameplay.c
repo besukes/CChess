@@ -21,6 +21,10 @@ void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event * event){
     }
 }
 
+void softReset(GameStruct * game){
+    game->pieceCoords = 0;
+    game->pieceSelecionada = Empty;
+}
 
 
 void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event){
@@ -36,6 +40,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
             game->isKeyPressedDown = 0;
             efetuaEventoSoltar(game,settings,event);
             if(game->jogada != Invalid && !game->pawnPromoted) game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
+            softReset(game);
         }
     }
 }

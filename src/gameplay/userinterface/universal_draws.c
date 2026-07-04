@@ -17,7 +17,7 @@ void desenhaCheck(GameStruct * game , CChessSettings * settings){
 
     int coluna = pos_tab % 8 , linha = pos_tab / 8;
     SDL_SetRenderDrawColor(settings->gameRenderer, 255 , 0 , 0, 150); 
-    SDL_Rect check = {100*coluna+260, 1080 - (100 * linha + 240),100,100};
+    SDL_Rect check = {100*coluna+210, 1080 - (100 * linha + 240),100,100};
     SDL_RenderFillRect(settings->gameRenderer, &check);
 }
 
@@ -29,12 +29,12 @@ void desenharPieceAttacks(CChessSettings * settings , uint64_bit passant , uint6
         if(casa_atual & attacks){
             int linha = counter/8 , coluna = counter % 8;
             if(1ULL<<counter & (cor_oposta | passant)){
-                filledCircleRGBA(settings->gameRenderer, 100*coluna+310, 1080 - (100 * linha + 192) , 40 , 0 , 0, 0, 150);
-                aacircleRGBA(settings->gameRenderer, 100*coluna+310, 1080 - (100 * linha + 192) , 40 , 0 , 0, 0, 150);
+                filledCircleRGBA(settings->gameRenderer, 100*coluna+260, 1080 - (100 * linha + 192) , 40 , 0 , 0, 0, 150);
+                aacircleRGBA(settings->gameRenderer, 100*coluna+260, 1080 - (100 * linha + 192) , 40 , 0 , 0, 0, 150);
             }
             else {
-                filledCircleRGBA(settings->gameRenderer, 100*coluna+310, 1080 - (100 * linha + 192) , 10 , 0 , 0, 0, 150);
-                aacircleRGBA(settings->gameRenderer, 100*coluna+310, 1080 - (100 * linha + 192) , 10 , 0 , 0, 0, 150);
+                filledCircleRGBA(settings->gameRenderer, 100*coluna+260, 1080 - (100 * linha + 192) , 10 , 0 , 0, 0, 150);
+                aacircleRGBA(settings->gameRenderer, 100*coluna+260, 1080 - (100 * linha + 192) , 10 , 0 , 0, 0, 150);
             }
         }
         attacks = (attacks>>1);
@@ -44,7 +44,7 @@ void desenharPieceAttacks(CChessSettings * settings , uint64_bit passant , uint6
 
 
 void desenharPiece(Pieces tipoPiece , int linha , int coluna , CChessSettings * settings, int offset){
-    SDL_Rect posicaoPeca = {100*coluna+260, 1080 - (100 * linha + 246),100,100};
+    SDL_Rect posicaoPeca = {100*coluna+210, 1080 - (100 * linha + 246),100,100};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.chessPieces[tipoPiece + offset],NULL,&posicaoPeca);
 }
 
@@ -76,16 +76,16 @@ void desenhaTipoPiece(uint64_bit pos_pieces,Pieces tipoPiece , CChessSettings * 
 
 
 void desenhaPromotion(GameStruct * game , CChessSettings * settings){
-    int offsetY = ( (posTabuleiro(game->pieceCoords) / 8 ) < 1) ? 800 : 0,
-        offsetX = posTabuleiro(game->pieceCoords)%8;
+    int offsetY = ( (posTabuleiro(game->promoted_square) / 8 ) < 1) ? 800 : 0,
+        offsetX = posTabuleiro(game->promoted_square)%8;
     int offset_textura = (game->turnoJogador == brancas) ? 0 : 6;
-    SDL_Rect promotion_sq = {300 + 110*offsetX,100 + offsetY,175,175};
+    SDL_Rect promotion_sq = {250 + 110*offsetX,100 + offsetY,175,175};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[3],NULL,&promotion_sq);
 
-    SDL_Rect queen = {305 + 110*offsetX,105 + offsetY,70,70};
-    SDL_Rect rook = {395 + 110*offsetX,105 + offsetY,70,70};
-    SDL_Rect bishop = {305 + 110*offsetX,190 + offsetY,70,70};
-    SDL_Rect knight = {395 + 110*offsetX,190 + offsetY,70,70};
+    SDL_Rect queen = {255 + 110*offsetX,105 + offsetY,70,70};
+    SDL_Rect rook = {345 + 110*offsetX,105 + offsetY,70,70};
+    SDL_Rect bishop = {255 + 110*offsetX,190 + offsetY,70,70};
+    SDL_Rect knight = {345 + 110*offsetX,190 + offsetY,70,70};
 
     SDL_RenderCopy(settings->gameRenderer,settings->textures.chessPieces[Queen + offset_textura],NULL,&queen);
     SDL_RenderCopy(settings->gameRenderer,settings->textures.chessPieces[Rook + offset_textura],NULL,&rook);
@@ -94,7 +94,24 @@ void desenhaPromotion(GameStruct * game , CChessSettings * settings){
 }
 
 
+
 void desenhaFundo(CChessSettings * settings , SDL_Texture * texture){
     SDL_Rect fundo = {0,0,1920,1080};
     SDL_RenderCopy(settings->gameRenderer,texture,NULL,&fundo);
+}
+
+
+
+void renderTextoCentrado(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, int escala){
+    SDL_Surface *s = TTF_RenderText_Blended(f, txt, cor);
+    SDL_Texture *tx = SDL_CreateTextureFromSurface(r, s);
+    int w = s->w * escala, h = s->h * escala;
+    SDL_FreeSurface(s);
+    SDL_Rect sombra = {x - w / 2 + 5, y + 5, w, h};
+    SDL_Rect rect = {x - w / 2, y, w, h};
+    SDL_SetTextureColorMod(tx, 60, 45, 0);
+    SDL_RenderCopy(r, tx, NULL, &sombra);
+    SDL_SetTextureColorMod(tx, cor.r, cor.g, cor.b);
+    SDL_RenderCopy(r, tx, NULL, &rect);
+    SDL_DestroyTexture(tx);
 }

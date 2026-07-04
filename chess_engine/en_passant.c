@@ -14,15 +14,21 @@ void update_en_passant(GameStruct * game){
 
 Boolean can_en_passant(GameStruct * game , uint64_bit drop,CorPiece cor){
     if(game->pieceSelecionada != Pawn) return 0;
+    uint64_bit passant = game->estadoJogo.enpassant;
     int pos_tab_drop = posTabuleiro(drop) , pos_tab_piece = posTabuleiro(game->pieceCoords);
+    int pos_passant = posTabuleiro(passant) , pos1 = 0 , pos2 = 0;
     if(cor==brancas){
-       Boolean is_6_line = 40<=pos_tab_drop && pos_tab_drop < 48 ,
-               pawn_in_pos = 32<=pos_tab_piece && pos_tab_piece < 40;
-       return (is_6_line && pawn_in_pos && ((game->estadoJogo.enpassant & drop) != 0));
+        pos1 = pos_passant - 7;
+        pos2 = pos_passant - 9;
+        Boolean is_6_line = 40<=pos_tab_drop && pos_tab_drop < 48 ,
+               pawn_in_pos = pos_tab_piece == pos1 || pos_tab_piece == pos2;
+        return (is_6_line && pawn_in_pos && ((game->estadoJogo.enpassant & drop) != 0));
     }
     else{
+        pos1 = pos_passant + 7;
+        pos2 = pos_passant + 9;
         Boolean is_3_line = 16<=pos_tab_drop && pos_tab_drop < 24,
-                pawn_in_pos = pawn_in_pos = 24<=pos_tab_piece && pos_tab_piece < 32;
+                pawn_in_pos = pos_tab_piece == pos1 || pos_tab_piece == pos2;
         return (is_3_line && pawn_in_pos && ((game->estadoJogo.enpassant & drop) != 0));
     }
 }

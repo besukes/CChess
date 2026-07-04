@@ -17,7 +17,7 @@ void loadTexturasPieces(CChessSettings * settings ,SDL_Texture * chessPieces[12]
 
 
 void loadButtons(SDL_Texture * buttonsTextures[20],SDL_Renderer * sdl_renderer){
-    buttonsTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/buttons/go_back_arrow_white.png");
+    buttonsTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/buttons/back_button_circle.png");
     buttonsTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/buttons/multiplayer_button.png");
     buttonsTextures[2] = IMG_LoadTexture(sdl_renderer,"assets/buttons/offline_button.png");
     buttonsTextures[3] = IMG_LoadTexture(sdl_renderer,"assets/buttons/settings_button.png");
@@ -48,6 +48,7 @@ void initTexturasJogo(CChessSettings * settings ,AssetsCChess * assets,SDL_Rende
 
     assets->niveisTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/niveis/nivel1.png");
     assets->niveisTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/niveis/forest.png");
+    assets->niveisTextures[2] = IMG_LoadTexture(sdl_renderer,"assets/niveis/forestlvl(2).png");
 
     loadMiscAssets(assets,sdl_renderer);
     

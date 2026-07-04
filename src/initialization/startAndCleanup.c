@@ -82,4 +82,7 @@ void free_allocated_memory(GameStruct * game , CChessSettings * user){
     }
     SDL_DestroyRenderer(user->gameRenderer);
     freeUserSettings(user);
+    TTF_CloseFont(user->fonteJogo);
+    IMG_Quit();
+    SDL_Quit();
 }

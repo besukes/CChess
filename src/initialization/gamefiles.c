@@ -155,7 +155,7 @@ void readLineAux(char * line , CChessSettings * settings){
     if(compareString(line,"coinsAmount")){
         line = skip_to_value(line);
 
-        settings->cosmeticos.efeito_checkSelecionado = get_number(line,INT32_MAX,0);
+        settings->ccoins_qntd = get_number(line,INT32_MAX,0);
     }
     else if(compareString(line,"offlineTutorial")){
         line = skip_to_value(line);

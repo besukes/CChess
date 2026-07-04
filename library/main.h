@@ -141,6 +141,7 @@ typedef struct GameStruct{
     CorPiece turnoJogador; //Guarda o turno do utilizador 
     TipoJogada jogada; //Guarda a jogada do utilizador
     PecasComidasLL lastmoves; //Guarda a peça que foi comida na jogada anterior , para depois desfazer a jogada , caso seja necessário
+    uint64_bit promoted_square; //Guarda o promotion square do pawn promovido
     Boolean pawnPromoted; //Guarda se o peão está a ser promovido
     Boolean promotedSucessfully; //Guarda se o peão foi promovido num clique
 }GameStruct;
@@ -374,6 +375,7 @@ void desenharPieceAttacks(CChessSettings * settings , uint64_bit passant , uint6
 void desenhaCheck(GameStruct * game , CChessSettings * settings);
 void desenhaPromotion(GameStruct * game , CChessSettings * settings);
 void desenhaFundo(CChessSettings * settings , SDL_Texture * texture);
+void renderTextoCentrado(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, int escala);
 
 
 

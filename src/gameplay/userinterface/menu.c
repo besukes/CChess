@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 #include <stdio.h>
 
 
@@ -17,12 +18,21 @@ void desenhaButtons(CChessSettings * settings,SDL_Event event){
     SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[3],NULL,&botaoSettings);
 }
 
+void verificaNumberCoins(int coins_qntd , char * coins){
+    if(coins_qntd == 10000) sprintf(coins,"%s","10K");
+    else if(coins_qntd > 10000) sprintf(coins,"%s","10K+");
+    else sprintf(coins,"%d",coins_qntd);
+}
 
 
 void desenhaCoins(CChessSettings * settings){
-    SDL_Rect coins = {1500,42,240,80};
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[4],NULL,&coins);
-    //necessitamos desenhar o numero de coins
+    SDL_Rect coins_shower = {1500,42,240,80};
+    SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[4],NULL,&coins_shower);
+
+    
+    char coins[6];
+    verificaNumberCoins(settings->ccoins_qntd,coins);
+    renderTextoCentrado(settings->gameRenderer,settings->fonteJogo,coins,(SDL_Color){255, 255, 255, 255},1613,48,2);
 }
 
 
@@ -44,8 +54,7 @@ void desenhaInterfaceMenu(CChessSettings * settings,SDL_Event event){
     SDL_SetRenderDrawBlendMode(settings->gameRenderer, SDL_BLENDMODE_BLEND);
 
     desenhaMisc(settings,event);
-    SDL_Rect menuOptions = {660,380,600,670};
-    SDL_RenderFillRect(settings->gameRenderer, &menuOptions);
+    roundedBoxRGBA(settings->gameRenderer, 660 , 370 , 1260 , 1040 , 40 , 0, 0, 0, 150);
     desenhaButtons(settings,event);
     desenhaCoins(settings);
 }

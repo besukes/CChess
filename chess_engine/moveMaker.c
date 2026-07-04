@@ -3,12 +3,12 @@
 
 
 
-void promotePiece(GameStruct * game , Pieces piece){
+void promotePiece(GameStruct * game , Pieces piece, uint64_bit promotion_square){
     CorPiece turno = game->turnoJogador;
     uint64_bit * bitboard_pawns = &(game->estadoJogo.tabuleirojogo[turno][Pawn]);
     uint64_bit * bitboard_nova_piece = &(game->estadoJogo.tabuleirojogo[turno][piece]);
-    *bitboard_pawns &= ~(game->pieceCoords);
-    *bitboard_nova_piece |= game->pieceCoords;
+    *bitboard_pawns &= ~promotion_square;
+    *bitboard_nova_piece |= promotion_square;
 }
 
 
@@ -16,20 +16,21 @@ void promotePiece(GameStruct * game , Pieces piece){
 int clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
     int ret = 1;
     game->pawnPromoted = 0;
-    int tamSquareX = 115;
-    int offsetY = ( (posTabuleiro(game->pieceCoords) / 8 ) < 1) ? 800 : 0;
-    int offsetX = posTabuleiro(game->pieceCoords)%8;
-    if(dentroDoBotao(mouseX,mouseY,305 + tamSquareX*offsetX,392 + tamSquareX*offsetX,105 + offsetY,192 + offsetY)){ //Queen
-        promotePiece(game,Queen);
+    uint64_bit promotion_square = game->promoted_square;
+    int tamSquareX = 110;
+    int offsetY = ( (posTabuleiro(promotion_square) / 8 ) < 1) ? 800 : 0;
+    int offsetX = posTabuleiro(promotion_square)%8;
+    if(dentroDoBotao(mouseX,mouseY,255 + tamSquareX*offsetX,345 + tamSquareX*offsetX,105 + offsetY,192 + offsetY)){ //Queen
+        promotePiece(game,Queen,promotion_square);
     }
-    else if(dentroDoBotao(mouseX,mouseY,393 + tamSquareX*offsetX,475 + tamSquareX*offsetX,105 + offsetY,192 + offsetY)){ //Rook
-        promotePiece(game,Rook);
+    else if(dentroDoBotao(mouseX,mouseY,345 + tamSquareX*offsetX,425 + tamSquareX*offsetX,105 + offsetY,192 + offsetY)){ //Rook
+        promotePiece(game,Rook,promotion_square);
     }
-    else if(dentroDoBotao(mouseX,mouseY,305 + tamSquareX*offsetX,392 + tamSquareX*offsetX,187 + offsetY,275 + offsetY)){ //Bishop
-        promotePiece(game,Bishop);
+    else if(dentroDoBotao(mouseX,mouseY,255 + tamSquareX*offsetX,345 + tamSquareX*offsetX,187 + offsetY,275 + offsetY)){ //Bishop
+        promotePiece(game,Bishop,promotion_square);
     }
-    else if(dentroDoBotao(mouseX,mouseY,393 + tamSquareX*offsetX,475 + tamSquareX*offsetX,187 + offsetY,275 + offsetY)){ //Knight
-        promotePiece(game,Horse);
+    else if(dentroDoBotao(mouseX,mouseY,345 + tamSquareX*offsetX,425 + tamSquareX*offsetX,187 + offsetY,275 + offsetY)){ //Knight
+        promotePiece(game,Horse,promotion_square);
     }
     else{//Invalid click
         game->pawnPromoted = 1;

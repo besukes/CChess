@@ -9,7 +9,9 @@
 
 void desenhaFundoStory(CChessSettings * settings){
     SDL_Rect fundo = {0,0,1920,1080};
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.niveisTextures[0],NULL,&fundo);
+    if(settings->nivelDificuldade == 0){
+        SDL_RenderCopy(settings->gameRenderer,settings->textures.niveisTextures[2],NULL,&fundo);
+    }
 }
 
 
@@ -33,17 +35,15 @@ void desenhaPromotionStory(GameStruct * game , CChessSettings * settings){
 
 
 
-void desenhaMenuStory(GameStruct * game , CChessSettings * settings){
-    SDL_SetRenderDrawColor(settings->gameRenderer, 0, 0, 0, 180); 
-    SDL_SetRenderDrawBlendMode(settings->gameRenderer, SDL_BLENDMODE_BLEND);
-    SDL_Rect menu = {1167,0,800,1080};
-    SDL_RenderFillRect(settings->gameRenderer, &menu);
+void desenhaMenuStory(CChessSettings * settings){
+    
 }
 
 
 
 void desenhaNivelTitleStory(CChessSettings * settings){
-    SDL_Rect title = {1240,(-5),600,210};
+    SDL_Rect title = {660,(-20),600,210};
+    roundedBoxRGBA(settings->gameRenderer, 0 , 0 , 1920 , 170 , 40 , 0, 0, 0, 150);
     if(settings->nivelDificuldade == 0){
         SDL_RenderCopy(settings->gameRenderer,settings->textures.niveisTextures[1],NULL,&title);
     }
@@ -53,21 +53,12 @@ void desenhaNivelTitleStory(CChessSettings * settings){
 
 void desenhaStoryScreen(GameStruct * game,CChessSettings * settings){
     desenhaFundoStory(settings);
-    SDL_Rect tabuleiro = {260,140,800,800};
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.tabTextures[1],NULL,&tabuleiro);
-    for(int i = 0 ; i < 6 ; i++){
-        desenhaTipoPiece(game->estadoJogo.tabuleirojogo[0][i],(Pieces)i,settings,game,0);
-    }
-    for( int i = 0; i < 6; i++){
-        desenhaTipoPiece(game->estadoJogo.tabuleirojogo[1][i],(Pieces)(i),settings,game,6);
-    }
+
     SDL_Rect go_back = {100,950,100,100};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[0],NULL,&go_back);
 
-    desenhaMenuStory(game,settings);
     if(game->pawnPromoted) desenhaPromotionStory(game,settings);
 
-    SDL_Rect turn = {300,(-40),700,210};
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[5 + game->turnoJogador],NULL,&turn);
+    desenhaMenuStory(settings);
     desenhaNivelTitleStory(settings);
 }
