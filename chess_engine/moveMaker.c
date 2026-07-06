@@ -13,33 +13,6 @@ void promotePiece(GameStruct * game , Pieces piece, uint64_bit promotion_square)
 
 
 
-int clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
-    int ret = 1;
-    game->pawnPromoted = 0;
-    uint64_bit promotion_square = game->promoted_square;
-    int tamSquareX = 110;
-    int offsetY = ( (posTabuleiro(promotion_square) / 8 ) < 1) ? 800 : 0;
-    int offsetX = posTabuleiro(promotion_square)%8;
-    if(dentroDoBotao(mouseX,mouseY,255 + tamSquareX*offsetX,345 + tamSquareX*offsetX,105 + offsetY,192 + offsetY)){ //Queen
-        promotePiece(game,Queen,promotion_square);
-    }
-    else if(dentroDoBotao(mouseX,mouseY,345 + tamSquareX*offsetX,425 + tamSquareX*offsetX,105 + offsetY,192 + offsetY)){ //Rook
-        promotePiece(game,Rook,promotion_square);
-    }
-    else if(dentroDoBotao(mouseX,mouseY,255 + tamSquareX*offsetX,345 + tamSquareX*offsetX,187 + offsetY,275 + offsetY)){ //Bishop
-        promotePiece(game,Bishop,promotion_square);
-    }
-    else if(dentroDoBotao(mouseX,mouseY,345 + tamSquareX*offsetX,425 + tamSquareX*offsetX,187 + offsetY,275 + offsetY)){ //Knight
-        promotePiece(game,Horse,promotion_square);
-    }
-    else{//Invalid click
-        game->pawnPromoted = 1;
-        ret = 0;
-    }
-    return ret;
-}
-
-
 
 void efetuaJogada(uint64_bit * selected_piece , uint64_bit * todas_pieces , uint64_bit original_coords , uint64_bit click , uint64_bit * mesmacor){
     *mesmacor = ( ( (*mesmacor) & (~original_coords) ) | click);
@@ -49,23 +22,27 @@ void efetuaJogada(uint64_bit * selected_piece , uint64_bit * todas_pieces , uint
 
 
 
+
 void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor , uint64_bit * corOposta){
     CorPiece turno = game->turnoJogador;
     CorPiece cor_oposta = (turno == brancas) ? pretas : brancas;
-    int i;
-    Pieces piece_comida , selected = game->pieceSelecionada;
-    for(i=0;i<6 && !(game->estadoJogo.tabuleirojogo[cor_oposta][i] & click);i++);
-    if(i==6) printf("[ERROR] In function fetch_change_board\n");
-    else if(!is_protected_square(game,click)){
-        piece_comida = (Pieces)i;
-        addHeadLinkedList(&(game->lastmoves),piece_comida,click,cor_oposta);
-        game->estadoJogo.tabuleirojogo[cor_oposta][i] &= ~(click);
-        *corOposta &= ~click;
-        efetuaJogada(&(game->estadoJogo.tabuleirojogo[turno][selected]),
-                     &(game->estadoJogo.bitboard_todas_pieces),game->pieceCoords,
-                     click,mesmaCor
-                    );
+    Pieces selected = game->pieceSelecionada;
+
+    if(is_protected_square(game,click)) return;
+
+    Pieces piece_comida = comparePiece(game->estadoJogo, cor_oposta, click);
+    if(piece_comida == Empty){
+        printf("[ERROR] In function fetch_change_board\n");
+        return;
     }
+
+    addHeadLinkedList(&(game->lastmoves),piece_comida,click,cor_oposta);
+    game->estadoJogo.tabuleirojogo[cor_oposta][piece_comida] &= ~click;
+    *corOposta &= ~click;
+    efetuaJogada(&(game->estadoJogo.tabuleirojogo[turno][selected]),
+                 &(game->estadoJogo.bitboard_todas_pieces),game->pieceCoords,
+                 click,mesmaCor
+                );
 }
 
 
@@ -97,6 +74,7 @@ void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean
     }
     else if(enpassant){
         enpassant_move(game,bitboard_cor_oposta,bitboard_cor_turno,ep);
+        game->score_game += (game->turnoJogador==brancas) ? 1 : (-1);
     }
     else if(*bitboard_cor_oposta & click){
         fetch_change_board(game,click,bitboard_cor_turno,bitboard_cor_oposta);

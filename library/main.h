@@ -144,6 +144,8 @@ typedef struct GameStruct{
     uint64_bit promoted_square; //Guarda o promotion square do pawn promovido
     Boolean pawnPromoted; //Guarda se o peão está a ser promovido
     Boolean promotedSucessfully; //Guarda se o peão foi promovido num clique
+    int score_game; //Guarda o score do jogo (diferenca de pecas comidas)
+    int turns; //Guarda os turnos ja jogados no jogo
 }GameStruct;
 
 
@@ -183,7 +185,8 @@ typedef struct CChessSettings{
     AssetsCChess textures; //Texturas do jogo CChess
     SDL_Renderer * gameRenderer; //Renderer responsável por guardar a janela e onde desenhamos os objetos
     SDL_Window * window; //Window atual do utilizador
-    TTF_Font * fonteJogo; //Fonte das letras do nosso jogo
+    TTF_Font * fonteJogoTitles; //Fonte das letras do nosso jogo de titulos importantes
+    TTF_Font * fonteJogoSmallerTitles; //Fonte das letras do nosso jogo de titulos mais pequenos
     int posMouseX; //Posição horizontal do rato do utilizador , em termos de píxeis
     int posMouseY; //Posição vertical do rato do utilizador , em termos de píxeis
     UserScreen screenAtual; //Tela atual em que o utilizador se encontra
@@ -287,8 +290,7 @@ void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Ev
 
 void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean enpassant);
 void updateBitboard_ClickEvent(CorPiece turno,Pieces piece,EstadoJogo * estado,uint64_bit click);
-int clickPromotingPiece(GameStruct * game , int mouseX , int mouseY);
-
+void promotePiece(GameStruct * game , Pieces piece, uint64_bit promotion_square);
 
 
 
@@ -319,7 +321,7 @@ void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettin
 
 //Modulo checkAndCheckmate.c
 
-TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click);
+TipoJogada check_move(GameStruct * game, Boolean castles , uint64_bit click);
 int isCheckMate(GameStruct * game, CorPiece cor);
 void notInCheck(GameStruct * game);
 Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor);
@@ -375,9 +377,10 @@ void desenharPieceAttacks(CChessSettings * settings , uint64_bit passant , uint6
 void desenhaCheck(GameStruct * game , CChessSettings * settings);
 void desenhaPromotion(GameStruct * game , CChessSettings * settings);
 void desenhaFundo(CChessSettings * settings , SDL_Texture * texture);
-void renderTextoCentradoSombra(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, int escala);
+void renderTextoCentradoSombra(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, float escala);
 void renderTextoCentradoBasico(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, float escala);
-
+void drawScore(int score_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale);
+void drawTurns(int turns_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale);
 
 
 //Modulo game_screen.c

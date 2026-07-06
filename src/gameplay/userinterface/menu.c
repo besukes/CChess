@@ -32,7 +32,7 @@ void desenhaCoins(CChessSettings * settings){
     
     char coins[6];
     verificaNumberCoins(settings->ccoins_qntd,coins);
-    renderTextoCentradoSombra(settings->gameRenderer,settings->fonteJogo,coins,(SDL_Color){255, 255, 255, 255},1613,48,2);
+    renderTextoCentradoSombra(settings->gameRenderer,settings->fonteJogoSmallerTitles,coins,(SDL_Color){255, 255, 255, 255},1613,48,1);
 }
 
 

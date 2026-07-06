@@ -3,10 +3,9 @@
 
 
 void undoPieceComida(GameStruct * game , uint64_bit * bb_cor_piece_comida, uint64_bit click){
-        uint64_bit pos_ant = game->lastmoves->pos_de_piece;
-        game->estadoJogo.tabuleirojogo[game->lastmoves->cor_piece][game->lastmoves->tipo_piece] |= pos_ant;
-        *bb_cor_piece_comida |= pos_ant;
-        game->estadoJogo.bitboard_todas_pieces |= pos_ant;
+    game->estadoJogo.tabuleirojogo[game->lastmoves->cor_piece][game->lastmoves->tipo_piece] |= click;
+    *bb_cor_piece_comida |= click;
+    game->estadoJogo.bitboard_todas_pieces |= click;
 }
 
 

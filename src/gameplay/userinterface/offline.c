@@ -8,7 +8,7 @@
 
 
 
-void desenhaMenu(GameStruct * ngame , CChessSettings * settings){
+void desenhaMenu(GameStruct * game , CChessSettings * settings){
     SDL_SetRenderDrawColor(settings->gameRenderer, 0, 0, 0, 150); 
     SDL_SetRenderDrawBlendMode(settings->gameRenderer, SDL_BLENDMODE_BLEND);
     SDL_Rect menu = {1131,0,789,1080};
@@ -22,27 +22,31 @@ void desenhaMenu(GameStruct * ngame , CChessSettings * settings){
     roundedBoxRGBA(settings->gameRenderer, 1241 , 50 , 1811 , 170 , 30 , 0, 0, 0, 160);
 
     roundedBoxRGBA(settings->gameRenderer, 1241 , 210 , 1811 , 597 , 30 , 0, 0, 0, 160);
-    renderTextoCentradoSombra(settings->gameRenderer,settings->fonteJogo,"Victory Conditions",branco,1530,210,3);
+    renderTextoCentradoSombra(settings->gameRenderer,settings->fonteJogoTitles,"Victory Conditions",branco,1530,210,2);
 
 
     //70 dist
     roundedBoxRGBA(settings->gameRenderer, 1260 , 300 , 1790 , 370 , 30 , 0, 0, 0, 180);
     SDL_Rect bola1 = {1270 , 310 , 50 , 50};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[9],NULL,&bola1);
-    renderTextoCentradoBasico(settings->gameRenderer,settings->fonteJogo,"Checkmate",branco,1393,315,1.5);
+    renderTextoCentradoBasico(settings->gameRenderer,settings->fonteJogoSmallerTitles,"Checkmate",branco,1410,315,0.8);
 
     roundedBoxRGBA(settings->gameRenderer, 1260 , 400 , 1790 , 470 , 30 , 0, 0, 0, 180);
     SDL_Rect bola2 = {1270 , 410 , 50 , 50};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[9],NULL,&bola2);
-    renderTextoCentradoBasico(settings->gameRenderer,settings->fonteJogo,"Take all non-king pieces",branco,1471,415,1.5);
+    renderTextoCentradoBasico(settings->gameRenderer,settings->fonteJogoSmallerTitles,"Take all non-king pieces",branco,1496,415,0.8);
 
     roundedBoxRGBA(settings->gameRenderer, 1260 , 500 , 1790 , 570 , 30 , 0, 0, 0, 180);
     SDL_Rect bola3 = {1270 , 510 , 50 , 50};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[9],NULL,&bola3);
-    renderTextoCentradoBasico(settings->gameRenderer,settings->fonteJogo,"Check 10 times in a row",branco,1478,514,1.5);
+    renderTextoCentradoBasico(settings->gameRenderer,settings->fonteJogoSmallerTitles,"Check 10 times in a row",branco,1497,514,0.8);
 
 
-    roundedBoxRGBA(settings->gameRenderer, 1241 , 637 , 1811 , 920 , 30 , 0, 0, 0, 160);
+    roundedBoxRGBA(settings->gameRenderer, 1241 , 637 , 1511 , 920 , 30 , 0, 0, 0, 160);
+    drawScore(game->score_game,settings->gameRenderer,settings->fonteJogoSmallerTitles,1347,681,0.8);
+    drawTurns(game->turns,settings->gameRenderer,settings->fonteJogoSmallerTitles, 1347 , 741 , 0.8);
+
+    roundedBoxRGBA(settings->gameRenderer, 1541 , 637 , 1811 , 920 , 30 , 0, 0, 0, 160);
     
     /*SDL_Rect menu = {1167,0,800,1080};
     SDL_RenderFillRect(settings->gameRenderer, &menu);*/
@@ -52,7 +56,7 @@ void desenhaMenu(GameStruct * ngame , CChessSettings * settings){
 void desenhaNivelTitle(CChessSettings * settings){
     SDL_Color branco = {255, 255, 255, 255};
     if(settings->nivelDificuldade == 0){
-        renderTextoCentradoSombra(settings->gameRenderer,settings->fonteJogo,"In the dawn",branco,1410,69,3);
+        renderTextoCentradoSombra(settings->gameRenderer,settings->fonteJogoTitles,"In the dawn",branco,1410,69,2);
     }
 }
 

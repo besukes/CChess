@@ -72,7 +72,7 @@ int isCheckMate(GameStruct * game , CorPiece cor){
 
 
 
-TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click){
+TipoJogada check_move(GameStruct * game, Boolean castles , uint64_bit click){
     TipoJogada j = Valid;
     CorPiece turno = game->turnoJogador;
     CorPiece turno_op = (turno == pretas) ? brancas : pretas;
@@ -80,7 +80,7 @@ TipoJogada check_or_mate(GameStruct * game, Boolean castles , uint64_bit click){
     if(is_in_check(&(game->estadoJogo),game->estadoJogo.tabuleirojogo[turno][King],turno)){
         return Invalid;
     }
-    else if(invalidCastle(game,click)){
+    else if( castles && invalidCastle(game,click)){
         return Invalid;
     }
     else{

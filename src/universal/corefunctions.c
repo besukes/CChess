@@ -78,7 +78,7 @@ void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit 
 
 void freeLinkedList(PecasComidasLL list){
     PecasComidasLL cur = list;
-    while(cur){
+    while(cur != NULL){
         PecasComidasLL next = cur->prox;
         free(cur);
         cur = next;

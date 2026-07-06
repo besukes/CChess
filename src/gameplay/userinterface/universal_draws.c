@@ -7,6 +7,33 @@
 
 
 
+void drawScore(int score_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale){
+    char str[256];
+    SDL_Color branco = {255, 255 , 255 , 255};
+    SDL_Color red = {255, 0 , 0 , 255} , green = {0, 255, 0, 255};
+    if(score_game<0){
+        renderTextoCentradoBasico(renderer,f,"Score",branco,x,y,scale);
+        sprintf(str,"%d",score_game);
+        renderTextoCentradoBasico(renderer,f,str,red,x+77,y,scale);
+    }
+    else{
+        renderTextoCentradoBasico(renderer,f,"Score",branco,x,y,scale);
+        sprintf(str,"+%d",score_game);
+        renderTextoCentradoBasico(renderer,f,str,green,x+73,y,scale);
+    }
+}
+
+
+void drawTurns(int turns_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale){
+    char str[256];
+    SDL_Color branco = {255, 255 , 255 , 255};
+    renderTextoCentradoBasico(renderer,f,"Turns",branco,x,y,scale);
+    sprintf(str,"%d",turns_game);
+    renderTextoCentradoBasico(renderer,f,str,branco,x+77,y,scale);
+}
+
+
+
 void desenhaCheck(GameStruct * game , CChessSettings * settings){
     int type = (-1);
     if(game->estadoJogo.king_in_check[0]) type = 0;
@@ -102,13 +129,13 @@ void desenhaFundo(CChessSettings * settings , SDL_Texture * texture){
 
 
 
-void renderTextoCentradoSombra(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, int escala){
+void renderTextoCentradoSombra(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, float escala){
     SDL_Surface *s = TTF_RenderText_Blended(f, txt, cor);
     SDL_Texture *tx = SDL_CreateTextureFromSurface(r, s);
-    int w = s->w * escala, h = s->h * escala;
+    float w = s->w * escala, h = s->h * escala;
     SDL_FreeSurface(s);
-    SDL_Rect sombra = {x - w / 2 + 5, y + 5, w, h};
-    SDL_Rect rect = {x - w / 2, y, w, h};
+    SDL_Rect sombra = {x - (int)(w / 2 + 5), y + 5, (int)w, (int)h};
+    SDL_Rect rect = {x - (int)(w / 2), y, w, h};
     SDL_SetTextureColorMod(tx, 60, 45, 0);
     SDL_RenderCopy(r, tx, NULL, &sombra);
     SDL_SetTextureColorMod(tx, cor.r, cor.g, cor.b);

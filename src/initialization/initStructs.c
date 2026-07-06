@@ -28,7 +28,6 @@ void zeroCustomPieces(CustomPieces * sets){
 
 CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * window){
     CChessSettings settings;
-    settings.fonteJogo = NULL; //temos de mudar
     settings.gameRenderer = sdl_renderer;
     settings.window = window;
     settings.screenAtual = Menu;
@@ -47,7 +46,8 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * win
     initGameFiles(&settings);
     initCosmeticos(&settings);
     TTF_Init();
-    settings.fonteJogo = TTF_OpenFont("assets/ttf/m6x11plus.ttf", 24);
+    settings.fonteJogoTitles = TTF_OpenFont("assets/ttf/m6x11plus.ttf", 35);
+    settings.fonteJogoSmallerTitles = TTF_OpenFont("assets/ttf/m6x11plus.ttf", 48);
     return settings;
 }
 
@@ -82,7 +82,10 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     game.pawnPromoted = 0;
     game.active_ultimate = NULL;
     game.promotedSucessfully = 0;
+    game.selected_piece_attacks = 0;
     game.promoted_square = 0;
+    game.score_game = 0;
+    game.turns=0;
     return game;
 }
 
@@ -104,4 +107,6 @@ void initializeOfflineGame(GameStruct * game){
     game->promotedSucessfully = 0;
     game->selected_piece_attacks = 0;
     game->promoted_square = 0;
+    game->score_game = 0;
+    game->turns=0;
 }
