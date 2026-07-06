@@ -120,10 +120,8 @@ void updateScore(GameStruct *game){
 
 
 void freePiecesTaken(GameStruct * game){
-    if(game->lastmoves != NULL){
-        freeLinkedList(game->lastmoves);
-        game->lastmoves = NULL;
-    }
+    if(game->lastmoves != NULL) freeLinkedList(game->lastmoves);
+    game->lastmoves = NULL;
 }
 
 
@@ -145,7 +143,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
             else if(game->jogada == Stalemate) eventoFimJogo(settings,DrawScreen);
             else {
                 notInCheck(game);
-                update_en_passant(game);
+                update_en_passant(game,click);
                 game->pawnPromoted = promote;
                 if(promote) game->promoted_square = click; //para depois se desenhar o quadrado de promoção na posição correta
                 else updateScore(game);

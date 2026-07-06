@@ -2,10 +2,11 @@
 
 
 
-void update_en_passant(GameStruct * game){
+void update_en_passant(GameStruct * game , uint64_bit click){
     CorPiece turno = game->turnoJogador;
     if(pawnFirstRank(game->pieceCoords,turno) && game->pieceSelecionada == Pawn){
-        game->estadoJogo.enpassant = (turno==brancas) ? (game->pieceCoords << 8) : (game->pieceCoords >> 8);
+        if(turno==brancas && (click == (game->pieceCoords << 16))) game->estadoJogo.enpassant = (game->pieceCoords << 8);
+        else if(turno==pretas && (click == (game->pieceCoords >> 16))) game->estadoJogo.enpassant = (game->pieceCoords >> 8);
     }
     else game->estadoJogo.enpassant = 0;
 }
@@ -13,7 +14,7 @@ void update_en_passant(GameStruct * game){
 
 
 Boolean can_en_passant(GameStruct * game , uint64_bit drop,CorPiece cor){
-    if(game->pieceSelecionada != Pawn) return 0;
+    if(game->pieceSelecionada != Pawn || game->estadoJogo.enpassant == 0) return 0;
     uint64_bit passant = game->estadoJogo.enpassant;
     int pos_tab_drop = posTabuleiro(drop) , pos_tab_piece = posTabuleiro(game->pieceCoords);
     int pos_passant = posTabuleiro(passant) , pos1 = 0 , pos2 = 0;

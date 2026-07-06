@@ -36,9 +36,10 @@ void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor
         return;
     }
 
-    addHeadLinkedList(&(game->lastmoves),piece_comida,click,cor_oposta);
     game->estadoJogo.tabuleirojogo[cor_oposta][piece_comida] &= ~click;
     *corOposta &= ~click;
+    game->estadoJogo.bitboard_todas_pieces &= ~click;
+    addHeadLinkedList(&(game->lastmoves),piece_comida,click,cor_oposta);
     efetuaJogada(&(game->estadoJogo.tabuleirojogo[turno][selected]),
                  &(game->estadoJogo.bitboard_todas_pieces),game->pieceCoords,
                  click,mesmaCor
@@ -76,7 +77,7 @@ void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean
         enpassant_move(game,bitboard_cor_oposta,bitboard_cor_turno,ep);
         game->score_game += (game->turnoJogador==brancas) ? 1 : (-1);
     }
-    else if(*bitboard_cor_oposta & click){
+    else if( (*bitboard_cor_oposta) & click){
         fetch_change_board(game,click,bitboard_cor_turno,bitboard_cor_oposta);
     }
     else{

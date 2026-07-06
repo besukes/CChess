@@ -332,7 +332,7 @@ Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor);
 
 //Modulo en_passant.c
 
-void update_en_passant(GameStruct * game);
+void update_en_passant(GameStruct * game ,uint64_bit click);
 Boolean can_en_passant(GameStruct * game , uint64_bit drop,CorPiece cor);
 void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * mesma_cor,ShiftFunction ep);
 
