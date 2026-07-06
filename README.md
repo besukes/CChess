@@ -73,6 +73,6 @@ Após compilação:
 ./cchess
 ```
 
-## Cŕeditos
+## Créditos
 
 Este jogo foi feito por Alberto Silva e Leandro Oliveira.
