@@ -68,6 +68,7 @@ void handleStoryScreen(GameStruct * game , CChessSettings * settings,SDL_Event *
             settings->screenAtual = Menu;
             game->game_needs_initialization = 1;
         }
+        printf("Mouse x: %d , Mouse y: %d\n",event->button.x,event->button.y);
     }
 }
 

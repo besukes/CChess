@@ -194,6 +194,7 @@ typedef struct CChessSettings{
     int ticks_checkmate; //Número de ticks que já passaram desde o começo da animação de checkmate (importante para o timer)
     Niveis nivelDificuldade; //Nível de dificuldade do jogo (para o modo carreira , que ainda não existe)
     int nivelSelecionado; //Nível selecionado para cada fase do jogo
+    int nivelMaxDesbloqueado; //Nível máximo desbloqueado pelo utilizador no modo carreira (que ainda não existe)
     InGame_Cosmetics cosmeticos; //Guarda as escolhas de cosméticos do utilizador (para o modo singleplayer , que ainda não existe)
     int num_imgsLoaded; //Número de imagens já carregadas ao inicializar o programa
     int num_imgsTotais; //Número de imagens totais que necessitam ser carregadas

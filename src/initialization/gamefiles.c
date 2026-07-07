@@ -169,6 +169,10 @@ void readLineAux(char * line , CChessSettings * settings){
         line = skip_to_value(line);
         settings->tutorials.tutorial_multiplayer_done = get_number(line,1,0);
     }
+    else if(compareString(line,"levelsUnlocked")){
+        line = skip_to_value(line);
+        settings->nivelMaxDesbloqueado = get_number(line,10,1);
+    }
     else readLineAuxAux(line,settings);
 }
 
