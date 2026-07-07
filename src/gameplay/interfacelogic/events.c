@@ -147,7 +147,6 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
                 game->pawnPromoted = promote;
                 if(promote) game->promoted_square = click; //para depois se desenhar o quadrado de promoção na posição correta
                 else updateScore(game);
-                game->turns++;
             }
     }
     else{

@@ -380,7 +380,8 @@ void desenhaFundo(CChessSettings * settings , SDL_Texture * texture);
 void renderTextoCentradoSombra(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, float escala);
 void renderTextoCentradoBasico(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, float escala);
 void drawScore(int score_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale);
-void drawTurns(int turns_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale);
+void drawTurns(CorPiece turno ,int turns_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale);
+void drawLevel(int nivel,SDL_Renderer * renderer , TTF_Font* f,int x , int y, float scale);
 
 
 //Modulo game_screen.c

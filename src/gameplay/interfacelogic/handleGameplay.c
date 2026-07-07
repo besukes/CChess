@@ -39,7 +39,10 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
         if(event.button.button == SDL_BUTTON_LEFT){
             game->isKeyPressedDown = 0;
             efetuaEventoSoltar(game,settings,event);
-            if(game->jogada != Invalid && !game->pawnPromoted) game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
+            if(game->jogada != Invalid && !game->pawnPromoted){
+                game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
+                if(game->turnoJogador == brancas) game->turns++;
+            }
             softReset(game);
         }
     }

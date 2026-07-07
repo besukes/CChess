@@ -6,6 +6,22 @@
 #include <stdio.h>
 
 
+void drawLevel(int nivel,SDL_Renderer * renderer , TTF_Font* f,int x , int y, float scale){
+    char str[256];
+    SDL_Color branco = {255, 255 , 255 , 255};
+    SDL_Color red = {255, 0 , 0 , 255} , suave = {150,150,150,255}; 
+    renderTextoCentradoBasico(renderer,f,"Level",branco,x,y,scale);
+    if(nivel==10){
+        sprintf(str,"%d",nivel);
+        renderTextoCentradoBasico(renderer,f,str,red,x+66,y,scale);
+    }
+    else{
+        sprintf(str,"%d",nivel);
+        renderTextoCentradoBasico(renderer,f,str,suave,x+66,y,scale);
+    }
+    renderTextoCentradoBasico(renderer,f,"/10",branco,x+101,y,scale);
+}
+
 
 void drawScore(int score_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale){
     char str[256];
@@ -24,12 +40,15 @@ void drawScore(int score_game,SDL_Renderer * renderer , TTF_Font* f,int x , int 
 }
 
 
-void drawTurns(int turns_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale){
+void drawTurns(CorPiece turno ,int turns_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale){
     char str[256];
-    SDL_Color branco = {255, 255 , 255 , 255};
+    SDL_Color branco = {255, 255 , 255 , 255} ,
+              laranja = {255, 165 , 0 , 255} , azul = {0, 255 , 255 , 255};
     renderTextoCentradoBasico(renderer,f,"Turns",branco,x,y,scale);
     sprintf(str,"%d",turns_game);
-    renderTextoCentradoBasico(renderer,f,str,branco,x+77,y,scale);
+    
+    if(turno==brancas) renderTextoCentradoBasico(renderer,f,str,azul,x+77,y,scale);
+    else renderTextoCentradoBasico(renderer,f,str,laranja,x+77,y,scale);
 }
 
 
