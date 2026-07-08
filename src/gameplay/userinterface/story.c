@@ -8,14 +8,6 @@
 
 
 
-void desenhaFundoStory(CChessSettings * settings){
-    SDL_Rect fundo = {0,0,1920,1080};
-    if(settings->nivelDificuldade == 0){
-        SDL_RenderCopy(settings->gameRenderer,settings->textures.niveisTextures[2],NULL,&fundo);
-    }
-}
-
-
 void desenhaOrbsLvl0(int lvl,CChessSettings * settings,SDL_Color branco , SDL_Color red , SDL_Texture * orb_laranja , SDL_Texture * orb_cinzenta){
     SDL_Rect orb2 = {720,290,190,90} , orb3 = {690,420,190,90} , orb4 = {540,500,190,90} , orb5 = {670,570,190,90} ,
              orb6 = {830,650,190,90} , orb7 = {988,735,190,90} , orb8 = {1124,815,190,90} , orb9 = {994,896,190,90} , 
@@ -25,7 +17,10 @@ void desenhaOrbsLvl0(int lvl,CChessSettings * settings,SDL_Color branco , SDL_Co
     for(int i=2;i<11;i++){
         SDL_Rect orb_temp = orbsJuntas[i-2];
         if(i + 10*lvl <= settings->nivelMaxDesbloqueado) SDL_RenderCopy(settings->gameRenderer,orb_laranja,NULL,&orb_temp);
-        else SDL_RenderCopy(settings->gameRenderer,orb_cinzenta,NULL,&orb_temp);
+        else{
+            SDL_RenderCopy(settings->gameRenderer,orb_cinzenta,NULL,&orb_temp);
+            filledCircleRGBA(settings->gameRenderer, orb_temp.x + orb_temp.w/2, orb_temp.y + orb_temp.h/2, 43 , 0 , 0, 0, 150);
+        }
         int x = orb_temp.x + orb_temp.w/2 , y = orb_temp.y + orb_temp.h/2 - 20;
         sprintf(str,"%d",i + 10*lvl);
         renderTextoCentradoBasico(settings->gameRenderer,settings->fonteJogoSmallerTitles,str, branco, x , y , 0.8);
@@ -47,12 +42,54 @@ void desenhaOrbsNiveis(CChessSettings * settings){
 }
 
 
+void desenhaFundoStory(CChessSettings * settings){
+    SDL_Rect fundo = {0, 0, 1920, 1080};
+    if(settings->nivelDificuldade == 0)
+        SDL_RenderCopy(settings->gameRenderer,
+                       settings->textures.niveisTextures[2], NULL, &fundo);
+
+    /* Vinheta — 80px de fade nas 4 bordas */
+    SDL_Renderer * r = settings->gameRenderer;
+    SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
+    for(int i = 0; i < 80; i++){
+        Uint8 a = (Uint8)(140 * (1.0f - (float)i / 80.0f));
+        SDL_SetRenderDrawColor(r, 0, 0, 0, a);
+        SDL_RenderDrawRect(r, &(SDL_Rect){i, i, 1920-2*i, 1080-2*i});
+    }
+}
+
+
 
 void desenhaNivelTitleStory(CChessSettings * settings){
-    SDL_Color branco = {255,255,255,255};
-    roundedBoxRGBA(settings->gameRenderer, 0 , 0 , 1920 , 170 , 40 , 0, 0, 0, 150);
+    SDL_Renderer * r = settings->gameRenderer;
+
+    /* Fundo do header — gradiente manual de cima para baixo */
+    for(int y = 0; y < 150; y++){
+        Uint8 a = (Uint8)(210 * (1.0f - (float)y / 150.0f * 0.5f));
+        SDL_SetRenderDrawColor(r, 10, 10, 10, a);
+        SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
+        SDL_RenderDrawLine(r, 0, y, 1920, y);
+    }
+
+    /* Linha dourada separadora */
+    SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
+    for(int i = 0; i < 5; i++){
+        Uint8 a = (i == 2) ? 255 : 160;
+        SDL_SetRenderDrawColor(r, 210, 165, 50, a);
+        SDL_RenderDrawLine(r, 0, 150 + i, 1920, 150 + i);
+    }
+
+    SDL_Color dourado = {220, 175, 55, 255};
+    SDL_Color cinzento_claro = {200, 200, 200, 255};
+
     if(settings->nivelDificuldade == 0){
-        renderTextoCentradoBasico(settings->gameRenderer,settings->fonteJogoTitles,"IN THE DAWN", branco, 400 , 4 , 4);
+        /* Título centrado horizontalmente */
+        renderTextoCentradoSombra(r, settings->fonteJogoTitles,
+                                  "IN THE DAWN", dourado, 960, 10, 3.2f);
+        /* Sub-linha discreta */
+        renderTextoCentradoBasico(r, settings->fonteJogoSmallerTitles,
+                                  "Chapter I   -   Select a Level",
+                                  cinzento_claro, 960, 100, 0.9f);
     }
 }
 
