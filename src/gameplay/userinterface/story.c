@@ -49,10 +49,10 @@ void desenhaOrbsNiveis(CChessSettings * settings){
 
 
 void desenhaNivelTitleStory(CChessSettings * settings){
-    SDL_Rect title = {660,(-20),600,210};
+    SDL_Color branco = {255,255,255,255};
     roundedBoxRGBA(settings->gameRenderer, 0 , 0 , 1920 , 170 , 40 , 0, 0, 0, 150);
     if(settings->nivelDificuldade == 0){
-        SDL_RenderCopy(settings->gameRenderer,settings->textures.niveisTextures[1],NULL,&title);
+        renderTextoCentradoBasico(settings->gameRenderer,settings->fonteJogoTitles,"IN THE DAWN", branco, 400 , 4 , 4);
     }
 }
 
