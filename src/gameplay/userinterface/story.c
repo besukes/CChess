@@ -5,13 +5,14 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <stdio.h>
 
-
+#define ORB_WIDTH 190
+#define ORB_HEIGHT 97
 
 
 void desenhaOrbsLvl0(int lvl,CChessSettings * settings,SDL_Color branco , SDL_Color red , SDL_Texture * orb_laranja , SDL_Texture * orb_cinzenta){
-    SDL_Rect orb2 = {720,290,190,90} , orb3 = {690,420,190,90} , orb4 = {540,500,190,90} , orb5 = {670,570,190,90} ,
-             orb6 = {830,650,190,90} , orb7 = {988,735,190,90} , orb8 = {1124,815,190,90} , orb9 = {994,896,190,90} , 
-             orb10 = {870,975,190,90};
+    SDL_Rect orb2 = {720,290,ORB_WIDTH,ORB_HEIGHT} , orb3 = {690,420,ORB_WIDTH,ORB_HEIGHT} , orb4 = {540,500,ORB_WIDTH,ORB_HEIGHT} , orb5 = {670,570,ORB_WIDTH,ORB_HEIGHT} ,
+             orb6 = {830,650,ORB_WIDTH,ORB_HEIGHT} , orb7 = {988,735,ORB_WIDTH,ORB_HEIGHT} , orb8 = {1124,815,ORB_WIDTH,ORB_HEIGHT} , orb9 = {994,896,ORB_WIDTH,ORB_HEIGHT} , 
+             orb10 = {870,975,ORB_WIDTH,ORB_HEIGHT};
     SDL_Rect orbsJuntas[9] = {orb2,orb3,orb4,orb5,orb6,orb7,orb8,orb9,orb10};
     char str[256];
     for(int i=2;i<11;i++){
@@ -19,10 +20,10 @@ void desenhaOrbsLvl0(int lvl,CChessSettings * settings,SDL_Color branco , SDL_Co
         if(i + 10*lvl <= settings->nivelMaxDesbloqueado) SDL_RenderCopy(settings->gameRenderer,orb_laranja,NULL,&orb_temp);
         else{
             SDL_RenderCopy(settings->gameRenderer,orb_cinzenta,NULL,&orb_temp);
-            filledCircleRGBA(settings->gameRenderer, orb_temp.x + orb_temp.w/2, orb_temp.y + orb_temp.h/2, 43 , 0 , 0, 0, 150);
+            filledCircleRGBA(settings->gameRenderer, orb_temp.x + orb_temp.w/2, orb_temp.y + orb_temp.h/2, 46 , 0 , 0, 0, 150);
         }
-        int x = orb_temp.x + orb_temp.w/2 , y = orb_temp.y + orb_temp.h/2 - 20;
         sprintf(str,"%d",i + 10*lvl);
+        int x = orb_temp.x + orb_temp.w/2 , y = orb_temp.y + orb_temp.h/2 - 20;
         renderTextoCentradoBasico(settings->gameRenderer,settings->fonteJogoSmallerTitles,str, branco, x , y , 0.8);
     }  
 }
@@ -34,7 +35,7 @@ void desenhaOrbsNiveis(CChessSettings * settings){
                 * orb_cinzenta = settings->textures.miscTextures[12];
     SDL_Color branco = {255,255,255,255} , red = {255,0,0,255};
     if(lvl == 0){
-        SDL_Rect orb1 = {600,240,190,90};
+        SDL_Rect orb1 = {600,240,ORB_WIDTH,ORB_HEIGHT};
         SDL_RenderCopy(settings->gameRenderer,orb_laranja,NULL,&orb1);
         renderTextoCentradoBasico(settings->gameRenderer,settings->fonteJogoSmallerTitles,"1", branco, 695 , 265 , 0.8);
         desenhaOrbsLvl0(lvl,settings,branco,red,orb_laranja,orb_cinzenta);
