@@ -5,6 +5,44 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <stdio.h>
 
+/*Hover — verifica se o rato está sobre o rect*/
+int mouseOver(CChessSettings * settings, SDL_Rect r){
+    SDL_Point mousePos = {settings->posMouseX, settings->posMouseY};
+    return (SDL_PointInRect(&mousePos, &r));
+}
+
+
+/* ─────────────────────────────────────────────
+   Botão com efeito hover dourado
+   ───────────────────────────────────────────── */
+static void desenhaButton(CChessSettings * settings, SDL_Event event,
+                           SDL_Texture * tex, SDL_Rect rect)
+{
+    SDL_Renderer * r = settings->gameRenderer;
+
+    if(mouseOver(settings, rect)){
+        /* Halo dourado ligeiro atrás do botão */
+        for(int i = 8; i > 0; i -= 2){
+            Uint8 a = (Uint8)(20 * i);
+            roundedBoxRGBA(r,
+                rect.x - i, rect.y - i,
+                rect.x + rect.w + i, rect.y + rect.h + i,
+                18, 210, 165, 40, a);
+        }
+        /* Botão ligeiramente maior (escala +4px em cada lado) */
+        SDL_Rect hover = {rect.x - 4, rect.y - 4, rect.w + 8, rect.h + 8};
+        SDL_RenderCopy(r, tex, NULL, &hover);
+        /* Tint dourado semitransparente por cima */
+        SDL_SetTextureColorMod(tex, 255, 220, 130);
+        SDL_SetTextureAlphaMod(tex, 230);
+        SDL_RenderCopy(r, tex, NULL, &hover);
+        SDL_SetTextureColorMod(tex, 255, 255, 255);
+        SDL_SetTextureAlphaMod(tex, 255);
+    } else {
+        SDL_RenderCopy(r, tex, NULL, &rect);
+    }
+}
+
 
 void desenhaButtons(CChessSettings * settings,SDL_Event event){
     SDL_Rect botaoStory = {710,400,500,100};
@@ -12,10 +50,14 @@ void desenhaButtons(CChessSettings * settings,SDL_Event event){
     SDL_Rect botaoOffline = {710,640,500,100};
     SDL_Rect botaoSettings = {710,760,500,100};
 
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[4],NULL,&botaoStory);
+    /*SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[4],NULL,&botaoStory);
     SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[1],NULL,&botaoMultiplayer);
     SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[2],NULL,&botaoOffline);
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[3],NULL,&botaoSettings);
+    SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[3],NULL,&botaoSettings);*/
+    desenhaButton(settings, event, settings->textures.buttonsTextures[4], botaoStory);
+    desenhaButton(settings, event, settings->textures.buttonsTextures[1], botaoMultiplayer);
+    desenhaButton(settings, event, settings->textures.buttonsTextures[2], botaoOffline);
+    desenhaButton(settings, event, settings->textures.buttonsTextures[3], botaoSettings);
 }
 
 void verificaNumberCoins(int coins_qntd , char * coins){
