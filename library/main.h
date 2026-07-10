@@ -441,7 +441,7 @@ void initStoryGame(GameStruct * game , CChessSettings * settings , int level);
 
 //Modulo settings.c
 
-void desenhaSettings(CChessSettings * settings , SDL_Event * event);
+void desenhaSettings(CChessSettings * settings, SDL_Event * event);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

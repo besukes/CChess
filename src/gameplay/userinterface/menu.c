@@ -15,9 +15,7 @@ int mouseOver(CChessSettings * settings, SDL_Rect r){
 /* ─────────────────────────────────────────────
    Botão com efeito hover dourado
    ───────────────────────────────────────────── */
-static void desenhaButton(CChessSettings * settings, SDL_Event event,
-                           SDL_Texture * tex, SDL_Rect rect)
-{
+static void desenhaButton(CChessSettings * settings, SDL_Texture * tex, SDL_Rect rect){
     SDL_Renderer * r = settings->gameRenderer;
 
     if(mouseOver(settings, rect)){
@@ -54,10 +52,10 @@ void desenhaButtons(CChessSettings * settings,SDL_Event event){
     SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[1],NULL,&botaoMultiplayer);
     SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[2],NULL,&botaoOffline);
     SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[3],NULL,&botaoSettings);*/
-    desenhaButton(settings, event, settings->textures.buttonsTextures[4], botaoStory);
-    desenhaButton(settings, event, settings->textures.buttonsTextures[1], botaoMultiplayer);
-    desenhaButton(settings, event, settings->textures.buttonsTextures[2], botaoOffline);
-    desenhaButton(settings, event, settings->textures.buttonsTextures[3], botaoSettings);
+    desenhaButton(settings, settings->textures.buttonsTextures[4], botaoStory);
+    desenhaButton(settings, settings->textures.buttonsTextures[1], botaoMultiplayer);
+    desenhaButton(settings, settings->textures.buttonsTextures[2], botaoOffline);
+    desenhaButton(settings, settings->textures.buttonsTextures[3], botaoSettings);
 }
 
 void verificaNumberCoins(int coins_qntd , char * coins){
