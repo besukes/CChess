@@ -53,6 +53,7 @@ void initTexturasJogo(CChessSettings * settings ,AssetsCChess * assets,SDL_Rende
     assets->niveisTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/niveis/nivel1.png");
     assets->niveisTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/niveis/forest.png");
     assets->niveisTextures[2] = IMG_LoadTexture(sdl_renderer,"assets/niveis/forestlvl(2).png");
+    assets->niveisTextures[3] = IMG_LoadTexture(sdl_renderer,"assets/niveis/test_forest(2).jpg");
 
     loadMiscAssets(assets,sdl_renderer);
     

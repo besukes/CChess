@@ -118,15 +118,8 @@ static int desenhaSectionTitle(CChessSettings * s,
    Linha de opção com setas de navegação  ◄  N  ►
    Devolve o y da próxima linha
    ───────────────────────────────────────────── */
-static int desenhaOptionRow(CChessSettings * s,
-                             int px1, int px2, int y,
-                             const char * label,
-                             const char * valor,
-                             int * rect_prev_out,   /* guardamos SDL_Rect para clicks */
-                             int * rect_next_out,
-                             SDL_Rect * prev_r,
-                             SDL_Rect * next_r)
-{
+static int desenhaOptionRow(CChessSettings * s,int px1, int px2, int y,const char * label,const char * valor,int * rect_prev_out, int * rect_next_out,
+    SDL_Rect * prev_r,SDL_Rect * next_r){
     SDL_Renderer * r = s->gameRenderer;
     (void)rect_prev_out; (void)rect_next_out;
 

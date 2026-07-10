@@ -66,7 +66,7 @@ void desenhaNivelTitle(CChessSettings * settings){
 
 
 void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event){
-    desenhaFundo(settings,settings->textures.niveisTextures[0]);
+    desenhaFundo(settings,settings->textures.niveisTextures[3]);
     SDL_Rect tabuleiro = {210,140,800,800};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.tabTextures[1],NULL,&tabuleiro);
     if(game->selected_piece_attacks != 0){
