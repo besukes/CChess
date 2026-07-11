@@ -118,7 +118,7 @@ void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Even
             if(settings->cosmeticos.tabuleiroSelecionado > 0) settings->cosmeticos.tabuleiroSelecionado--;
         }
         else if(SDL_PointInRect(&point,&prox_board)){
-            if(settings->cosmeticos.tabuleiroSelecionado < 4) settings->cosmeticos.tabuleiroSelecionado++;
+            if(settings->cosmeticos.tabuleiroSelecionado < 6) settings->cosmeticos.tabuleiroSelecionado++;
         }
     }
 }

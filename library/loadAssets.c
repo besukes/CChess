@@ -46,8 +46,13 @@ void loadMiscAssets(AssetsCChess * assets,SDL_Renderer * sdl_renderer){
 
 
 void initTexturasJogo(CChessSettings * settings ,AssetsCChess * assets,SDL_Renderer * sdl_renderer){
-    //assets->tabTextures[0] = IMG_LoadTexture(sdl_renderer,"");
     assets->tabTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/tab_1.png");
+    assets->tabTextures[1] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/tab_2.png");
+    assets->tabTextures[2] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/tab_3.png");
+    assets->tabTextures[3] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/tab_4.png");
+    assets->tabTextures[4] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/tab_5.png");
+    assets->tabTextures[5] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/tab_6.png");
+    assets->tabTextures[6] = IMG_LoadTexture(sdl_renderer,"assets/tabuleiro/tab_7.png");
 
 
     assets->niveisTextures[0] = IMG_LoadTexture(sdl_renderer,"assets/niveis/nivel1.png");

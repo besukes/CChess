@@ -64,7 +64,7 @@ void free_allocated_memory(GameStruct * game , CChessSettings * user){
     for(int i = 0; i < 12; i++){
         SDL_DestroyTexture(user->textures.chessPieces[i]);
     }
-    for(int i = 1; i < 2; i++){
+    for(int i = 1; i < 7; i++){
         SDL_DestroyTexture(user->textures.tabTextures[i]);
     }
     for(int i = 0; i < 2; i++){

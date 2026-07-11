@@ -162,7 +162,7 @@ typedef struct InGame_Cosmetics{
 typedef struct AssetsCChess{
     Themes temaSelecionado; //Tema selecionado pelo utilizador
     SDL_Texture * chessPieces[12]; //Texturas das peças de xadrez do CChess
-    SDL_Texture * tabTextures[5]; //Texturas dos tabuleiros de xadrez do CChess
+    SDL_Texture * tabTextures[7]; //Texturas dos tabuleiros de xadrez do CChess
     SDL_Texture * niveisTextures[10]; //Texturas misc do CChess
     SDL_Texture * buttonsTextures[20]; //Texturas dos botões do CChess
     SDL_Texture * miscTextures[20]; //Texturas misc do CChess
