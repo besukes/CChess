@@ -316,8 +316,8 @@ void writeNewGameFiles(CChessSettings * settings){
         story_tutorial_done = settings->tutorials.tutorial_story_done ,
         mtply_tutorial_done = settings->tutorials.tutorial_multiplayer_done ,
         volume = settings->volume , max_lvl = settings->nivelMaxDesbloqueado;
-    char str_pieces_place[256] , str_selected_powers[256] ,  str_owned_powers[256] , str_unlocked_powers[256] , 
-         str_extra_powers_owned[256];
+    char str_pieces_place[256] = {0} , str_selected_powers[256] = {0} ,  str_owned_powers[256] = {0} , 
+         str_unlocked_powers[256] = {0} , str_extra_powers_owned[256] = {0} ;
     check_pieces_place(settings,str_pieces_place);
     check_selected_powers(settings,str_selected_powers);
     check_owned_powers(settings,str_owned_powers);
