@@ -41,6 +41,7 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * win
     settings.indx_starting_line = 0;
     settings.selected_pieces_power = NULL;
     settings.indx_selected_ults = 0;
+    settings.volume = 100;
     zeroCustomPieces(&settings.user_custom_items);
     initTexturasJogo(&settings,&settings.textures,sdl_renderer);
     initGameFiles(&settings);

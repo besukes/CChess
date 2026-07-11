@@ -5,11 +5,6 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <stdio.h>
 
-/*Hover — verifica se o rato está sobre o rect*/
-int mouseOver(CChessSettings * settings, SDL_Rect r){
-    SDL_Point mousePos = {settings->posMouseX, settings->posMouseY};
-    return (SDL_PointInRect(&mousePos, &r));
-}
 
 
 /* ─────────────────────────────────────────────

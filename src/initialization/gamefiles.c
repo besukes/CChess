@@ -30,14 +30,17 @@ void checkResolutionUser(char * line , CChessSettings * settings){
             SDL_SetWindowFullscreen(settings->window,SDL_WINDOW_FULLSCREEN);
         break;
         case 1:
+            if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
             SDL_SetWindowSize(settings->window,1280,720);
             SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
         break;
         case 2:
+            if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
             SDL_SetWindowSize(settings->window,1600,900);
             SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
         break;
         case 3:
+            if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
             SDL_SetWindowSize(settings->window,1920,1080);
             SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
         break;

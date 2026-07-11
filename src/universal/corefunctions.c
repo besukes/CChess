@@ -170,3 +170,23 @@ int get_number(char * line, int max , int def){
     return numbr;
 }
 
+
+/*Hover — verifica se o rato está sobre o rect*/
+int mouseOver(CChessSettings * settings, SDL_Rect r){
+    SDL_Point mousePos = {settings->posMouseX, settings->posMouseY};
+    return (SDL_PointInRect(&mousePos, &r));
+}
+
+
+int is_window_fullscreen(SDL_Window* window){
+    // Obtém todas as flags da janela atual
+    Uint32 flags = SDL_GetWindowFlags(window);
+
+    // Verifica se a flag de Fullscreen Normal OU Fullscreen Desktop está ativa
+    if ((flags & SDL_WINDOW_FULLSCREEN) || (flags & SDL_WINDOW_FULLSCREEN_DESKTOP)) {
+        return 1;
+    }
+
+    return 0;
+}
+

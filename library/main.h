@@ -203,6 +203,7 @@ typedef struct CChessSettings{
     int indx_starting_line; //index para o array dinamicamente alocado
     PlayerChessTable * story_st_line; //Guarda a informação do utilizador quanto à organização das peças no modo história
     int indx_selected_ults; //index para o array dinamicamente alocado
+    int volume; //Guarda o volume do jogo
     UltimatesSettings * selected_pieces_power; //Guarda os poderes selecionados de cada piece
     TutorialsDone tutorials; //Guarda booleans que informam sobre o estado do utilizador quanto aos tutoriais de cada modo de jogo
 }CChessSettings;
@@ -274,6 +275,8 @@ int compareString(char comparing[],char compared[]);
 int numberChars(char * str);
 char * skip_to_value(char * line);
 int get_number(char * line, int max , int def);
+int mouseOver(CChessSettings * settings, SDL_Rect r);
+int is_window_fullscreen(SDL_Window* window);
 
 
 
