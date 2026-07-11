@@ -23,28 +23,30 @@
 
 
 
-void checkResolutionUser(char * line , CChessSettings * settings){
-    int u = get_number(line,3,0);
+void set_new_window_size(int u, CChessSettings * settings){
     switch(u){
-        case 0:
-            SDL_SetWindowFullscreen(settings->window,SDL_WINDOW_FULLSCREEN);
-        break;
         case 1:
             if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
             SDL_SetWindowSize(settings->window,1280,720);
             SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
+            settings->window_optn = 1;
         break;
         case 2:
             if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
             SDL_SetWindowSize(settings->window,1600,900);
             SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
+            settings->window_optn = 2;
         break;
         case 3:
             if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
             SDL_SetWindowSize(settings->window,1920,1080);
             SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
+            settings->window_optn = 3;
         break;
-        default:break;
+        default:
+            SDL_SetWindowFullscreen(settings->window,SDL_WINDOW_FULLSCREEN);
+            settings->window_optn = 0;
+        break;
     }
 }
 
@@ -148,7 +150,8 @@ void readLineAuxAux(char * line , CChessSettings * settings){
     }
     else if(compareString(line,"resolutionOption")){
         line = skip_to_value(line);
-        checkResolutionUser(line,settings);
+        int u = get_number(line,3,0);
+        set_new_window_size(u,settings);
     }
 }
 

@@ -185,6 +185,7 @@ typedef struct CChessSettings{
     AssetsCChess textures; //Texturas do jogo CChess
     SDL_Renderer * gameRenderer; //Renderer responsável por guardar a janela e onde desenhamos os objetos
     SDL_Window * window; //Window atual do utilizador
+    int window_optn; //Opção de janela selecionada pelo utilizador Fullscreen/Windowed
     TTF_Font * fonteJogoTitles; //Fonte das letras do nosso jogo de titulos importantes
     TTF_Font * fonteJogoSmallerTitles; //Fonte das letras do nosso jogo de titulos mais pequenos
     int posMouseX; //Posição horizontal do rato do utilizador , em termos de píxeis
@@ -425,6 +426,7 @@ void loading_screen(CChessSettings * settings,int perc);
 
 void initGameFiles(CChessSettings * settings);
 void writeNewGameFiles(CChessSettings * settings);
+void set_new_window_size(int u, CChessSettings * settings);
 
 
 //Modulo custom_interactions.c 

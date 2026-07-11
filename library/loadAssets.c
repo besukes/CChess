@@ -68,5 +68,5 @@ void initTexturasJogo(CChessSettings * settings ,AssetsCChess * assets,SDL_Rende
     loadTexturasPieces(settings,assets->chessPieces,sdl_renderer);
     
     loadButtons(assets->buttonsTextures,sdl_renderer);
-    settings->num_imgsLoaded+=5;
+    settings->num_imgsLoaded+=6;
 }
