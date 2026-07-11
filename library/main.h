@@ -203,8 +203,8 @@ typedef struct CChessSettings{
     int ccoins_qntd; //Guarda a quantidade de moedas do utilizador
     int indx_starting_line; //index para o array dinamicamente alocado
     PlayerChessTable * story_st_line; //Guarda a informação do utilizador quanto à organização das peças no modo história
-    int indx_selected_ults; //index para o array dinamicamente alocado
     int volume; //Guarda o volume do jogo
+    int indx_selected_ults; //index para o array dinamicamente alocado
     UltimatesSettings * selected_pieces_power; //Guarda os poderes selecionados de cada piece
     TutorialsDone tutorials; //Guarda booleans que informam sobre o estado do utilizador quanto aos tutoriais de cada modo de jogo
 }CChessSettings;
@@ -278,6 +278,7 @@ char * skip_to_value(char * line);
 int get_number(char * line, int max , int def);
 int mouseOver(CChessSettings * settings, SDL_Rect r);
 int is_window_fullscreen(SDL_Window* window);
+char * skip_to_x_or_value(char * line);
 
 
 
@@ -447,6 +448,20 @@ void initStoryGame(GameStruct * game , CChessSettings * settings , int level);
 //Modulo settings.c
 
 void desenhaSettings(CChessSettings * settings, SDL_Event * event);
+
+
+//Modulo gamefiles_aux.c
+
+void check_extra_powers_owned(CChessSettings * settings , char * str);
+void check_unlocked_powers(CChessSettings * settings , char * str);
+void check_owned_powers(CChessSettings * settings , char * str);
+void check_selected_powers(CChessSettings * settings , char * str);
+void check_pieces_place(CChessSettings * settings , char * str);
+
+
+
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

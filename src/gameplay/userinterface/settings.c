@@ -188,7 +188,7 @@ static void desenhaTabPreview(CChessSettings * s, int x1, int x2, int y){
     int idx = s->cosmeticos.tabuleiroSelecionado;
     if(idx >= 0 && idx < 7 && s->textures.tabTextures[idx])
         SDL_RenderCopy(r, s->textures.tabTextures[idx], NULL, &preview);
-    else;
+    else{};
 }
 
 

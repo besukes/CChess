@@ -67,7 +67,7 @@ void readExtraPieces(char * line ,CChessSettings * settings){
 
 void readStartingLine(char * line ,CChessSettings * settings){
     int counter = 0;
-    while(*line != ' ' && *line != '\0' && *line != '\n'){
+    while(*line != ' ' && *line != '\0' && *line != '\n' && counter<16){
         if(*line != 'x'){
             PlayerChessTable * table = settings->story_st_line , * atual;
             int indx = ++ settings->indx_starting_line;
@@ -79,9 +79,11 @@ void readStartingLine(char * line ,CChessSettings * settings){
             atual->tipo_piece = (Pieces)get_number(line,MAX_PIECES,DEFAULT_PIECES);
 
             settings->story_st_line = table;
+
+            int n = numberChars(line);
+            line = skipWhileSpace(line+n);
         }
-        int n = numberChars(line);
-        line = skipWhileSpace(line+n);
+        else line = skipWhileSpace(line+1);
         counter++;
         if(line == NULL) break;
     }
@@ -125,22 +127,19 @@ void readPowersLine(char * line , CChessSettings * settings, int type){
 void readLineAuxAux(char * line , CChessSettings * settings){
     if(compareString(line,"ownedPowers")){
         line = skip_to_value(line);
-        
+    
         readPowersLine(line,settings,0);
     }
     else if(compareString(line,"unlockedPowers")){
         line = skip_to_value(line);
-
         readPowersLine(line,settings,1);
     }
     else if(compareString(line,"selectedPowers")){
         line = skip_to_value(line);
-
         readPowersLine(line,settings,2);
     }
     else if(compareString(line,"piecesPlace")){
-        line = skip_to_value(line);
-
+        line = skip_to_x_or_value(line);
         readStartingLine(line,settings);
     }
     else if(compareString(line,"extraPiecesOwned")){
@@ -178,6 +177,10 @@ void readLineAux(char * line , CChessSettings * settings){
     else if(compareString(line,"levelsUnlocked")){
         line = skip_to_value(line);
         settings->nivelMaxDesbloqueado = get_number(line,10,1);
+    }
+    else if(compareString(line,"volume")){
+        line = skip_to_value(line);
+        settings->volume = get_number(line,101,100);
     }
     else readLineAuxAux(line,settings);
 }
@@ -255,6 +258,8 @@ void writeDefaultGamefiles(FILE * file){
                    "offlineTutorial : 0 \n"
                    "storyTutorial : 0 \n"
                    "mtplyTutorial : 0 \n"
+                   "volume : 100 \n"
+                   "levelsUnlocked : 1 \n"
            )
     ;
 }
@@ -294,6 +299,53 @@ void initGameFiles(CChessSettings * settings){
 }
 
 
+
 void writeNewGameFiles(CChessSettings * settings){
-    
+    DIR * dir = opendir("gamefiles");
+    if(dir==NULL) createGamefilesDir(settings);
+    FILE * file = fopen("gamefiles/GameUserSettings.ini","w");
+    int lvl_difficulty = settings->nivelDificuldade , lvl_selected = settings->nivelSelecionado ,
+        selected_theme = settings->textures.temaSelecionado ,
+        selected_table = settings->cosmeticos.tabuleiroSelecionado ,
+        selected_music = settings->cosmeticos.musicaSelecionada ,
+        checkmate_effect = settings->cosmeticos.efeito_checkmateSelecionado ,
+        check_effect = settings->cosmeticos.efeito_checkSelecionado ,
+        coins_amount = settings->ccoins_qntd ,
+        resolution_option = settings->window_optn ,
+        offline_tutorial_done = settings->tutorials.tutorial_offline_done ,
+        story_tutorial_done = settings->tutorials.tutorial_story_done ,
+        mtply_tutorial_done = settings->tutorials.tutorial_multiplayer_done ,
+        volume = settings->volume , max_lvl = settings->nivelMaxDesbloqueado;
+    char str_pieces_place[256] , str_selected_powers[256] ,  str_owned_powers[256] , str_unlocked_powers[256] , 
+         str_extra_powers_owned[256];
+    check_pieces_place(settings,str_pieces_place);
+    check_selected_powers(settings,str_selected_powers);
+    check_owned_powers(settings,str_owned_powers);
+    check_unlocked_powers(settings,str_unlocked_powers);
+    check_extra_powers_owned(settings,str_extra_powers_owned);
+    fprintf(file , "difficultyLevel : %d \n"
+                   "selectedLevel : %d \n"
+                   "ownedPowers : %s \n"
+                   "unlockedPowers : %s \n"
+                   "selectedTheme : %d \n"
+                   "selectedTable : %d \n"
+                   "selectedMusic : %d \n"
+                   "checkmateEffect : %d \n"
+                   "checkEffect : %d \n"
+                   "coinsAmount : %d \n"
+                   "piecesPlace : %s \n"
+                   "selectedPowers : %s \n"
+                   "extraPiecesOwned : %s \n"
+                   "resolutionOption : %d \n"
+                   "offlineTutorial : %d \n"
+                   "storyTutorial : %d \n"
+                   "mtplyTutorial : %d \n" 
+                   "volume : %d \n"
+                   "levelsUnlocked : %d \n",
+            lvl_difficulty , lvl_selected , str_owned_powers , str_unlocked_powers , selected_theme , selected_table ,
+            selected_music , checkmate_effect , check_effect , coins_amount , str_pieces_place   , str_selected_powers , str_extra_powers_owned , resolution_option ,
+            offline_tutorial_done ,story_tutorial_done , mtply_tutorial_done , volume , max_lvl
+    );
+    fclose(file);
+    closedir(dir);
 }
