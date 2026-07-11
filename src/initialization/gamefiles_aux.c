@@ -50,13 +50,12 @@ void check_pieces_place(CChessSettings * settings , char * str){
     int indx = settings->indx_starting_line , counter_indx = 0;
     if(table == NULL) return;
     for(int i=0;i<16;i++){
-        if(table->bitboard_extra_piece != (1ULL<<i)) sprintf(str,"%sx ",str);
+        if(counter_indx >= indx || (table + counter_indx)->bitboard_extra_piece != (1ULL<<i)) 
+            sprintf(str,"%sx ",str);
         else{
-            if(counter_indx < indx){
-                PlayerChessTable * atual = table + counter_indx;
-                sprintf(str,"%s%d ",str,atual->tipo_piece);
-                counter_indx++;
-            }
+            PlayerChessTable * atual = table + counter_indx;
+            sprintf(str,"%s%d ",str,atual->tipo_piece);
+            counter_indx++;
         }
     }
 }
