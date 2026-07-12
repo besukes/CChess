@@ -19,18 +19,20 @@ O jogo utiliza a biblioteca **SDL2** e extensões associadas para criar uma apli
 ## Estrutura do Projeto
 ```bash
 .
-├── chess_engine/  # Ficheiros relativos a movimentação de peças + CChess IA
-├── src/           # Ficheiros fonte do jogo (maior parte dos .c)
-├── sfx/           # Ficheiros de áudio utilizados
-├── musica/        # Música que implementamos para tocar ao longo do jogo
-├── library/       # Headers (.h) e ficheiros relativos a texturas
-├── assets/        # Imagens e fontes necessárias ao projeto
 ├── animations/    # Animações ao longo do jogo
-├── gamefiles/     # Ficheiro relativo ao progresso do utilizador no jogo (client settings)
+├── assets/        # Imagens e fontes necessárias ao projeto
 ├── build/         # Ficheiros objeto (.o) (gerado automaticamente pelo comando make)
+├── chess_engine/  # Ficheiros relativos a movimentação de peças + CChess IA
+├── gamefiles/     # Ficheiro relativo ao progresso do utilizador no jogo (client settings)
+├── library/       # Headers (.h) e ficheiros relativos a texturas
+├── sfx/           # Ficheiros de áudio utilizados
+├── src/           # Ficheiros fonte do jogo (maior parte dos .c)
+├── music/        # Músicas que implementamos para tocar ao longo do jogo
+├── cchess         # Executável final , Jogo CChess (gerado automaticamente)
 ├── Makefile
-├── cchess         # Executável final , Jogo CChess(gerado automaticamente)
-└── README.md      # Informações sobre o projeto
+├── README.md      # Informações detalhadas sobre o projeto
+├── todoList.txt   # Informações sobre adições pendentes do projeto
+└── unused.txt     # Código não utilizado no projeto mas que pode ser útil
 ```
 
 ## Assets
