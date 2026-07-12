@@ -36,10 +36,7 @@ void setResolution(int * resX,int * resY,int * optn){
 SDL_Initializators sdl_initializer(void){
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* window;
-    int optn = getOption(),resX , resY;
-    setResolution(&resX,&resY,&optn);
-    if(optn==4) window = SDL_CreateWindow("CChess", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0 , 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
-    else window = SDL_CreateWindow("CChess", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, resX , resY , 0);
+    window = SDL_CreateWindow("CChess", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920 , 1080 , 0);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     //para não precisar de dar scale às imagens no ecrã
     SDL_RenderSetLogicalSize(renderer, 1920, 1080);
@@ -73,8 +70,7 @@ void free_allocated_memory(GameStruct * game , CChessSettings * user){
     for(int i = 0; i < 9; i++){
         SDL_DestroyTexture(user->textures.miscTextures[i]);
     }
-    int frames = (user->cosmeticos.efeito_checkmateSelecionado == 2) ? 40 : 60;
-    for(int i = 0; i < frames; i++){
+    for(int i = 0; i < user->cosmeticos.n_frames_gif; i++){
         SDL_DestroyTexture(user->cosmeticos.gif_checkmate[i]);
     }
     free(user->cosmeticos.gif_checkmate);

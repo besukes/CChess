@@ -1,5 +1,11 @@
 //////////////TO-DO-LIST//////////////////
 1-- userinterface.c
 2-- finish gamefiles piecesPlace save file
+3-- SETTINGS IMPROVEMENTS{
+    AI difficulty
+    starting line
+    choose ultimates
+    set window mode in settings
+}
 
 

@@ -63,13 +63,13 @@ SDL_Texture ** gif_utilizador_checkmate(CChessSettings * settings, int efeito_ch
     pathAnimacaoCheckmate(str,efeito_checkmateSelecionado);
     IMG_Animation* gif = IMG_LoadAnimation(str);
     int n_frames = gif->count;
-    printf("%d\n",n_frames);
     SDL_Texture * * textures = malloc(sizeof(SDL_Texture*) * n_frames);
     for(int i = 0; i < n_frames; i++) {
         settings->num_imgsLoaded++;
         textures[i] = SDL_CreateTextureFromSurface(settings->gameRenderer, gif->frames[i]);
         loading_screen(settings,settings->num_imgsLoaded);
     }
+    settings->cosmeticos.n_frames_gif = n_frames;
     IMG_FreeAnimation(gif);
     return textures;
 }

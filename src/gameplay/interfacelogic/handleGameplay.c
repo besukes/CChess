@@ -110,12 +110,8 @@ void handleWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event even
 void load_new_animations(CChessSettings * settings){
     settings->num_imgsLoaded = 24;
     settings->num_imgsTotais = 60;
-    int n_frames = 60;
-    if(settings->cosmeticos.efeito_checkmateSelecionado == 2){
-        settings->num_imgsLoaded = 40;
-        n_frames = 40;
-    }
-    for(int i = 0; i < n_frames; i++){
+    if(settings->cosmeticos.efeito_checkmateSelecionado == 2)settings->num_imgsLoaded = 40;
+    for(int i = 0; i < settings->cosmeticos.n_frames_gif; i++){
         SDL_DestroyTexture(settings->cosmeticos.gif_checkmate[i]);
     }
     free(settings->cosmeticos.gif_checkmate);
