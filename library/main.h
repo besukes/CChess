@@ -146,6 +146,7 @@ typedef struct GameStruct{
     Boolean promotedSucessfully; //Guarda se o peão foi promovido num clique
     int score_game; //Guarda o score do jogo (diferenca de pecas comidas)
     int turns; //Guarda os turnos ja jogados no jogo
+    Boolean trying_to_leave; //Informa se o utilizador clicou no botao de sair
 }GameStruct;
 
 

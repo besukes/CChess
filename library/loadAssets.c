@@ -23,6 +23,11 @@ void loadButtons(SDL_Texture * buttonsTextures[20],SDL_Renderer * sdl_renderer){
     buttonsTextures[3] = IMG_LoadTexture(sdl_renderer,"assets/buttons/settings_button.png");
     buttonsTextures[4] = IMG_LoadTexture(sdl_renderer,"assets/buttons/story_button.png");
     buttonsTextures[5] = IMG_LoadTexture(sdl_renderer,"assets/buttons/go_back.png");
+    buttonsTextures[6] = IMG_LoadTexture(sdl_renderer,"assets/buttons/return_red_button.png");
+
+    buttonsTextures[7] = IMG_LoadTexture(sdl_renderer,"assets/buttons/go_back_red_button.png");
+    buttonsTextures[8] = IMG_LoadTexture(sdl_renderer,"assets/buttons/stay_button.png");
+    buttonsTextures[9] = IMG_LoadTexture(sdl_renderer,"assets/buttons/panel_go_back_stay.png");
 }
 
 

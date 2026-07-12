@@ -87,6 +87,7 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     game.promoted_square = 0;
     game.score_game = 0;
     game.turns=0;
+    game.trying_to_leave = 0;
     return game;
 }
 
@@ -110,4 +111,5 @@ void initializeOfflineGame(GameStruct * game){
     game->promoted_square = 0;
     game->score_game = 0;
     game->turns=0;
+    game->trying_to_leave = 0;
 }

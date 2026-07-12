@@ -42,14 +42,15 @@ int clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
 void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event * event){
     int mouseX = event->button.x , mouseY = event->button.y;
     uint64_bit click = click_table_position(mouseX,mouseY);
-    if(game->pawnPromoted){
+    int * is_leaving = &game->trying_to_leave;
+    if(game->pawnPromoted && !*is_leaving){
         int did_promote = clickPromotingPiece(game,mouseX,mouseY);
         if(did_promote){
             game->promotedSucessfully = 1;
             game->promoted_square = 0;
         }
     }
-    else if(click != 0){
+    else if(click != 0 && !*is_leaving){
         Pieces piece = comparePiece(game->estadoJogo ,game->turnoJogador, click);
         game->pieceCoords = click;
         game->pieceSelecionada = piece;
@@ -59,10 +60,15 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
     }
     else{
         SDL_Point point = {mouseX,mouseY};
-        SDL_Rect leave = {50,950,100,100};
-        if(SDL_PointInRect(&point,&leave)){ 
-            settings->screenAtual = Menu;
-            game->game_needs_initialization = 1;
+        SDL_Rect returns = {1425,950,202,100};
+        SDL_Rect back = {765,570,180,86} , stay = {975,570,180,86};
+        if(SDL_PointInRect(&point,&returns) && !*is_leaving) *is_leaving = 1;
+        else if(*is_leaving){
+            if(SDL_PointInRect(&point,&back)){
+                settings->screenAtual = Menu;
+                game->game_needs_initialization = 1;
+            }
+            else if(SDL_PointInRect(&point,&stay)) *is_leaving = 0;
         }
         else if(1){
             

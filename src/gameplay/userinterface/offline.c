@@ -80,8 +80,6 @@ void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event
     for( int i = 0; i < 6; i++){
         desenhaTipoPiece(game->estadoJogo.tabuleirojogo[1][i],(Pieces)(i),settings,game,6);
     }
-    SDL_Rect go_back = {50,950,100,100};
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[0],NULL,&go_back);
 
     desenhaMenu(game,settings);
     if(game->pawnPromoted) desenhaPromotion(game,settings);
@@ -89,4 +87,35 @@ void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event
     SDL_Rect turn = {250,(-40),700,210};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[5 + game->turnoJogador],NULL,&turn);
     desenhaNivelTitle(settings);
+
+    SDL_Rect returns = {1425,950,202,100};
+    if(game->trying_to_leave){
+        SDL_Rect panel = {735,400,450,280};
+        SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[9],NULL,&panel);
+
+        SDL_Rect back = {765,570,180,86} , stay = {975,570,180,86};
+        if(mouseOver(settings,back)){
+            back.h += 8; back.w += 10;
+            SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[7],NULL,&back);
+            SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[8],NULL,&stay);
+            roundedBoxRGBA(settings->gameRenderer,765,570,955,659,9,255,0,0,20);
+        }
+        else if(mouseOver(settings,stay)){
+            stay.h += 8; stay.w +=10;
+            SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[7],NULL,&back);
+            SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[8],NULL,&stay);
+            roundedBoxRGBA(settings->gameRenderer,975,570,1165,659,9,0,0,255,20);
+        }
+        else{
+            SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[7],NULL,&back);
+            SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[8],NULL,&stay);
+        }
+        SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[6],NULL,&returns);
+    }
+    else if(mouseOver(settings,returns)){
+        returns.h = 109; returns.w = 210;
+        SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[6],NULL,&returns);
+        roundedBoxRGBA(settings->gameRenderer,1425,950,1635,1059,9,255,0,0,20);
+    }
+    else SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[6],NULL,&returns);
 }
