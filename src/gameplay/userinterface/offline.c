@@ -90,7 +90,7 @@ void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event
 
     SDL_Rect returns = {1425,950,202,100};
     if(game->trying_to_leave){
-        SDL_Rect panel = {735,400,450,280};
+        SDL_Rect panel = {720,400,480,280};
         SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[9],NULL,&panel);
 
         SDL_Rect back = {765,570,180,86} , stay = {975,570,180,86};
@@ -113,9 +113,9 @@ void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event
         SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[6],NULL,&returns);
     }
     else if(mouseOver(settings,returns)){
-        returns.h = 109; returns.w = 210;
+        returns.h += 8; returns.w +=10;
         SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[6],NULL,&returns);
-        roundedBoxRGBA(settings->gameRenderer,1425,950,1635,1059,9,255,0,0,20);
+        roundedBoxRGBA(settings->gameRenderer,1425,950,1635,1050,9,255,0,0,20);
     }
     else SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[6],NULL,&returns);
 }
