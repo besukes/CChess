@@ -59,6 +59,7 @@ check:
 	@pkg-config --exists SDL2_image || { echo "SDL2_image missing"; exit 1; }
 	@pkg-config --exists SDL2_mixer || { echo "SDL2_mixer missing"; exit 1; }
 	@pkg-config --exists SDL2_ttf || { echo "SDL2_ttf missing"; exit 1; }
-	@pkg-config --exists libsdl2-gfx-dev || { echo "SDL2_ttf missing"; exit 1; }
+	@pkg-config --exists SDL2_gfx || { echo "SDL2_gfx missing"; exit 1; }
+	@test -f /usr/include/dirent.h || { echo "dirent.h missing (Non-POSIX system?)"; exit 1; }
 
 	@echo "All dependencies OK"
