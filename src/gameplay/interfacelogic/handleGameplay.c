@@ -16,7 +16,10 @@ void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event * event){
         if(SDL_PointInRect(&point,&botaoOffline))  settings->screenAtual = Chess;
         else if(SDL_PointInRect(&point,&botaoStory)) settings->screenAtual = Story;
         else if(SDL_PointInRect(&point,&botaoMultiplayer)) settings->screenAtual = Multiplayer;
-        else if(SDL_PointInRect(&point,&botaoSettings)) settings->screenAtual = Settings;
+        else if(SDL_PointInRect(&point,&botaoSettings)) {
+            settings->screenAtual = Settings;
+            settings->cosmeticos.ultimo_efeito_checkmateSelecionado = settings->cosmeticos.efeito_checkmateSelecionado;
+        }
         else if(dentroDoBotao(mouseX,mouseY,1750,1850,1000,1050)) event->type = SDL_QUIT;
     }
 }
@@ -132,7 +135,9 @@ void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Even
     SDL_Rect ant_volume = {1370,762,40,40} , prox_volume = {1580,762,40,40};
     if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT){
         if(SDL_PointInRect(&point,&voltar)){
-            load_new_animations(settings);
+            int last = settings->cosmeticos.ultimo_efeito_checkmateSelecionado ,
+                new = settings->cosmeticos.efeito_checkmateSelecionado;
+            if(new != last) load_new_animations(settings);
             settings->screenAtual = Menu;
         }
         else if(SDL_PointInRect(&point,&ant_board)){

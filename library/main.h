@@ -154,6 +154,7 @@ typedef struct GameStruct{
 typedef struct InGame_Cosmetics{
     int tabuleiroSelecionado; //Tabuleiro selecionado pelo utilizador
     int musicaSelecionada; //Música selecionada pelo utilizador
+    int ultimo_efeito_checkmateSelecionado; //Apenas para verificar se o utilizador trocou o efeito checkmate nas settings
     int efeito_checkmateSelecionado; //Efeito de checkmate selecionado pelo utilizador
     int n_frames_gif; //Numero de frames do gif selecionado
     SDL_Texture * * gif_checkmate; //Texturas da animação de checkmate selecionada pelo utilizador
