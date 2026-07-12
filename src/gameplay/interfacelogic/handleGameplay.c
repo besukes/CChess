@@ -110,12 +110,19 @@ void handleWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event even
 void load_new_animations(CChessSettings * settings){
     settings->num_imgsLoaded = 24;
     settings->num_imgsTotais = 60;
-    for(int i = 0; i < 60; i++){
+    int n_frames = 60;
+    if(settings->cosmeticos.efeito_checkmateSelecionado == 2){
+        settings->num_imgsLoaded = 40;
+        n_frames = 40;
+    }
+    for(int i = 0; i < n_frames; i++){
         SDL_DestroyTexture(settings->cosmeticos.gif_checkmate[i]);
     }
     free(settings->cosmeticos.gif_checkmate);
     settings->cosmeticos.gif_checkmate = gif_utilizador_checkmate(settings,settings->cosmeticos.efeito_checkmateSelecionado);
 }
+
+
 
 void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Event * event){
     int mouseX = event->button.x , mouseY = event->button.y;
@@ -129,8 +136,8 @@ void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Even
     SDL_Rect ant_volume = {1370,762,40,40} , prox_volume = {1580,762,40,40};
     if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT){
         if(SDL_PointInRect(&point,&voltar)){
-            settings->screenAtual = Menu;
             load_new_animations(settings);
+            settings->screenAtual = Menu;
         }
         else if(SDL_PointInRect(&point,&ant_board)){
             if(settings->cosmeticos.tabuleiroSelecionado <= 0) settings->cosmeticos.tabuleiroSelecionado = 6;
@@ -151,11 +158,11 @@ void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Even
             set_new_window_size(settings->window_optn,settings);
         }
         else if(SDL_PointInRect(&point,&ant_checkmate)){
-            if(settings->cosmeticos.efeito_checkmateSelecionado <= 0) settings->cosmeticos.efeito_checkmateSelecionado = 6;
+            if(settings->cosmeticos.efeito_checkmateSelecionado <= 0) settings->cosmeticos.efeito_checkmateSelecionado = 7;
             else settings->cosmeticos.efeito_checkmateSelecionado--;
         }
         else if(SDL_PointInRect(&point,&prox_checkmate)){
-            if(settings->cosmeticos.efeito_checkmateSelecionado >= 6) settings->cosmeticos.efeito_checkmateSelecionado = 0;
+            if(settings->cosmeticos.efeito_checkmateSelecionado >= 7) settings->cosmeticos.efeito_checkmateSelecionado = 0;
             else settings->cosmeticos.efeito_checkmateSelecionado++;
         }
         else if(SDL_PointInRect(&point,&ant_check)){

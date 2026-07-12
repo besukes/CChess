@@ -32,6 +32,7 @@ void pathAnimacaoCheckmate(char * str , int efeito_checkmateSelecionado){
         break;
         default :
             sprintf(str,"animations/checkmate/space.gif");
+        break;
     }
 }
 
@@ -62,6 +63,7 @@ SDL_Texture ** gif_utilizador_checkmate(CChessSettings * settings, int efeito_ch
     pathAnimacaoCheckmate(str,efeito_checkmateSelecionado);
     IMG_Animation* gif = IMG_LoadAnimation(str);
     int n_frames = gif->count;
+    printf("%d\n",n_frames);
     SDL_Texture * * textures = malloc(sizeof(SDL_Texture*) * n_frames);
     for(int i = 0; i < n_frames; i++) {
         settings->num_imgsLoaded++;
