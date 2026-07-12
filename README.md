@@ -37,7 +37,7 @@ O jogo utiliza a biblioteca **SDL2** e extensões associadas para criar uma apli
 
 ## Assets
 
-Créditos especiais ao gemini e ao claude por várias imagens geradas por ambas as inteligências artificiais.
+Créditos especiais ao gemini e ao claude pois neste projeto são utilizadas várias imagens geradas por ambas as inteligências artificiais.
 
 ## Compilação
 
