@@ -34,6 +34,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
     if(event.type == SDL_MOUSEBUTTONDOWN){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown ==0){
             game->isKeyPressedDown = 1;
+            cleanArrowEvent(game);
             efetuaEventoClique(game,settings,&event);
             game->jogada = Valid;
         }
@@ -42,7 +43,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
         if(event.button.button == SDL_BUTTON_LEFT){
             game->isKeyPressedDown = 0;
             efetuaEventoSoltar(game,settings,event);
-            if(game->jogada != Invalid && !game->pawnPromoted){
+            if(game->jogada != Invalid && !game->promoted.pawnPromoted){
                 game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
                 if(game->turnoJogador == brancas) game->turns++;
             }
@@ -85,6 +86,7 @@ void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event ev
     else if(event.type == SDL_MOUSEBUTTONDOWN){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown == 0 ){
             game->isKeyPressedDown = 1;
+            cleanArrowEvent(game);
             efetuaEventoClickStory(game,settings,&event,valido_turno);
             game->jogada = Valid;
         }
@@ -93,7 +95,7 @@ void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event ev
         if(event.button.button == SDL_BUTTON_LEFT){
             game->isKeyPressedDown = 0;
             efetuaEventoSoltar(game,settings,event);
-            if(game->jogada != Invalid && !game->pawnPromoted) game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
+            if(game->jogada != Invalid && !game->promoted.pawnPromoted) game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
         }
     }
 }

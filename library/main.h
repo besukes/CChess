@@ -125,6 +125,23 @@ typedef struct UltimatesActive{
     uint64_bit ult_affected_positions; //Define as posições afetadas pela ultimate , no tabuleiro
 }UltimatesActive;
 
+/*Struct responsável por guardar as informações sobre os peões se estão ou não a ser promovidos , se o peão foi promovido de forma correta
+e o quadrado onde a promoção está a acontecer*/
+typedef struct PromotedInformation{
+    uint64_bit promoted_square; //Guarda o promotion square do pawn promovido
+    Boolean pawnPromoted; //Guarda se o peão está a ser promovido
+    Boolean promotedSucessfully; //Guarda se o peão foi promovido num clique
+}PromotedInformation;
+
+/*Struct responsável por guardar as informações necessárias para desenhar setas do utilizador*/
+typedef struct ArrowsGame{
+    Boolean is_drawing_arrows;//Informa se o utilizador está neste momento a desenhar uma arrow 
+    int indx_drawable_arrows;//Guarda o número de quantas setas é suposto desenhar no jogo
+    /*Guarda os vetores de cada seta para desenhar no jogo.
+    Este tipo define um array dinamico em que cada elemento é um array de 2 elementos de Coordenadas cartesianas , uma posição original e uma posição final.
+    Inicializa-se com realloc(indx_drawable_arrows * sizeof(Coordenadas[2]));*/
+    Coordenadas (*arrows_vector)[2];
+}ArrowsGame;
 
 /*Struct que guarda o estado do jogo , tal como o turno do jogador , a peça que está a ser segurada(caso esteja a ser premida a tecla ,
 que é da responsabilidade do bool isKeyPressedDown) e também a jogada do utilizador */
@@ -141,9 +158,8 @@ typedef struct GameStruct{
     CorPiece turnoJogador; //Guarda o turno do utilizador 
     TipoJogada jogada; //Guarda a jogada do utilizador
     PecasComidasLL lastmoves; //Guarda a peça que foi comida na jogada anterior , para depois desfazer a jogada , caso seja necessário
-    uint64_bit promoted_square; //Guarda o promotion square do pawn promovido
-    Boolean pawnPromoted; //Guarda se o peão está a ser promovido
-    Boolean promotedSucessfully; //Guarda se o peão foi promovido num clique
+    PromotedInformation promoted; //Guarda informações sobre se uma promotion aconteceu e onde ela ocorreu
+    ArrowsGame arrows; //Guarda informações sobre se existem ou não setas desenhadas pelo utilizador e onde elas se encontram desenhadas
     int score_game; //Guarda o score do jogo (diferenca de pecas comidas)
     int turns; //Guarda os turnos ja jogados no jogo
     Boolean trying_to_leave; //Informa se o utilizador clicou no botao de sair
@@ -291,6 +307,7 @@ char * skip_to_x_or_value(char * line);
 void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event * event);
 void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event);
 void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Event * event, Boolean valido_turno);
+void cleanArrowEvent(GameStruct * game);
 
 
 

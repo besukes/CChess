@@ -71,6 +71,14 @@ EstadoJogo initEstadoJogoOffline(void){
     return es;
 }
 
+
+void initArrowsStruct(GameStruct * game){
+    game->arrows.is_drawing_arrows = 0;
+    game->arrows.indx_drawable_arrows=0;
+    game->arrows.arrows_vector = NULL; 
+}
+
+
 GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     GameStruct game;
     game.game_needs_initialization = 1;
@@ -80,14 +88,15 @@ GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
     game.turnoJogador = brancas;
     game.pieceCoords = 0;
     game.lastmoves = NULL;
-    game.pawnPromoted = 0;
+    game.promoted.pawnPromoted = 0;
     game.active_ultimate = NULL;
-    game.promotedSucessfully = 0;
+    game.promoted.promotedSucessfully = 0;
     game.selected_piece_attacks = 0;
-    game.promoted_square = 0;
+    game.promoted.promoted_square = 0;
     game.score_game = 0;
     game.turns=0;
     game.trying_to_leave = 0;
+    initArrowsStruct(&game);
     return game;
 }
 
@@ -103,13 +112,14 @@ void initializeOfflineGame(GameStruct * game){
     game->pieceCoords = 0;
     freeLinkedList(game->lastmoves);
     game->lastmoves = NULL;
-    game->pawnPromoted = 0;
+    game->promoted.pawnPromoted = 0;
     free(game->active_ultimate);
     game->active_ultimate = NULL;
-    game->promotedSucessfully = 0;
+    game->promoted.promotedSucessfully = 0;
     game->selected_piece_attacks = 0;
-    game->promoted_square = 0;
+    game->promoted.promoted_square = 0;
     game->score_game = 0;
     game->turns=0;
     game->trying_to_leave = 0;
+    initArrowsStruct(game);
 }

@@ -109,7 +109,7 @@ void desenhaTipoPiece(uint64_bit pos_pieces,Pieces tipoPiece , CChessSettings * 
         if(casaAtual & pos_pieces){
             linha = counter/8; coluna = counter%8;
             Boolean is_selected_piece = game->pieceSelecionada == tipoPiece && game->pieceCoords == (1ULL<<counter);
-            if( game->isKeyPressedDown && is_selected_piece && !game->pawnPromoted)
+            if( game->isKeyPressedDown && is_selected_piece && !game->promoted.pawnPromoted)
                 desenharPieceDrag(tipoPiece,settings->posMouseX,settings->posMouseY,settings,offset);
             else
             desenharPiece(tipoPiece,linha,coluna,settings, offset);
@@ -122,8 +122,9 @@ void desenhaTipoPiece(uint64_bit pos_pieces,Pieces tipoPiece , CChessSettings * 
 
 
 void desenhaPromotion(GameStruct * game , CChessSettings * settings){
-    int offsetY = ( (posTabuleiro(game->promoted_square) / 8 ) < 1) ? 800 : 0,
-        offsetX = posTabuleiro(game->promoted_square)%8;
+    int pos_tab = posTabuleiro(game->promoted.promoted_square);
+    int offsetY = ( (pos_tab / 8 ) < 1) ? 800 : 0,
+        offsetX = pos_tab%8;
     int offset_textura = (game->turnoJogador == brancas) ? 0 : 6;
     SDL_Rect promotion_sq = {250 + 110*offsetX,100 + offsetY,175,175};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[3],NULL,&promotion_sq);

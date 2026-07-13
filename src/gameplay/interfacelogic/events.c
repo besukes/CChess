@@ -9,8 +9,8 @@
 
 int clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
     int ret = 1 , mult = (game->turnoJogador == brancas) ? 1 : (-1);
-    game->pawnPromoted = 0;
-    uint64_bit promotion_square = game->promoted_square;
+    game->promoted.pawnPromoted = 0;
+    uint64_bit promotion_square = game->promoted.promoted_square;
     int tamSquareX = 110;
     int offsetY = ( (posTabuleiro(promotion_square) / 8 ) < 1) ? 800 : 0;
     int offsetX = posTabuleiro(promotion_square)%8;
@@ -31,7 +31,7 @@ int clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
         game->score_game += 3*mult;
     }
     else{//Invalid click
-        game->pawnPromoted = 1;
+        game->promoted.pawnPromoted = 1;
         ret = 0;
     }
     return ret;
@@ -43,11 +43,11 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
     int mouseX = event->button.x , mouseY = event->button.y;
     uint64_bit click = click_table_position(mouseX,mouseY);
     int * is_leaving = &game->trying_to_leave;
-    if(game->pawnPromoted && !*is_leaving){
+    if(game->promoted.pawnPromoted && !*is_leaving){
         int did_promote = clickPromotingPiece(game,mouseX,mouseY);
         if(did_promote){
-            game->promotedSucessfully = 1;
-            game->promoted_square = 0;
+            game->promoted.promotedSucessfully = 1;
+            game->promoted.promoted_square = 0;
         }
     }
     else if(click != 0 && !*is_leaving){
@@ -87,7 +87,7 @@ void eventoFimJogo(CChessSettings * settings, UserScreen screen){
 
 void eventoPromotePiece(GameStruct * game , CChessSettings * settings,uint64_bit click){
     game->jogada = check_move(game,0,click);
-    game->promotedSucessfully = 0;
+    game->promoted.promotedSucessfully = 0;
     if(game->jogada == Checkmate) eventoFimJogo(settings,WinScreen);
     else if(game->jogada == Stalemate) eventoFimJogo(settings,DrawScreen);
     else if(game->jogada == Invalid) game->jogada = Valid; //Apenas para prevenir bugs
@@ -136,8 +136,8 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
     int mouseX = event.button.x , mouseY = event.button.y;
     Boolean castles = 0, enpassant = 0 , promote = 0;
     uint64_bit click = click_table_position(mouseX,mouseY);
-    if(game->promotedSucessfully) eventoPromotePiece(game,settings,click);
-    else if(click != 0 && isPseudoValidMove(game,click,&castles,&enpassant,&promote) && !game->pawnPromoted){
+    if(game->promoted.promotedSucessfully) eventoPromotePiece(game,settings,click);
+    else if(click != 0 && isPseudoValidMove(game,click,&castles,&enpassant,&promote) && !game->promoted.pawnPromoted){
             int check_antes = game->estadoJogo.king_in_check[game->turnoJogador];
             atualizaJogada(game,click,castles,enpassant);
             game->jogada = check_move(game,castles,click);
@@ -150,8 +150,8 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
             else {
                 notInCheck(game);
                 update_en_passant(game,click);
-                game->pawnPromoted = promote;
-                if(promote) game->promoted_square = click; //para depois se desenhar o quadrado de promoção na posição correta
+                game->promoted.pawnPromoted = promote;
+                if(promote) game->promoted.promoted_square = click; //para depois se desenhar o quadrado de promoção na posição correta
                 else updateScore(game);
             }
     }
@@ -179,9 +179,9 @@ void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Ev
         }
     }
     else{
-        if(game->pawnPromoted){
+        if(game->promoted.pawnPromoted){
             int did_promote = clickPromotingPiece(game,mouseX,mouseY);
-            if(did_promote) game->promotedSucessfully = 1;
+            if(did_promote) game->promoted.promotedSucessfully = 1;
         }
         else{
             Pieces piece = comparePiece(game->estadoJogo ,game->turnoJogador, click);
@@ -190,4 +190,14 @@ void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Ev
             if(piece==Empty) game->jogada = Invalid;
         }
     }
+}
+
+
+
+void cleanArrowEvent(GameStruct * game){
+    ArrowsGame * arrows = &game->arrows;
+    arrows->is_drawing_arrows = 0;
+    arrows->indx_drawable_arrows = 0;
+    free(arrows->arrows_vector);
+    arrows->arrows_vector = NULL;
 }

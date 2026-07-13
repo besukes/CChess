@@ -82,7 +82,7 @@ void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event
     }
 
     desenhaMenu(game,settings);
-    if(game->pawnPromoted) desenhaPromotion(game,settings);
+    if(game->promoted.pawnPromoted) desenhaPromotion(game,settings);
 
     SDL_Rect turn = {250,(-40),700,210};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[5 + game->turnoJogador],NULL,&turn);
