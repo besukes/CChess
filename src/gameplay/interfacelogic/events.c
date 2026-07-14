@@ -7,6 +7,36 @@
 
 
 
+void efetuaEventoClickArrows(GameStruct * game , SDL_Event event){
+    game->arrows.is_drawing_arrows = 1;
+    int indx = ++ game->arrows.indx_drawable_arrows;
+    game->arrows.arrows_vector = realloc(game->arrows.arrows_vector,sizeof(Coordenadas[2])*indx);
+    int (*vector)[2] = game->arrows.arrows_vector + indx - 1;
+    uint64_bit table_pos = click_table_position(event.button.x,event.button.y);
+    int pos = posTabuleiro(table_pos); //verifica se table_pos == 0 , se nao retorna a posicao de 0-63
+    if(pos!= (-1)) (*vector)[0] = pos;
+}
+
+
+void efetuaEventoSoltarArrows(GameStruct * game , SDL_Event event){
+    game->arrows.is_drawing_arrows = 0;
+    int * indx = &game->arrows.indx_drawable_arrows;
+    int (*vector)[2] = game->arrows.arrows_vector + *indx - 1;
+    uint64_bit table_pos = click_table_position(event.button.x,event.button.y);
+    int pos_nova = posTabuleiro(table_pos) , //verifica se table_pos == 0 , se nao retorna a posicao de 0-63
+        pos_ant = (*vector)[0];
+    if(pos_nova!= (-1) && pos_nova != pos_ant) (*vector)[1] = pos_nova;
+    else{
+        (*indx)--;
+        game->arrows.arrows_vector = realloc(game->arrows.arrows_vector,sizeof(Coordenadas[2])*(*indx));\
+        if(!(*indx)) game->arrows.arrows_vector = NULL;
+    }
+}
+
+
+
+
+
 int clickPromotingPiece(GameStruct * game , int mouseX , int mouseY){
     int ret = 1 , mult = (game->turnoJogador == brancas) ? 1 : (-1);
     game->promoted.pawnPromoted = 0;

@@ -4,6 +4,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <stdio.h>
+#include <math.h>
 
 
 
@@ -65,29 +66,9 @@ void desenhaNivelTitle(CChessSettings * settings){
 }
 
 
-void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event){
-    desenhaFundo(settings,settings->textures.niveisTextures[3]);
-    SDL_Rect tabuleiro = {210,140,800,800};
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.tabTextures[settings->cosmeticos.tabuleiroSelecionado],NULL,&tabuleiro);
-    if(game->selected_piece_attacks != 0){
-        uint64_bit op = get_opposing_colour_bitboard(&game->estadoJogo,game->turnoJogador);
-        desenharPieceAttacks(settings,game->estadoJogo.enpassant, game->selected_piece_attacks , op);
-    }
-    desenhaCheck(game,settings);
-    for(int i = 0 ; i < 6 ; i++){
-        desenhaTipoPiece(game->estadoJogo.tabuleirojogo[0][i],(Pieces)i,settings,game,0);
-    }
-    for( int i = 0; i < 6; i++){
-        desenhaTipoPiece(game->estadoJogo.tabuleirojogo[1][i],(Pieces)(i),settings,game,6);
-    }
 
-    desenhaMenu(game,settings);
-    if(game->promoted.pawnPromoted) desenhaPromotion(game,settings);
 
-    SDL_Rect turn = {250,(-40),700,210};
-    SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[5 + game->turnoJogador],NULL,&turn);
-    desenhaNivelTitle(settings);
-
+void desenhaLeave(CChessSettings * settings , GameStruct  * game){
     SDL_Rect returns = {1425,950,202,100};
     if(game->trying_to_leave){
         SDL_Rect panel = {720,400,480,280};
@@ -118,4 +99,70 @@ void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event
         roundedBoxRGBA(settings->gameRenderer,1425,950,1635,1050,9,255,0,0,20);
     }
     else SDL_RenderCopy(settings->gameRenderer,settings->textures.buttonsTextures[6],NULL,&returns);
+}
+
+
+void drawSingleArrow(int (*vector)[2] , SDL_Renderer * renderer , SDL_Texture * generic){
+    int pos_draw_inicial = (*vector)[0] , pos_draw_final = (*vector)[1];
+    int xi = pos_draw_inicial % 8 , xf = pos_draw_final ,
+        yi = pos_draw_inicial / 8 , yf = pos_draw_final / 8;
+
+    double centro_xi = 100*xi+210 + 50 , centro_xf = 100*xf+210 + 50 ,
+           centro_yi = 1080 - (100 * yi + 246) - 50 , centro_yf = 1080 - (100 * yf + 246) - 50;
+
+    double dx = centro_xf - centro_xi , dy = centro_yf - centro_yi;
+    int tam_arrow = (int)(sqrt(dx*dx + dy*dy));
+    int largura_arrow = 24;
+
+    double angulo_rad = atan2(dy, dx);
+    double angulo_graus = angulo_rad * (180.0 / M_PI) + 90.0;
+
+    SDL_Rect arrow_rect = {
+        .x = (int)(centro_xi - largura_arrow/2),
+        .y = (int)(centro_yi),
+        .w = largura_arrow,
+        .h = tam_arrow
+    };
+
+    SDL_Point pivot = {largura_arrow / 2,0};
+    SDL_RenderCopyEx(renderer , generic , NULL, &arrow_rect , angulo_graus , NULL , SDL_FLIP_NONE);
+}
+
+
+void desenhaArrows(GameStruct * game , SDL_Renderer * renderer , SDL_Texture * generic_orange){
+    ArrowsGame arrows = game->arrows;
+    int indx = arrows.indx_drawable_arrows;
+    if(arrows.arrows_vector == NULL) return;
+    for(int i=0;i<indx;i++){
+        int (*vector_atual)[2] = (arrows.arrows_vector + i);
+        drawSingleArrow(vector_atual, renderer , generic_orange);
+    }
+}
+
+
+void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event){
+    desenhaFundo(settings,settings->textures.niveisTextures[3]);
+    SDL_Rect tabuleiro = {210,140,800,800};
+    SDL_RenderCopy(settings->gameRenderer,settings->textures.tabTextures[settings->cosmeticos.tabuleiroSelecionado],NULL,&tabuleiro);
+    if(game->selected_piece_attacks != 0){
+        uint64_bit op = get_opposing_colour_bitboard(&game->estadoJogo,game->turnoJogador);
+        desenharPieceAttacks(settings,game->estadoJogo.enpassant, game->selected_piece_attacks , op);
+    }
+    desenhaCheck(game,settings);
+    for(int i = 0 ; i < 6 ; i++){
+        desenhaTipoPiece(game->estadoJogo.tabuleirojogo[0][i],(Pieces)i,settings,game,0);
+    }
+    for( int i = 0; i < 6; i++){
+        desenhaTipoPiece(game->estadoJogo.tabuleirojogo[1][i],(Pieces)(i),settings,game,6);
+    }
+
+    desenhaMenu(game,settings);
+    if(game->promoted.pawnPromoted) desenhaPromotion(game,settings);
+
+    SDL_Rect turn = {250,(-40),700,210};
+    SDL_RenderCopy(settings->gameRenderer,settings->textures.miscTextures[5 + game->turnoJogador],NULL,&turn);
+    desenhaNivelTitle(settings);
+
+    desenhaLeave(settings,game);
+    desenhaArrows(game,settings->gameRenderer,settings->textures.arrow_orange_generic);
 }

@@ -73,5 +73,7 @@ void initTexturasJogo(CChessSettings * settings ,AssetsCChess * assets,SDL_Rende
     loadTexturasPieces(settings,assets->chessPieces,sdl_renderer);
     
     loadButtons(assets->buttonsTextures,sdl_renderer);
+    
+    assets->arrow_orange_generic = IMG_LoadTexture(sdl_renderer,"assets/misc/arrow_texture.png");
     settings->num_imgsLoaded+=6;
 }

@@ -38,6 +38,9 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
             efetuaEventoClique(game,settings,&event);
             game->jogada = Valid;
         }
+        else if(event.button.button = SDL_BUTTON_RIGHT && game->arrows.is_drawing_arrows == 0){
+            efetuaEventoClickArrows(game,event);
+        }
     }
     else if(event.type == SDL_MOUSEBUTTONUP){
         if(event.button.button == SDL_BUTTON_LEFT){
@@ -48,6 +51,9 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
                 if(game->turnoJogador == brancas) game->turns++;
             }
             softReset(game);
+        }
+        else if(event.button.button = SDL_BUTTON_RIGHT && game->arrows.is_drawing_arrows){
+           efetuaEventoSoltarArrows(game,event);
         }
     }
 }

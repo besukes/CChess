@@ -138,9 +138,9 @@ typedef struct ArrowsGame{
     Boolean is_drawing_arrows;//Informa se o utilizador está neste momento a desenhar uma arrow 
     int indx_drawable_arrows;//Guarda o número de quantas setas é suposto desenhar no jogo
     /*Guarda os vetores de cada seta para desenhar no jogo.
-    Este tipo define um array dinamico em que cada elemento é um array de 2 elementos de Coordenadas cartesianas , uma posição original e uma posição final.
+    Este tipo define um array dinamico em que cada elemento é um array de 2 elementos de Indices de posicao do tabuleiro , uma posição original e uma posição final.
     Inicializa-se com realloc(indx_drawable_arrows * sizeof(Coordenadas[2]));*/
-    Coordenadas (*arrows_vector)[2];
+    int (*arrows_vector)[2];
 }ArrowsGame;
 
 /*Struct que guarda o estado do jogo , tal como o turno do jogador , a peça que está a ser segurada(caso esteja a ser premida a tecla ,
@@ -185,6 +185,7 @@ typedef struct AssetsCChess{
     SDL_Texture * niveisTextures[10]; //Texturas misc do CChess
     SDL_Texture * buttonsTextures[20]; //Texturas dos botões do CChess
     SDL_Texture * miscTextures[20]; //Texturas misc do CChess
+    SDL_Texture * arrow_orange_generic; //Textura generica para desenhar as arrows
 }AssetsCChess;
 
 /*Struct responsável por guardar as informações do utilizador sobre peças personalizadas e poderes do CChess*/

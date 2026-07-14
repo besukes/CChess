@@ -77,6 +77,7 @@ void free_allocated_memory(GameStruct * game , CChessSettings * user){
     for(int i = 0; i < 6; i++){
         SDL_DestroyTexture(user->textures.buttonsTextures[i]);
     }
+    free(game->arrows.arrows_vector);
     SDL_DestroyRenderer(user->gameRenderer);
     freeUserSettings(user);
     TTF_CloseFont(user->fonteJogoTitles);
