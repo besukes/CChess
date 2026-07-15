@@ -187,8 +187,8 @@ void drawSingleArrow(int (*vector)[2] , SDL_Renderer * renderer , SDL_Texture * 
         centro_yi = 1080 - (100 * yi + 246) + 40, centro_yf = 1080 - (100 * yf + 246) + 40;
 
     double dx = centro_xf - centro_xi , dy = (-1)*(centro_yf - centro_yi);
-    int tam_arrow = (int)(sqrt(dx*dx + dy*dy)) - 40;
-    int largura_arrow = 24;
+    int tam_arrow = (int)(sqrt(dx*dx + dy*dy)) - 57,
+        largura_arrow = 24;
 
     double angulo_rad = (-1) * atan2(dy, dx);
     double angulo_graus =  angulo_rad * (180.0 / M_PI) - 90;
@@ -202,19 +202,18 @@ void drawSingleArrow(int (*vector)[2] , SDL_Renderer * renderer , SDL_Texture * 
         .w = largura_arrow,
         .h = tam_arrow
     };
-
-    int mult = (dy > 0) ? (-1) : 1;
     SDL_Rect arrow_tip = {
-        .x = (int)(centro_xf + mult*10) ,
-        .y = (int)(centro_yf),
+        .x = (int)(centro_xf - 30) ,
+        .y = (int)(centro_yf) + offset,
         .w = 60 , 
         .h = 60
     };
 
 
-    SDL_Point pivot = {largura_arrow / 2,0};
-    SDL_RenderCopyEx(renderer , arrow[0] , NULL, &arrow_rect , angulo_graus , &pivot , SDL_FLIP_NONE);
-    SDL_RenderCopyEx(renderer , arrow[1] , NULL, &arrow_tip , angulo_graus_tip , &pivot , SDL_FLIP_NONE);
+    SDL_Point pivot1 = {largura_arrow / 2,0},
+              pivot2 = {30,0};
+    SDL_RenderCopyEx(renderer , arrow[0] , NULL, &arrow_rect , angulo_graus , &pivot1 , SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer , arrow[1] , NULL, &arrow_tip , angulo_graus_tip , &pivot2 , SDL_FLIP_NONE);
 }
 
 
