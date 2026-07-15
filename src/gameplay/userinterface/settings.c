@@ -185,7 +185,7 @@ static void desenhaTabPreview(CChessSettings * s, int x1, int x2, int y){
     roundedRectangleRGBA(r, preview.x-3, preview.y-3,preview.x+preview.w+3, preview.y+preview.h+3,
                             8, COL_GOLD_R, COL_GOLD_G, COL_GOLD_B, 180);
 
-    int idx = s->cosmeticos.tabuleiroSelecionado;
+    int idx = s->client_settings.cosmeticos.tabuleiroSelecionado;
     if(idx >= 0 && idx < 7 && s->textures.tabTextures[idx])
         SDL_RenderCopy(r, s->textures.tabTextures[idx], NULL, &preview);
     else{};
@@ -195,7 +195,8 @@ static void desenhaTabPreview(CChessSettings * s, int x1, int x2, int y){
 /* ─────────────────────────────────────────────
    Nomes para os valores dos settings
    ───────────────────────────────────────────── */
-static const char * themeNome(Themes t){
+static const char * themeNome(int type){
+    Themes t = (Themes)type;
     switch(t){
         case CChess:      return "CChess";
         case ChessDotCom: return "Chess.com";
@@ -203,6 +204,68 @@ static const char * themeNome(Themes t){
         default:          return "?";
     }
 }
+
+
+
+void drawPainelEsquerdo(CChessSettings * settings , SDL_Renderer * r){
+    /* ── PAINEL ESQUERDO ── */
+    desenhaPainel(r, PNL_L_X1, PNL_Y1, PNL_L_X2, PNL_Y2);
+    int y = PNL_Y1 + 20;
+
+    /* Secção: Tabuleiro */
+    y = desenhaSectionTitle(settings, PNL_L_X1, PNL_L_X2, y, "BOARD");
+    char buf[32];
+    intToStr(settings->client_settings.cosmeticos.tabuleiroSelecionado + 1, buf);
+    y = desenhaOptionRow(settings, PNL_L_X1, PNL_L_X2, y,"Board Theme", buf , 2);
+
+    /* Preview do tabuleiro */
+    int preview_h = (PNL_L_X2 - PNL_L_X1 - 80);   /* quadrado */
+    desenhaTabPreview(settings, PNL_L_X1, PNL_L_X1 + 140, y - 78);
+    y += 20;
+
+    /* Secção: Tema de Peças */
+    y = desenhaSectionTitle(settings, PNL_L_X1, PNL_L_X2, y, "PIECE THEME");
+    y = desenhaOptionRow(settings, PNL_L_X1, PNL_L_X2, y,"Theme", themeNome(settings->client_settings.cosmeticos.themes_piece),0);
+    y+=20;
+
+    /* Secção: Efeitos */
+    y = desenhaSectionTitle(settings, PNL_L_X1 - 3, PNL_L_X2 - 3, y, "EFFECTS");
+
+    intToStr(settings->client_settings.cosmeticos.efeito_checkmateSelecionado + 1, buf);
+    y = desenhaOptionRow(settings, PNL_L_X1, PNL_L_X2, y,"Checkmate", buf,0);
+
+    intToStr(settings->client_settings.cosmeticos.efeito_checkSelecionado + 1, buf);
+    y = desenhaOptionRow(settings, PNL_L_X1, PNL_L_X2, y,"Check", buf,0);
+
+    y += 20;
+}
+
+
+
+
+void drawPainelDireito(CChessSettings * settings , SDL_Renderer * r){
+    char buf[32];
+    /* ── PAINEL DIREITO ── */
+    desenhaPainel(r, PNL_R_X1, PNL_Y1, PNL_R_X2, PNL_Y2);
+    int y = PNL_Y1 + 20;
+    /* Secção: Screen Utilizador */
+    y = desenhaSectionTitle(settings, PNL_R_X1, PNL_R_X2, y, "RESOLUTION");
+    intToStr(settings->client_settings.cosmeticos.musicaSelecionada + 1, buf);
+    desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Screen Resolution", buf , 1);
+    y += ROW_GAP + ROW_H + 20;
+
+
+    /* Secção: Musica */
+    y = desenhaSectionTitle(settings, PNL_R_X1 - 5, PNL_R_X2 - 5, y, "MUSIC");
+    intToStr(settings->client_settings.cosmeticos.musicaSelecionada + 1, buf);
+    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Track", buf,0);
+
+    intToStr(settings->client_settings.volume_music, buf);
+    sprintf(buf, "%d%%", settings->client_settings.volume_music);
+    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Volume", buf,3);
+}
+
+
 
 
 
@@ -220,58 +283,9 @@ void desenhaSettings(CChessSettings * settings, SDL_Event * event){
     SDL_SetRenderDrawColor(r, 0, 0, 0, 80);
     SDL_RenderFillRect(r, &(SDL_Rect){0, 0, 1920, 1080});
 
+    drawPainelEsquerdo(settings,r);
 
-    /* ── PAINEL ESQUERDO ── */
-    desenhaPainel(r, PNL_L_X1, PNL_Y1, PNL_L_X2, PNL_Y2);
-    int y = PNL_Y1 + 20;
-
-    /* Secção: Tabuleiro */
-    y = desenhaSectionTitle(settings, PNL_L_X1, PNL_L_X2, y, "BOARD");
-    char buf[32];
-    intToStr(settings->cosmeticos.tabuleiroSelecionado + 1, buf);
-    y = desenhaOptionRow(settings, PNL_L_X1, PNL_L_X2, y,"Board Theme", buf , 2);
-
-    /* Preview do tabuleiro */
-    int preview_h = (PNL_L_X2 - PNL_L_X1 - 80);   /* quadrado */
-    desenhaTabPreview(settings, PNL_L_X1, PNL_L_X1 + 140, y - 78);
-    y += preview_h + 30;
-
-    /* Secção: Tema de Peças */
-    y = desenhaSectionTitle(settings, PNL_L_X1, PNL_L_X2, y, "PIECE THEME");
-    y = desenhaOptionRow(settings, PNL_L_X1, PNL_L_X2, y,"Theme", themeNome(CChess),0);
-
-
-
-    /* ── PAINEL DIREITO ── */
-    desenhaPainel(r, PNL_R_X1, PNL_Y1, PNL_R_X2, PNL_Y2);
-    y = PNL_Y1 + 20;
-    /* Secção: Screen Utilizador */
-    y = desenhaSectionTitle(settings, PNL_R_X1, PNL_R_X2, y, "RESOLUTION");
-    intToStr(settings->cosmeticos.musicaSelecionada + 1, buf);
-    desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Screen Resolution", buf , 1);
-    y += ROW_GAP + ROW_H + 20;
-
-    /* Secção: Efeitos */
-    y = desenhaSectionTitle(settings, PNL_R_X1 - 3, PNL_R_X2 - 3, y, "EFFECTS");
-
-    intToStr(settings->cosmeticos.efeito_checkmateSelecionado + 1, buf);
-    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Checkmate", buf,0);
-
-    intToStr(settings->cosmeticos.efeito_checkSelecionado + 1, buf);
-    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Check", buf,0);
-
-    y += 20;
-
-    /* Secção: Musica */
-    y = desenhaSectionTitle(settings, PNL_R_X1 - 5, PNL_R_X2 - 5, y, "MUSIC");
-    intToStr(settings->cosmeticos.musicaSelecionada + 1, buf);
-    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Track", buf,0);
-
-    intToStr(settings->volume, buf);
-    sprintf(buf, "%d%%", settings->volume);
-    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Volume", buf,3);
-
-
+    drawPainelDireito(settings,r);
 
 
     SDL_Rect leave = {1750,890,150,150};

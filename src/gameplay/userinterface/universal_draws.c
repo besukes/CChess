@@ -163,6 +163,8 @@ void renderTextoCentradoSombra(SDL_Renderer* r, TTF_Font* f, const char* txt, SD
     SDL_DestroyTexture(tx);
 }
 
+
+
 void renderTextoCentradoBasico(SDL_Renderer* r, TTF_Font* f, const char* txt, SDL_Color cor, int x , int y, float escala){
     SDL_Surface *s = TTF_RenderText_Blended(f, txt, cor);
     SDL_Texture *tx = SDL_CreateTextureFromSurface(r, s);

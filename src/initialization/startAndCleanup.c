@@ -47,8 +47,8 @@ SDL_Initializators sdl_initializer(void){
 
 
 void freeUserSettings(CChessSettings * user){
-    free(user->selected_pieces_power);
-    free(user->story_st_line);
+    free(user->client_settings.selected_pieces_power);
+    free(user->client_settings.story_st_line);
 
     free(user->user_custom_items.extraPieces_owned);
     free(user->user_custom_items.ultimates_owned);
@@ -70,10 +70,10 @@ void free_allocated_memory(GameStruct * game , CChessSettings * user){
     for(int i = 0; i < 9; i++){
         SDL_DestroyTexture(user->textures.miscTextures[i]);
     }
-    for(int i = 0; i < user->cosmeticos.n_frames_gif; i++){
-        SDL_DestroyTexture(user->cosmeticos.gif_checkmate[i]);
+    for(int i = 0; i < user->client_settings.cosmeticos.n_frames_gif; i++){
+        SDL_DestroyTexture(user->client_settings.cosmeticos.gif_checkmate[i]);
     }
-    free(user->cosmeticos.gif_checkmate);
+    free(user->client_settings.cosmeticos.gif_checkmate);
     for(int i = 0; i < 6; i++){
         SDL_DestroyTexture(user->textures.buttonsTextures[i]);
     }

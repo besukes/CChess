@@ -3,6 +3,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
+
 /*Struct que serve apenas no startAndCleanup.c para retornar os endereços de memória do nosso renderer e window*/
 typedef struct SDL_Initializators{
     SDL_Renderer * renderer; //renderer do jogo
@@ -19,6 +20,8 @@ typedef struct Coordenadas{
 
 /*Struct que define a posicao de uma peca no tabuleiro de xadrez usando um long 64 bit*/
 typedef unsigned long long uint64_bit;
+
+typedef uint64_bit (*ShiftFunction)(uint64_bit,int); //Tipo que define um endereço de memória de uma função que recebe um unsigned long long de 64 bits e um int normal
 
 /*Enum que guarda todas as peças possíveis do jogo*/
 typedef enum {
@@ -175,6 +178,7 @@ typedef struct InGame_Cosmetics{
     int n_frames_gif; //Numero de frames do gif selecionado
     SDL_Texture * * gif_checkmate; //Texturas da animação de checkmate selecionada pelo utilizador
     int efeito_checkSelecionado; //Efeito de check selecionado pelo utilizador
+    int themes_piece; //Tema de piece selecionado pelo utilizador
 }InGame_Cosmetics;
 
 /*Guarda as texturas que o jogo utiliza no seu decorrer , tal como o tema das peças*/
@@ -198,6 +202,19 @@ typedef struct CustomPieces{
     Pieces * extraPieces_owned; //Pieces personalizadas que o utilizador compradas
 }CustomPieces;
 
+/*Struct responsável por guardar as settings client-sided do jogo , que o utilizador define.*/
+typedef struct ClientSettings{
+    int window_optn; //Opção de resolução da janela selecionada pelo utilizador (1280x720 , 1600x900 , etc..)
+    int window_type; //Opção de janela do utilizador (Fullscreen / Borderless / Windowed)
+    int volume_music; //Guarda o volume da musica jogo
+    int volume_sfx; //Guarda o volume dos sound effects do jogo
+    InGame_Cosmetics cosmeticos; //Guarda as escolhas de cosméticos do utilizador (para o modo singleplayer , que ainda não existe)
+    int indx_starting_line; //index para o array dinamicamente alocado
+    PlayerChessTable * story_st_line; //Guarda a informação do utilizador quanto à organização das peças no modo história
+    int indx_selected_ults; //index para o array dinamicamente alocado
+    UltimatesSettings * selected_pieces_power; //Guarda os poderes selecionados de cada piece
+}ClientSettings;
+
 /*Struct que guarda as definições do jogo CChess mais relevantes , como o renderer responsável para apresentar imagens,
 as texturas do jogo , a fonte das letras do jogo , as posições verticais e horizontais do rato do utilizador , o nª de ticks
 que já se passaram deste o começo do jogo , bem como a tela em que o utilizador se encontra*/
@@ -205,9 +222,9 @@ typedef struct CChessSettings{
     AssetsCChess textures; //Texturas do jogo CChess
     SDL_Renderer * gameRenderer; //Renderer responsável por guardar a janela e onde desenhamos os objetos
     SDL_Window * window; //Window atual do utilizador
-    int window_optn; //Opção de janela selecionada pelo utilizador Fullscreen/Windowed
     TTF_Font * fonteJogoTitles; //Fonte das letras do nosso jogo de titulos importantes
     TTF_Font * fonteJogoSmallerTitles; //Fonte das letras do nosso jogo de titulos mais pequenos
+    ClientSettings client_settings; //Settings personalizadas do utilizador
     int posMouseX; //Posição horizontal do rato do utilizador , em termos de píxeis
     int posMouseY; //Posição vertical do rato do utilizador , em termos de píxeis
     UserScreen screenAtual; //Tela atual em que o utilizador se encontra
@@ -216,21 +233,14 @@ typedef struct CChessSettings{
     Niveis nivelDificuldade; //Nível de dificuldade do jogo (para o modo carreira , que ainda não existe)
     int nivelSelecionado; //Nível selecionado para cada fase do jogo
     int nivelMaxDesbloqueado; //Nível máximo desbloqueado pelo utilizador no modo carreira (que ainda não existe)
-    InGame_Cosmetics cosmeticos; //Guarda as escolhas de cosméticos do utilizador (para o modo singleplayer , que ainda não existe)
+    CustomPieces user_custom_items; //Struct que guarda as informações do utilizador quanto a items personalizados
     int num_imgsLoaded; //Número de imagens já carregadas ao inicializar o programa
     int num_imgsTotais; //Número de imagens totais que necessitam ser carregadas
-    CustomPieces user_custom_items; //Struct que guarda as informações do utilizador quanto a items personalizados
     int ccoins_qntd; //Guarda a quantidade de moedas do utilizador
-    int indx_starting_line; //index para o array dinamicamente alocado
-    PlayerChessTable * story_st_line; //Guarda a informação do utilizador quanto à organização das peças no modo história
-    int volume; //Guarda o volume do jogo
-    int indx_selected_ults; //index para o array dinamicamente alocado
-    UltimatesSettings * selected_pieces_power; //Guarda os poderes selecionados de cada piece
     TutorialsDone tutorials; //Guarda booleans que informam sobre o estado do utilizador quanto aos tutoriais de cada modo de jogo
 }CChessSettings;
 
 
-typedef uint64_bit (*ShiftFunction)(uint64_bit,int);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////     MODULOS     ///////////////////////////////////////////////////////////////////////////

@@ -69,7 +69,7 @@ SDL_Texture ** gif_utilizador_checkmate(CChessSettings * settings, int efeito_ch
         textures[i] = SDL_CreateTextureFromSurface(settings->gameRenderer, gif->frames[i]);
         loading_screen(settings,settings->num_imgsLoaded);
     }
-    settings->cosmeticos.n_frames_gif = n_frames;
+    settings->client_settings.cosmeticos.n_frames_gif = n_frames;
     IMG_FreeAnimation(gif);
     return textures;
 }

@@ -35,9 +35,9 @@ void check_owned_powers(CChessSettings * settings , char * str){
 }
 
 void check_selected_powers(CChessSettings * settings , char * str){
-    UltimatesSettings * selected = settings->selected_pieces_power;
+    UltimatesSettings * selected = settings->client_settings.selected_pieces_power;
     if(selected == NULL) return;
-    int indx = settings->indx_selected_ults;
+    int indx = settings->client_settings.indx_selected_ults;
     for(int i=0;i<indx;i++){
         UltimatesSettings * atual = selected + i;
         sprintf(str,"%s%d ",str,atual->ultimate);
@@ -46,8 +46,8 @@ void check_selected_powers(CChessSettings * settings , char * str){
 
 
 void check_pieces_place(CChessSettings * settings , char * str){
-    PlayerChessTable * table = settings->story_st_line;
-    int indx = settings->indx_starting_line , counter_indx = 0;
+    PlayerChessTable * table = settings->client_settings.story_st_line;
+    int indx = settings->client_settings.indx_starting_line , counter_indx = 0;
     if(table == NULL) return;
     for(int i=0;i<16;i++){
         if(counter_indx >= indx || (table + counter_indx)->bitboard_extra_piece != (1ULL<<i)) 

@@ -25,18 +25,18 @@ void desenhaEndGameUI(CChessSettings * settings){
 
 
 void desenhaAnimacaoCheckmate(int temp_inicial, CChessSettings * settings , Boolean default_animation){
-    int frames = settings->cosmeticos.n_frames_gif , offset = 32;
+    int frames = settings->client_settings.cosmeticos.n_frames_gif , offset = 32;
     if(default_animation) offset = 36;
     int indx = ((settings->ticks - temp_inicial) / offset ) % frames;
-    SDL_Texture * gif_frame = settings->cosmeticos.gif_checkmate[indx];
+    SDL_Texture * gif_frame = settings->client_settings.cosmeticos.gif_checkmate[indx];
     SDL_SetTextureBlendMode(gif_frame,SDL_BLENDMODE_BLEND);
-    SDL_RenderCopy(settings->gameRenderer, settings->cosmeticos.gif_checkmate[indx], NULL, NULL);
+    SDL_RenderCopy(settings->gameRenderer, settings->client_settings.cosmeticos.gif_checkmate[indx], NULL, NULL);
 }
 
 
 void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event){
     SDL_Renderer * r = settings->gameRenderer;
-    Boolean default_animation = settings->cosmeticos.efeito_checkmateSelecionado == 2;
+    Boolean default_animation = settings->client_settings.cosmeticos.efeito_checkmateSelecionado == 2;
     int offset_timer = (default_animation) ? 1200 : 1800;
     int temp_inicial = settings->ticks_checkmate, tempo_animacao = temp_inicial + offset_timer;
     while(settings->ticks < tempo_animacao){

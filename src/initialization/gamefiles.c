@@ -29,23 +29,23 @@ void set_new_window_size(int u, CChessSettings * settings){
             if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
             SDL_SetWindowSize(settings->window,1280,720);
             SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
-            settings->window_optn = 1;
+            settings->client_settings.window_optn = 1;
         break;
         case 2:
             if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
             SDL_SetWindowSize(settings->window,1600,900);
             SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
-            settings->window_optn = 2;
+            settings->client_settings.window_optn = 2;
         break;
         case 3:
             if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
             SDL_SetWindowSize(settings->window,1920,1080);
             SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
-            settings->window_optn = 3;
+            settings->client_settings.window_optn = 3;
         break;
         default:
             SDL_SetWindowFullscreen(settings->window,SDL_WINDOW_FULLSCREEN);
-            settings->window_optn = 0;
+            settings->client_settings.window_optn = 0;
         break;
     }
 }
@@ -69,8 +69,8 @@ void readStartingLine(char * line ,CChessSettings * settings){
     int counter = 0;
     while(*line != ' ' && *line != '\0' && *line != '\n' && counter<16){
         if(*line != 'x'){
-            PlayerChessTable * table = settings->story_st_line , * atual;
-            int indx = ++ settings->indx_starting_line;
+            PlayerChessTable * table = settings->client_settings.story_st_line , * atual;
+            int indx = ++ settings->client_settings.indx_starting_line;
             table = realloc(table,indx*sizeof(PlayerChessTable));
 
             atual = table + indx - 1;
@@ -78,7 +78,7 @@ void readStartingLine(char * line ,CChessSettings * settings){
             atual->bitboard_extra_piece = (1ULL<<counter);
             atual->tipo_piece = (Pieces)get_number(line,MAX_PIECES,DEFAULT_PIECES);
 
-            settings->story_st_line = table;
+            settings->client_settings.story_st_line = table;
 
             int n = numberChars(line);
             line = skipWhileSpace(line+n);
@@ -101,12 +101,12 @@ void readPowersLine(char * line , CChessSettings * settings, int type){
             settings->user_custom_items.ultimates_unlocked = temp;
         }
         else if(type==2){
-            int indx = ++settings->indx_selected_ults;
-            UltimatesSettings * temp = realloc(settings->selected_pieces_power,indx*sizeof(UltimatesSettings));
+            int indx = ++settings->client_settings.indx_selected_ults;
+            UltimatesSettings * temp = realloc(settings->client_settings.selected_pieces_power,indx*sizeof(UltimatesSettings));
             (temp + indx - 1)->ultimate_refers_piece = (Pieces)counter;
             (temp + indx - 1)->ultimate = (TypeUltimate) get_number(line,MAX_ULTIMATES,DEFAULT_ULTIMATES);
 
-            settings->selected_pieces_power = temp;
+            settings->client_settings.selected_pieces_power = temp;
         }
         else{
             int indx = ++settings->user_custom_items.indx_ult_owned;
@@ -178,9 +178,17 @@ void readLineAux(char * line , CChessSettings * settings){
         line = skip_to_value(line);
         settings->nivelMaxDesbloqueado = get_number(line,10,1);
     }
-    else if(compareString(line,"volume")){
+    else if(compareString(line,"volumeMusic")){
         line = skip_to_value(line);
-        settings->volume = get_number(line,101,100);
+        settings->client_settings.volume_music = get_number(line,101,100);
+    }
+    else if(compareString(line,"volumeSFX")){
+        line = skip_to_value(line);
+        settings->client_settings.volume_music = get_number(line,101,100);
+    }
+    else if(compareString(line,"themePiece")){
+        line = skip_to_value(line);
+        settings->client_settings.cosmeticos.themes_piece = get_number(line,2,0);
     }
     else readLineAuxAux(line,settings);
 }
@@ -206,22 +214,22 @@ void readLine(char * line , CChessSettings * settings){
     else if(compareString(line,"selectedTable")){
         line = skip_to_value(line);
 
-        settings->cosmeticos.tabuleiroSelecionado = get_number(line,3,0);
+        settings->client_settings.cosmeticos.tabuleiroSelecionado = get_number(line,3,0);
     }
     else if(compareString(line,"selectedMusic")){
         line = skip_to_value(line);
 
-        settings->cosmeticos.musicaSelecionada = get_number(line,3,0);
+        settings->client_settings.cosmeticos.musicaSelecionada = get_number(line,3,0);
     }
     else if(compareString(line,"checkmateEffect")){
         line = skip_to_value(line);
 
-        settings->cosmeticos.efeito_checkmateSelecionado = get_number(line,7,0);
+        settings->client_settings.cosmeticos.efeito_checkmateSelecionado = get_number(line,7,0);
     }
     else if(compareString(line,"checkEffect")){
         line = skip_to_value(line);
 
-        settings->cosmeticos.efeito_checkSelecionado = get_number(line,7,0);
+        settings->client_settings.cosmeticos.efeito_checkSelecionado = get_number(line,7,0);
     }
     else readLineAux(line,settings);
 }
@@ -258,8 +266,10 @@ void writeDefaultGamefiles(FILE * file){
                    "offlineTutorial : 0 \n"
                    "storyTutorial : 0 \n"
                    "mtplyTutorial : 0 \n"
-                   "volume : 100 \n"
+                   "volumeMusic : 100 \n"
+                   "volumeSFX : 100 \n"
                    "levelsUnlocked : 1 \n"
+                   "themePiece : 0 \n"
            )
     ;
 }
@@ -306,16 +316,17 @@ void writeNewGameFiles(CChessSettings * settings){
     FILE * file = fopen("gamefiles/GameUserSettings.ini","w");
     int lvl_difficulty = settings->nivelDificuldade , lvl_selected = settings->nivelSelecionado ,
         selected_theme = settings->textures.temaSelecionado ,
-        selected_table = settings->cosmeticos.tabuleiroSelecionado ,
-        selected_music = settings->cosmeticos.musicaSelecionada ,
-        checkmate_effect = settings->cosmeticos.efeito_checkmateSelecionado ,
-        check_effect = settings->cosmeticos.efeito_checkSelecionado ,
+        selected_table = settings->client_settings.cosmeticos.tabuleiroSelecionado ,
+        selected_music = settings->client_settings.cosmeticos.musicaSelecionada ,
+        checkmate_effect = settings->client_settings.cosmeticos.efeito_checkmateSelecionado ,
+        check_effect = settings->client_settings.cosmeticos.efeito_checkSelecionado ,
         coins_amount = settings->ccoins_qntd ,
-        resolution_option = settings->window_optn ,
+        resolution_option = settings->client_settings.window_optn ,
         offline_tutorial_done = settings->tutorials.tutorial_offline_done ,
         story_tutorial_done = settings->tutorials.tutorial_story_done ,
         mtply_tutorial_done = settings->tutorials.tutorial_multiplayer_done ,
-        volume = settings->volume , max_lvl = settings->nivelMaxDesbloqueado;
+        volume_music = settings->client_settings.volume_music , max_lvl = settings->nivelMaxDesbloqueado ,
+        volume_sfx = settings->client_settings.volume_sfx , theme_piece = settings->client_settings.cosmeticos.themes_piece;
     char str_pieces_place[256] = {0} , str_selected_powers[256] = {0} ,  str_owned_powers[256] = {0} , 
          str_unlocked_powers[256] = {0} , str_extra_powers_owned[256] = {0} ;
     check_pieces_place(settings,str_pieces_place);
@@ -340,11 +351,13 @@ void writeNewGameFiles(CChessSettings * settings){
                    "offlineTutorial : %d \n"
                    "storyTutorial : %d \n"
                    "mtplyTutorial : %d \n" 
-                   "volume : %d \n"
-                   "levelsUnlocked : %d \n",
+                   "volumeMusic : %d \n"
+                   "volumeSFX : %d \n"
+                   "levelsUnlocked : %d \n"
+                   "themePiece : %d \n",
             lvl_difficulty , lvl_selected , str_owned_powers , str_unlocked_powers , selected_theme , selected_table ,
             selected_music , checkmate_effect , check_effect , coins_amount , str_pieces_place   , str_selected_powers , str_extra_powers_owned , resolution_option ,
-            offline_tutorial_done ,story_tutorial_done , mtply_tutorial_done , volume , max_lvl
+            offline_tutorial_done ,story_tutorial_done , mtply_tutorial_done , volume_music , volume_sfx , max_lvl , theme_piece
     );
     fclose(file);
     closedir(dir);

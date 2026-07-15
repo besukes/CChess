@@ -9,7 +9,7 @@
 
 //No futuro sera suposto ler o ficheiro de jogo do utilizador
 void initCosmeticos(CChessSettings * settings){
-    settings->cosmeticos.gif_checkmate = gif_utilizador_checkmate(settings, settings->cosmeticos.efeito_checkmateSelecionado);
+    settings->client_settings.cosmeticos.gif_checkmate = gif_utilizador_checkmate(settings, settings->client_settings.cosmeticos.efeito_checkmateSelecionado);
 }
 
 
@@ -37,11 +37,10 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * win
     settings.ticks_checkmate = 0;
     settings.num_imgsTotais = 100;
     settings.num_imgsLoaded = 0;
-    settings.story_st_line = NULL;
-    settings.indx_starting_line = 0;
-    settings.selected_pieces_power = NULL;
-    settings.indx_selected_ults = 0;
-    settings.volume = 100;
+    settings.client_settings.story_st_line = NULL;
+    settings.client_settings.indx_starting_line = 0;
+    settings.client_settings.selected_pieces_power = NULL;
+    settings.client_settings.indx_selected_ults = 0;
     zeroCustomPieces(&settings.user_custom_items);
     initTexturasJogo(&settings,&settings.textures,sdl_renderer);
     initGameFiles(&settings);
