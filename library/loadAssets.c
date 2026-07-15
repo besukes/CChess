@@ -74,6 +74,12 @@ void initTexturasJogo(CChessSettings * settings ,AssetsCChess * assets,SDL_Rende
     
     loadButtons(assets->buttonsTextures,sdl_renderer);
     
-    assets->arrow_orange_generic = IMG_LoadTexture(sdl_renderer,"assets/misc/arrow_texture.png");
+    assets->arrow_orange_generic[0] = IMG_LoadTexture(sdl_renderer,"assets/misc/arrow_texture.png");
+    assets->arrow_orange_generic[1] = IMG_LoadTexture(sdl_renderer,"assets/misc/triangle_orange.png");
+    SDL_SetTextureBlendMode(assets->arrow_orange_generic[0],SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(assets->arrow_orange_generic[0],140);
+    SDL_SetTextureBlendMode(assets->arrow_orange_generic[1],SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(assets->arrow_orange_generic[1],140);
+
     settings->num_imgsLoaded+=6;
 }

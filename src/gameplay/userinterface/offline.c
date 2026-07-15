@@ -102,44 +102,6 @@ void desenhaLeave(CChessSettings * settings , GameStruct  * game){
 }
 
 
-void drawSingleArrow(int (*vector)[2] , SDL_Renderer * renderer , SDL_Texture * generic){
-    int pos_draw_inicial = (*vector)[0] , pos_draw_final = (*vector)[1];
-    if(pos_draw_inicial > 64 || pos_draw_inicial < 0 || pos_draw_final > 64 || pos_draw_final < 0) return;
-    int xi = pos_draw_inicial % 8 , xf = pos_draw_final ,
-        yi = pos_draw_inicial / 8 , yf = pos_draw_final / 8;
-
-    int centro_xi = 100*xi+260 , centro_xf = 100*xf + 260,
-        centro_yi = 1080 - (100 * yi + 246) - 50 , centro_yf = 1080 - (100 * yf + 246) - 50;
-
-    double dx = centro_xf - centro_xi , dy = (-1)*(centro_yf - centro_yi);
-    int tam_arrow = abs(yf-yi)*80;
-    int largura_arrow = 24;
-
-    double angulo_rad = atan2(dy, dx);
-    double angulo_graus = angulo_rad * (180.0 / M_PI) ;
-    
-
-    SDL_Rect arrow_rect = {
-        .x = (int)(centro_xi - largura_arrow/2),
-        .y = (int)(centro_yi),
-        .w = largura_arrow,
-        .h = tam_arrow
-    };
-
-    SDL_Point pivot = {largura_arrow / 2,0};
-    SDL_RenderCopyEx(renderer , generic , NULL, &arrow_rect , angulo_graus , &pivot , SDL_FLIP_NONE);
-}
-
-
-void desenhaArrows(GameStruct * game , SDL_Renderer * renderer , SDL_Texture * generic_orange){
-    ArrowsGame arrows = game->arrows;
-    int indx = arrows.indx_drawable_arrows;
-    if(arrows.arrows_vector == NULL) return;
-    for(int i=0;i<indx;i++){
-        int (*vector_atual)[2] = (arrows.arrows_vector + i);
-        drawSingleArrow(vector_atual, renderer , generic_orange);
-    }
-}
 
 
 void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event){

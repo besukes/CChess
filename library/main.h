@@ -185,7 +185,7 @@ typedef struct AssetsCChess{
     SDL_Texture * niveisTextures[10]; //Texturas misc do CChess
     SDL_Texture * buttonsTextures[20]; //Texturas dos botões do CChess
     SDL_Texture * miscTextures[20]; //Texturas misc do CChess
-    SDL_Texture * arrow_orange_generic; //Textura generica para desenhar as arrows
+    SDL_Texture * arrow_orange_generic[2]; //Textura generica para desenhar as arrows
 }AssetsCChess;
 
 /*Struct responsável por guardar as informações do utilizador sobre peças personalizadas e poderes do CChess*/
@@ -409,6 +409,7 @@ void renderTextoCentradoBasico(SDL_Renderer* r, TTF_Font* f, const char* txt, SD
 void drawScore(int score_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale);
 void drawTurns(CorPiece turno ,int turns_game,SDL_Renderer * renderer , TTF_Font* f,int x , int y , float scale);
 void drawLevel(int nivel,SDL_Renderer * renderer , TTF_Font* f,int x , int y, float scale);
+void desenhaArrows(GameStruct * game , SDL_Renderer * renderer , SDL_Texture * generic_orange[2]);
 
 
 //Modulo game_screen.c

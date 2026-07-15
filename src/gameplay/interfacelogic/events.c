@@ -28,8 +28,11 @@ void efetuaEventoSoltarArrows(GameStruct * game , SDL_Event event){
     if(pos_nova!= (-1) && pos_nova != pos_ant) (*vector)[1] = pos_nova;
     else{
         (*indx)--;
-        game->arrows.arrows_vector = realloc(game->arrows.arrows_vector,sizeof(Coordenadas[2])*(*indx));\
-        if(!(*indx)) game->arrows.arrows_vector = NULL;
+        if(!(*indx)){
+            free(game->arrows.arrows_vector);
+            game->arrows.arrows_vector = NULL;
+        }
+        else game->arrows.arrows_vector = realloc(game->arrows.arrows_vector,sizeof(Coordenadas[2])*(*indx));\
     }
 }
 

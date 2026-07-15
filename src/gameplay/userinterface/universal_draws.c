@@ -172,3 +172,58 @@ void renderTextoCentradoBasico(SDL_Renderer* r, TTF_Font* f, const char* txt, SD
     SDL_RenderCopy(r, tx, NULL, &rect);
     SDL_DestroyTexture(tx);
 }
+
+
+
+
+
+void drawSingleArrow(int (*vector)[2] , SDL_Renderer * renderer , SDL_Texture * arrow[2]){
+    int pos_draw_inicial = (*vector)[0] , pos_draw_final = (*vector)[1];
+    if(pos_draw_inicial > 64 || pos_draw_inicial < 0 || pos_draw_final > 64 || pos_draw_final < 0) return;
+    int xi = pos_draw_inicial % 8 , xf = pos_draw_final % 8 ,
+        yi = pos_draw_inicial / 8 , yf = pos_draw_final / 8;
+
+    int centro_xi = 100*xi+260 , centro_xf = 100*xf + 260,
+        centro_yi = 1080 - (100 * yi + 246) + 40, centro_yf = 1080 - (100 * yf + 246) + 40;
+
+    double dx = centro_xf - centro_xi , dy = (-1)*(centro_yf - centro_yi);
+    int tam_arrow = (int)(sqrt(dx*dx + dy*dy)) - 40;
+    int largura_arrow = 24;
+
+    double angulo_rad = (-1) * atan2(dy, dx);
+    double angulo_graus =  angulo_rad * (180.0 / M_PI) - 90;
+    double angulo_graus_tip =  angulo_rad * (180.0 / M_PI) + 90;
+    
+    int offset = (dy > 0) ? 0 : 30;
+
+    SDL_Rect arrow_rect = {
+        .x = (int)(centro_xi - largura_arrow/2),
+        .y = (int)(centro_yi) + offset,
+        .w = largura_arrow,
+        .h = tam_arrow
+    };
+
+    int mult = (dy > 0) ? (-1) : 1;
+    SDL_Rect arrow_tip = {
+        .x = (int)(centro_xf + mult*10) ,
+        .y = (int)(centro_yf),
+        .w = 60 , 
+        .h = 60
+    };
+
+
+    SDL_Point pivot = {largura_arrow / 2,0};
+    SDL_RenderCopyEx(renderer , arrow[0] , NULL, &arrow_rect , angulo_graus , &pivot , SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer , arrow[1] , NULL, &arrow_tip , angulo_graus_tip , &pivot , SDL_FLIP_NONE);
+}
+
+
+void desenhaArrows(GameStruct * game , SDL_Renderer * renderer , SDL_Texture * generic_orange[2]){
+    ArrowsGame arrows = game->arrows;
+    int indx = arrows.indx_drawable_arrows;
+    if(arrows.arrows_vector == NULL) return;
+    for(int i=0;i<indx;i++){
+        int (*vector_atual)[2] = (arrows.arrows_vector + i);
+        drawSingleArrow(vector_atual, renderer , generic_orange);
+    }
+}
