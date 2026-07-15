@@ -309,6 +309,8 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
 void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event);
 void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Event * event, Boolean valido_turno);
 void cleanArrowEvent(GameStruct * game);
+void efetuaEventoClickArrows(GameStruct * game , SDL_Event event);
+void efetuaEventoSoltarArrows(GameStruct * game , SDL_Event event);
 
 
 

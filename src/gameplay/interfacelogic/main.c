@@ -52,6 +52,11 @@ void interfaceCChess(GameStruct * game ,CChessSettings * settings){
         if(event.type == SDL_MOUSEMOTION){
             settings->posMouseX = event.motion.x;
             settings->posMouseY = event.motion.y;
+            SDL_Event tmp;
+            while(SDL_PeepEvents(&tmp,1,SDL_GETEVENT,SDL_MOUSEMOTION,SDL_MOUSEMOTION) > 0){
+                settings->posMouseX = tmp.motion.x;
+                settings->posMouseY = tmp.motion.y;
+            }
         }
         handleTipoMenu(game,settings,&event);
         SDL_RenderPresent(settings->gameRenderer);
