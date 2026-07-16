@@ -172,7 +172,7 @@ void handleEffectChanges(CChessSettings * settings , Boolean ant_checkmate , Boo
 }
 
 
-void handleVolumeChange(CChessSettings * settings , Boolean ant_vol , Boolean prox_vol , Boolean ant_track , Boolean prox_track){
+void handleVolumeChange(CChessSettings * settings , Boolean ant_vol , Boolean prox_vol , Boolean ant_track , Boolean prox_track , Boolean ant_sfx){
     if(ant_vol){
         if(settings->client_settings.volume_music <= 0) settings->client_settings.volume_music = 100;
         else settings->client_settings.volume_music-=10;
@@ -189,6 +189,14 @@ void handleVolumeChange(CChessSettings * settings , Boolean ant_vol , Boolean pr
         if(settings->client_settings.cosmeticos.musicaSelecionada >= 6) settings->client_settings.cosmeticos.musicaSelecionada = 0;
         else settings->client_settings.cosmeticos.musicaSelecionada++;
     }
+    else if(ant_track){
+        if(settings->client_settings.volume_sfx <= 0) settings->client_settings.volume_sfx = 100;
+        else settings->client_settings.volume_sfx-=10;
+    }
+    else{
+        if(settings->client_settings.volume_sfx >= 100) settings->client_settings.volume_sfx = 0;
+        else settings->client_settings.volume_sfx+=10;
+    }
 }
 
 
@@ -203,14 +211,14 @@ void handleWindowChange(CChessSettings * settings , Boolean ant_w_type , Boolean
         else settings->client_settings.window_type++;
         set_new_window_size(settings->client_settings.window_type,settings,1);
     }
-    else if(ant_w_res){
-        if(settings->client_settings.window_res >= 2) settings->client_settings.window_res = 0;
-        else settings->client_settings.window_res++;
-        set_new_window_size(settings->client_settings.window_res,settings,0);
-    }
-    else{
+    else if(ant_w_res && !is_window_fullscreen(settings->window)){
         if(settings->client_settings.window_res <= 0) settings->client_settings.window_res = 2;
         else settings->client_settings.window_res--;
+        set_new_window_size(settings->client_settings.window_res,settings,0);
+    }
+    else if(!is_window_fullscreen(settings->window)){
+        if(settings->client_settings.window_res >= 2) settings->client_settings.window_res = 0;
+        else settings->client_settings.window_res++;
         set_new_window_size(settings->client_settings.window_res,settings,0);
     }
 }
@@ -226,8 +234,9 @@ void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Even
              ant_check = {450,678,40,40} , prox_check = {660,678,40,40};
     SDL_Rect ant_window_type = {1370,246,40,40} , prox_window_type = {1580,246,40,40} , 
              ant_window_res = {1370,330,40,40} , prox_window_res = {1580,330,40,40};
-    SDL_Rect ant_track = {1370,678,40,40} , prox_track = {1580,678,40,40} ,
-             ant_volume = {1370,762,40,40} , prox_volume = {1580,762,40,40};
+    SDL_Rect ant_track = {1370,504,40,40} , prox_track = {1580,504,40,40} ,
+             ant_volume = {1370,588,40,40} , prox_volume = {1580,588,40,40},
+             ant_sfx = {1370,672,40,40} , prox_sfx = {1580,672,40,40};
     Boolean b_ant_board = SDL_PointInRect(&point,&ant_board) , b_prox_board = SDL_PointInRect(&point,&prox_board) ,
             b_ant_themes = SDL_PointInRect(&point,&ant_themes) , b_prox_themes = SDL_PointInRect(&point,&prox_themes) ,
             b_ant_window_type = SDL_PointInRect(&point,&ant_window_type) , b_prox_window_type = SDL_PointInRect(&point,&prox_window_type) ,
@@ -235,12 +244,13 @@ void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Even
             b_ant_checkmate = SDL_PointInRect(&point,&ant_checkmate) , b_prox_checkmate = SDL_PointInRect(&point,&prox_checkmate) ,
             b_ant_check = SDL_PointInRect(&point,&ant_check) , b_prox_check = SDL_PointInRect(&point,&prox_check) ,
             b_ant_track = SDL_PointInRect(&point,&ant_track) , b_prox_track = SDL_PointInRect(&point,&prox_track) , 
-            b_ant_volume = SDL_PointInRect(&point,&ant_volume) , b_prox_volume = SDL_PointInRect(&point,&prox_volume);
+            b_ant_volume = SDL_PointInRect(&point,&ant_volume) , b_prox_volume = SDL_PointInRect(&point,&prox_volume),
+            b_ant_sfx = SDL_PointInRect(&point,&ant_sfx) , b_prox_sfx = SDL_PointInRect(&point,&prox_sfx);
     Boolean board_event = b_ant_board || b_prox_board , 
             themes_event = b_ant_themes || b_prox_themes , 
             window_event = b_ant_window_type || b_prox_window_type || b_ant_window_res || b_prox_window_res , 
             effects_event = b_ant_check || b_prox_check || b_ant_checkmate || b_prox_checkmate , 
-            volume_event = b_ant_track || b_prox_track || b_ant_volume || b_prox_volume;
+            volume_event = b_ant_track || b_prox_track || b_ant_volume || b_prox_volume || b_ant_sfx || b_prox_sfx;
     if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT){
         if(SDL_PointInRect(&point,&voltar)){
             int last = settings->client_settings.cosmeticos.ultimo_efeito_checkmateSelecionado ,
@@ -251,7 +261,7 @@ void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Even
         else if(board_event) handleBoardChange(settings,b_ant_board);
         else if(themes_event) handleThemesChange(settings,b_ant_themes);
         else if(effects_event) handleEffectChanges(settings,b_ant_checkmate,b_prox_checkmate,b_ant_check);
-        else if(volume_event) handleVolumeChange(settings,b_ant_volume,b_prox_volume,b_ant_track,b_prox_track);
+        else if(volume_event) handleVolumeChange(settings,b_ant_volume,b_prox_volume,b_ant_track,b_prox_track , b_ant_sfx);
         else if(window_event) handleWindowChange(settings , b_ant_window_type , b_prox_window_type , b_ant_window_res);
     }
 }

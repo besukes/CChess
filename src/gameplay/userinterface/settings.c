@@ -278,7 +278,11 @@ void drawPainelDireito(CChessSettings * settings , SDL_Renderer * r){
 
     intToStr(settings->client_settings.volume_music, buf);
     sprintf(buf, "%d%%", settings->client_settings.volume_music);
-    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Volume", buf,0);
+    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Music", buf,0);
+
+    intToStr(settings->client_settings.volume_sfx, buf);
+    sprintf(buf, "%d%%", settings->client_settings.volume_sfx);
+    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Sfx", buf,0);
 }
 
 
