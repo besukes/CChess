@@ -107,6 +107,34 @@ static int desenhaSectionTitle(CChessSettings * s,int px1, int px2, int y,const 
 }
 
 
+/* Valor atual centrado entre as setas */
+void desenhaValorCentrado(SDL_Renderer * r , CChessSettings * s , SDL_Color branco , SDL_Rect row , const char * valor , int cx , int type){
+    if(type == 1){ //Para verificar se estamos a desenhar o tipo de resolucao da window
+        if(s->client_settings.window_type == 0) {
+            renderTextoCentradoSombra(r, s->fonteJogoSmallerTitles,"Windowed", branco,cx - 20, row.y + 16, 0.85f);
+        }
+        else if(s->client_settings.window_type == 1) {
+            renderTextoCentradoSombra(r, s->fonteJogoSmallerTitles,"Borderless", branco,cx - 15, row.y + 16, 0.85f);
+        }
+        else if(s->client_settings.window_type == 2) {
+            renderTextoCentradoSombra(r, s->fonteJogoSmallerTitles,"Fullscreen", branco,cx - 16, row.y + 16, 0.85f);
+        }
+    }
+    else if(type==2){
+        int resX = 0, resY = 0;
+        if(is_window_fullscreen(s->window)){
+            renderTextoCentradoSombra(r, s->fonteJogoSmallerTitles,"-", branco,cx - 20, row.y + 16, 0.85f);
+        }
+        else{
+            SDL_GetWindowSize(s->window, &resX, &resY);
+            char str[256];
+            sprintf(str, "%dx%d", resX, resY);
+            renderTextoCentradoSombra(r, s->fonteJogoSmallerTitles,str, branco,cx - 20, row.y + 16, 0.85f);
+        }
+    }
+    else renderTextoCentradoSombra(r, s->fonteJogoSmallerTitles,valor, branco,cx - 20, row.y + 16, 0.85f);
+}
+
 
 
 /* ─────────────────────────────────────────────
@@ -147,20 +175,8 @@ static int desenhaOptionRow(CChessSettings * s,int px1, int px2, int y,const cha
     filledTrigonRGBA(r,next_r.x,next_r.y,next_r.x + next_r.w, next_r.y + next_r.h/2,next_r.x,next_r.y + next_r.h,
                     COL_GOLD_R, COL_GOLD_G, COL_GOLD_B, arrow_a);
 
-    /* Valor atual centrado entre as setas */
-    if(type == 1){ //Para verificar se estamos a desenhar a resolução do jogo, que é um caso especial
-        int resX = 0, resY = 0;
-        if(is_window_fullscreen(s->window)){
-            renderTextoCentradoSombra(r, s->fonteJogoSmallerTitles,"Fullscreen", branco,cx - 20, row.y + 16, 0.85f);
-        }
-        else{
-            SDL_GetWindowSize(s->window, &resX, &resY);
-            char str[256];
-            sprintf(str, "%dx%d", resX, resY);
-            renderTextoCentradoSombra(r, s->fonteJogoSmallerTitles,str, branco,cx - 20, row.y + 16, 0.85f);
-        }
-    }
-    else renderTextoCentradoSombra(r, s->fonteJogoSmallerTitles,valor, branco,cx - 20, row.y + 16, 0.85f);
+    desenhaValorCentrado(r,s,branco,row,valor,cx,type);
+    
 
     /* Linha separadora inferior subtil */
     SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
@@ -216,7 +232,7 @@ void drawPainelEsquerdo(CChessSettings * settings , SDL_Renderer * r){
     y = desenhaSectionTitle(settings, PNL_L_X1, PNL_L_X2, y, "BOARD");
     char buf[32];
     intToStr(settings->client_settings.cosmeticos.tabuleiroSelecionado + 1, buf);
-    y = desenhaOptionRow(settings, PNL_L_X1, PNL_L_X2, y,"Board Theme", buf , 2);
+    y = desenhaOptionRow(settings, PNL_L_X1, PNL_L_X2, y,"Board Theme", buf , 0);
 
     /* Preview do tabuleiro */
     int preview_h = (PNL_L_X2 - PNL_L_X1 - 80);   /* quadrado */
@@ -250,9 +266,9 @@ void drawPainelDireito(CChessSettings * settings , SDL_Renderer * r){
     int y = PNL_Y1 + 20;
     /* Secção: Screen Utilizador */
     y = desenhaSectionTitle(settings, PNL_R_X1, PNL_R_X2, y, "RESOLUTION");
-    intToStr(settings->client_settings.cosmeticos.musicaSelecionada + 1, buf);
-    desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Screen Resolution", buf , 1);
-    y += ROW_GAP + ROW_H + 20;
+    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Window type", buf , 1);
+    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Window Resolution", buf , 2);
+    y += 20;
 
 
     /* Secção: Musica */
@@ -262,7 +278,7 @@ void drawPainelDireito(CChessSettings * settings , SDL_Renderer * r){
 
     intToStr(settings->client_settings.volume_music, buf);
     sprintf(buf, "%d%%", settings->client_settings.volume_music);
-    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Volume", buf,3);
+    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Volume", buf,0);
 }
 
 

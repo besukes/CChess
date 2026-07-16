@@ -23,29 +23,43 @@
 
 
 
-void set_new_window_size(int u, CChessSettings * settings){
+void set_new_window_size(int u, CChessSettings * settings, int window_type){
     switch(u){
-        case 1:
-            if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
-            SDL_SetWindowSize(settings->window,1280,720);
-            SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
-            settings->client_settings.window_optn = 1;
+        case 0: //Windowed or 1280x720
+            if(window_type){ 
+                if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
+                SDL_SetWindowBordered(settings->window,SDL_TRUE);
+                settings->client_settings.window_type = 0;
+            }
+            else{
+                SDL_SetWindowSize(settings->window,1280,720);
+                SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
+                settings->client_settings.window_res = 0;
+            }
         break;
-        case 2:
-            if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
-            SDL_SetWindowSize(settings->window,1600,900);
-            SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
-            settings->client_settings.window_optn = 2;
+        case 1: //Windowed Borderless or 1600x900
+            if(window_type){
+                if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
+                SDL_SetWindowBordered(settings->window,SDL_FALSE);
+                settings->client_settings.window_type = 1;
+            }
+            else{
+                SDL_SetWindowSize(settings->window,1600,900);
+                SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
+                settings->client_settings.window_res = 1;
+            }
         break;
-        case 3:
-            if(is_window_fullscreen(settings->window)) SDL_SetWindowFullscreen(settings->window,0);
-            SDL_SetWindowSize(settings->window,1920,1080);
-            SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
-            settings->client_settings.window_optn = 3;
-        break;
-        default:
-            SDL_SetWindowFullscreen(settings->window,SDL_WINDOW_FULLSCREEN);
-            settings->client_settings.window_optn = 0;
+        case 2: //FULLSCREEN or 1920x1080
+            if(window_type){
+                SDL_SetWindowBordered(settings->window,SDL_FALSE);
+                SDL_SetWindowFullscreen(settings->window,SDL_WINDOW_FULLSCREEN_DESKTOP);
+                settings->client_settings.window_type = 2;
+            }
+            else{
+                SDL_SetWindowSize(settings->window,1920,1080);
+                SDL_SetWindowPosition(settings->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
+                settings->client_settings.window_res = 2;
+            }
         break;
     }
 }
@@ -147,10 +161,15 @@ void readLineAuxAux(char * line , CChessSettings * settings){
 
         readExtraPieces(line,settings);
     }
-    else if(compareString(line,"resolutionOption")){
+    else if(compareString(line,"windowType")){
         line = skip_to_value(line);
-        int u = get_number(line,3,0);
-        set_new_window_size(u,settings);
+        int u = get_number(line,2,0);
+        set_new_window_size(u,settings,1);
+    }
+    else if(compareString(line,"windowResolution")){
+        line = skip_to_value(line);
+        int u = get_number(line,2,0);
+        set_new_window_size(u,settings,0);
     }
 }
 
@@ -262,7 +281,8 @@ void writeDefaultGamefiles(FILE * file){
                    "piecesPlace : x x 7 5 x 2 x x 0 x 0 0 0 0 0 x \n"
                    "selectedPowers : 0 0 0 0 0 0 0 \n"
                    "extraPiecesOwned : 7 \n"
-                   "resolutionOption : 0 \n"
+                   "windowType : 0 \n"
+                   "windowResolution : 0 \n"
                    "offlineTutorial : 0 \n"
                    "storyTutorial : 0 \n"
                    "mtplyTutorial : 0 \n"
@@ -321,7 +341,8 @@ void writeNewGameFiles(CChessSettings * settings){
         checkmate_effect = settings->client_settings.cosmeticos.efeito_checkmateSelecionado ,
         check_effect = settings->client_settings.cosmeticos.efeito_checkSelecionado ,
         coins_amount = settings->ccoins_qntd ,
-        resolution_option = settings->client_settings.window_optn ,
+        resolution_option = settings->client_settings.window_res ,
+        screen_type = settings->client_settings.window_type ,
         offline_tutorial_done = settings->tutorials.tutorial_offline_done ,
         story_tutorial_done = settings->tutorials.tutorial_story_done ,
         mtply_tutorial_done = settings->tutorials.tutorial_multiplayer_done ,
@@ -347,7 +368,8 @@ void writeNewGameFiles(CChessSettings * settings){
                    "piecesPlace : %s \n"
                    "selectedPowers : %s \n"
                    "extraPiecesOwned : %s \n"
-                   "resolutionOption : %d \n"
+                   "windowResolution : %d \n"
+                   "windowType : %d \n"
                    "offlineTutorial : %d \n"
                    "storyTutorial : %d \n"
                    "mtplyTutorial : %d \n" 
@@ -356,8 +378,9 @@ void writeNewGameFiles(CChessSettings * settings){
                    "levelsUnlocked : %d \n"
                    "themePiece : %d \n",
             lvl_difficulty , lvl_selected , str_owned_powers , str_unlocked_powers , selected_theme , selected_table ,
-            selected_music , checkmate_effect , check_effect , coins_amount , str_pieces_place   , str_selected_powers , str_extra_powers_owned , resolution_option ,
-            offline_tutorial_done ,story_tutorial_done , mtply_tutorial_done , volume_music , volume_sfx , max_lvl , theme_piece
+            selected_music , checkmate_effect , check_effect , coins_amount , str_pieces_place   , str_selected_powers , str_extra_powers_owned , 
+            resolution_option , screen_type ,offline_tutorial_done , story_tutorial_done , mtply_tutorial_done , volume_music , 
+            volume_sfx , max_lvl , theme_piece
     );
     fclose(file);
     closedir(dir);

@@ -204,7 +204,7 @@ typedef struct CustomPieces{
 
 /*Struct responsável por guardar as settings client-sided do jogo , que o utilizador define.*/
 typedef struct ClientSettings{
-    int window_optn; //Opção de resolução da janela selecionada pelo utilizador (1280x720 , 1600x900 , etc..)
+    int window_res; //Opção de resolução da janela selecionada pelo utilizador (1280x720 , 1600x900 , etc..)
     int window_type; //Opção de janela do utilizador (Fullscreen / Borderless / Windowed)
     int volume_music; //Guarda o volume da musica jogo
     int volume_sfx; //Guarda o volume dos sound effects do jogo
@@ -461,7 +461,7 @@ void loading_screen(CChessSettings * settings,int perc);
 
 void initGameFiles(CChessSettings * settings);
 void writeNewGameFiles(CChessSettings * settings);
-void set_new_window_size(int u, CChessSettings * settings);
+void set_new_window_size(int u, CChessSettings * settings , int type);
 
 
 //Modulo custom_interactions.c 
