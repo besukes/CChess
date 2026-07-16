@@ -147,7 +147,7 @@ void handleThemesChange(CChessSettings * settings , Boolean ant){
         else settings->client_settings.cosmeticos.themes_piece--;
     }
     else{
-        if(settings->client_settings.cosmeticos.themes_piece >= 6) settings->client_settings.cosmeticos.themes_piece = 0;
+        if(settings->client_settings.cosmeticos.themes_piece >= 2) settings->client_settings.cosmeticos.themes_piece = 0;
         else settings->client_settings.cosmeticos.themes_piece++;
     }
 }

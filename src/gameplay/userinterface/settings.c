@@ -155,7 +155,7 @@ static int desenhaOptionRow(CChessSettings * s,int px1, int px2, int y,const cha
     SDL_Color dourado    = {COL_GOLD_R, COL_GOLD_G, COL_GOLD_B, 255};
     SDL_Color cinzento   = {140, 130, 110, 255};
 
-    int offset = (type == 2) ? row.x + 200 : row.x + 160;
+    int offset = (type == 3) ? row.x + 180 : row.x + 160;
     renderTextoCentradoBasico(r, s->fonteJogoSmallerTitles,label, cinzento,offset, row.y + 18, 0.75f);
 
     /* Seta ◄ */
@@ -232,7 +232,7 @@ void drawPainelEsquerdo(CChessSettings * settings , SDL_Renderer * r){
     y = desenhaSectionTitle(settings, PNL_L_X1, PNL_L_X2, y, "BOARD");
     char buf[32];
     intToStr(settings->client_settings.cosmeticos.tabuleiroSelecionado + 1, buf);
-    y = desenhaOptionRow(settings, PNL_L_X1, PNL_L_X2, y,"Board Theme", buf , 0);
+    y = desenhaOptionRow(settings, PNL_L_X1, PNL_L_X2, y,"Board Theme", buf , 3);
 
     /* Preview do tabuleiro */
     int preview_h = (PNL_L_X2 - PNL_L_X1 - 80);   /* quadrado */
@@ -282,7 +282,7 @@ void drawPainelDireito(CChessSettings * settings , SDL_Renderer * r){
 
     intToStr(settings->client_settings.volume_sfx, buf);
     sprintf(buf, "%d%%", settings->client_settings.volume_sfx);
-    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Sfx", buf,0);
+    y = desenhaOptionRow(settings, PNL_R_X1, PNL_R_X2, y,"Sound effects", buf,0);
 }
 
 
