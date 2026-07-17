@@ -38,7 +38,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
             efetuaEventoClique(game,settings,&event);
             game->jogada = Valid;
         }
-        else if(event.button.button = SDL_BUTTON_RIGHT && game->arrows.is_drawing_arrows == 0){
+        else if( (event.button.button == SDL_BUTTON_RIGHT) && game->arrows.is_drawing_arrows == 0){
             efetuaEventoClickArrows(game,event);
         }
     }
@@ -52,7 +52,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
             }
             softReset(game);
         }
-        else if(event.button.button = SDL_BUTTON_RIGHT && game->arrows.is_drawing_arrows){
+        else if( (event.button.button == SDL_BUTTON_RIGHT) && game->arrows.is_drawing_arrows){
            efetuaEventoSoltarArrows(game,event);
         }
     }
@@ -189,7 +189,7 @@ void handleVolumeChange(CChessSettings * settings , Boolean ant_vol , Boolean pr
         if(settings->client_settings.cosmeticos.musicaSelecionada >= 6) settings->client_settings.cosmeticos.musicaSelecionada = 0;
         else settings->client_settings.cosmeticos.musicaSelecionada++;
     }
-    else if(ant_track){
+    else if(ant_sfx){
         if(settings->client_settings.volume_sfx <= 0) settings->client_settings.volume_sfx = 100;
         else settings->client_settings.volume_sfx-=10;
     }
@@ -224,7 +224,7 @@ void handleWindowChange(CChessSettings * settings , Boolean ant_w_type , Boolean
 }
 
 
-void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Event * event){
+void handleSettingsScreen(CChessSettings * settings,SDL_Event * event){
     int mouseX = event->button.x , mouseY = event->button.y;
     SDL_Point point = {mouseX,mouseY};
     SDL_Rect voltar = {1750,890,150,150};

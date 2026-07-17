@@ -9,7 +9,7 @@ int is_open_castle_path(uint64_bit bitboard_todas_pieces,uint64_bit path , uint6
 
 
 
-int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor, uint64_bit drop){
+int is_castelling_king(GameStruct * game , CorPiece cor, uint64_bit drop){
     uint64_bit destino_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7)  : (1ULL << 62 | 1ULL<<63),
                destino_long  = (cor == brancas) ? (1ULL << 2 | 1ULL <<1 | 1ULL)  : (1ULL << 58 | 1ULL << 57 | 1ULL << 56);
     uint64_bit path_short = (cor == brancas) ? (1ULL << 6 | 1ULL<<7 | 1ULL<<5)  : ( 1ULL << 61 | 1ULL << 62 | 1ULL<<63),
@@ -30,7 +30,8 @@ int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor, 
 //Necessita ser feita
 int invalidCastle(GameStruct * game , uint64_bit click){
     CorPiece turno = game->turnoJogador;
-    int pos = posTabuleiro(click) , offset = 0 , indx = 0;
+    int pos = posTabuleiro(click) , offset = 0;
+    unsigned int indx = 0;
     if(pos == (-1)) return 0;
     casas_board casa_rook = (pos%8 > 4) ? F1 : D1;
     if(turno == pretas){

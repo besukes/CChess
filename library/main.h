@@ -178,12 +178,11 @@ typedef struct InGame_Cosmetics{
     int n_frames_gif; //Numero de frames do gif selecionado
     SDL_Texture * * gif_checkmate; //Texturas da animação de checkmate selecionada pelo utilizador
     int efeito_checkSelecionado; //Efeito de check selecionado pelo utilizador
-    int themes_piece; //Tema de piece selecionado pelo utilizador
+    Themes themes_piece; //Tema de piece selecionado pelo utilizador
 }InGame_Cosmetics;
 
 /*Guarda as texturas que o jogo utiliza no seu decorrer , tal como o tema das peças*/
 typedef struct AssetsCChess{
-    Themes temaSelecionado; //Tema selecionado pelo utilizador
     SDL_Texture * chessPieces[12]; //Texturas das peças de xadrez do CChess
     SDL_Texture * tabTextures[7]; //Texturas dos tabuleiros de xadrez do CChess
     SDL_Texture * niveisTextures[10]; //Texturas misc do CChess
@@ -213,6 +212,9 @@ typedef struct ClientSettings{
     PlayerChessTable * story_st_line; //Guarda a informação do utilizador quanto à organização das peças no modo história
     int indx_selected_ults; //index para o array dinamicamente alocado
     UltimatesSettings * selected_pieces_power; //Guarda os poderes selecionados de cada piece
+    Niveis nivelDificuldade; //Nível de dificuldade do jogo (para o modo carreira , que ainda não existe)
+    int nivelSelecionado; //Nível selecionado para cada fase do jogo
+    TutorialsDone tutorials; //Guarda booleans que informam sobre o estado do utilizador quanto aos tutoriais de cada modo de jogo
 }ClientSettings;
 
 /*Struct que guarda as definições do jogo CChess mais relevantes , como o renderer responsável para apresentar imagens,
@@ -230,14 +232,11 @@ typedef struct CChessSettings{
     UserScreen screenAtual; //Tela atual em que o utilizador se encontra
     int ticks; //Número de ticks que já passaram desde o começo do jogo (importante para o timer)
     int ticks_checkmate; //Número de ticks que já passaram desde o começo da animação de checkmate (importante para o timer)
-    Niveis nivelDificuldade; //Nível de dificuldade do jogo (para o modo carreira , que ainda não existe)
-    int nivelSelecionado; //Nível selecionado para cada fase do jogo
     int nivelMaxDesbloqueado; //Nível máximo desbloqueado pelo utilizador no modo carreira (que ainda não existe)
     CustomPieces user_custom_items; //Struct que guarda as informações do utilizador quanto a items personalizados
     int num_imgsLoaded; //Número de imagens já carregadas ao inicializar o programa
     int num_imgsTotais; //Número de imagens totais que necessitam ser carregadas
     int ccoins_qntd; //Guarda a quantidade de moedas do utilizador
-    TutorialsDone tutorials; //Guarda booleans que informam sobre o estado do utilizador quanto aos tutoriais de cada modo de jogo
 }CChessSettings;
 
 
@@ -249,7 +248,7 @@ typedef struct CChessSettings{
 //Modulo initStructs.c
 
 CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * window);
-GameStruct initGameStruct(SDL_Renderer * sdl_renderer);
+GameStruct initGameStruct(void);
 EstadoJogo initEstadoJogo(void);
 void initializeOfflineGame(GameStruct * game);
 
@@ -278,7 +277,7 @@ void handleJogadaThemes(CChessSettings * settings,SDL_Event event);
 void handleWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event);
 void handleStoryScreen(GameStruct* game , CChessSettings * settings,SDL_Event * event);
 void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event event);
-void handleSettingsScreen(GameStruct * game , CChessSettings * settings,SDL_Event * event);
+void handleSettingsScreen(CChessSettings * settings,SDL_Event * event);
 
 
 
@@ -350,7 +349,7 @@ uint64_bit get_dog_protected_squares(uint64_bit pos_dog ,CorPiece turno);
 //Modulo userinterface.c
 
 void desenhaInterfaceMenu(CChessSettings * settings,SDL_Event event);
-void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event);
+void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings);
 void desenhaMenuThemes(CChessSettings * settings,SDL_Event event);
 void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event);
 void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettings * settings , int offset);
@@ -387,7 +386,7 @@ uint64_bit shiftl(uint64_bit pos,int shift);
 uint64_bit get_same_colour_bitboard(EstadoJogo * estado , CorPiece cor);
 uint64_bit initQuadrado(void);
 uint64_bit get_opposing_colour_bitboard(EstadoJogo * estado , CorPiece cor);
-uint64_bit get_selected_piece_attacks(GameStruct * game , CChessSettings * settings , uint64_bit click , Pieces piece , CorPiece turno);
+uint64_bit get_selected_piece_attacks(GameStruct * game , uint64_bit click , Pieces piece , CorPiece turno);
 
 
 
@@ -399,7 +398,7 @@ void undoMove(GameStruct * game , uint64_bit click , Boolean castles);
 
 //Modulo castle_logic.c
 
-int is_castelling_king(uint64_bit pos_piece , GameStruct * game , CorPiece cor , uint64_bit drop);
+int is_castelling_king(GameStruct * game , CorPiece cor , uint64_bit drop);
 int invalidCastle(GameStruct * game , uint64_bit click);
 void verifica_direito_castle(GameStruct * game ,CorPiece turno);
 void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit * mesmaCor);
@@ -426,7 +425,7 @@ void desenhaArrows(GameStruct * game , SDL_Renderer * renderer , SDL_Texture * g
 
 //Modulo game_screen.c
 
-void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event);
+void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings);
 
 
 
@@ -481,7 +480,7 @@ void initStoryGame(GameStruct * game , CChessSettings * settings , int level);
 
 //Modulo settings.c
 
-void desenhaSettings(CChessSettings * settings, SDL_Event * event);
+void desenhaSettings(CChessSettings * settings);
 
 
 //Modulo gamefiles_aux.c

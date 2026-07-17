@@ -37,7 +37,7 @@ static void desenhaButton(CChessSettings * settings, SDL_Texture * tex, SDL_Rect
 }
 
 
-void desenhaButtons(CChessSettings * settings,SDL_Event event){
+void desenhaButtons(CChessSettings * settings){
     SDL_Rect botaoStory = {710,400,500,100};
     SDL_Rect botaoMultiplayer = {710,520,500,100};
     SDL_Rect botaoOffline = {710,640,500,100};
@@ -72,7 +72,7 @@ void desenhaCoins(CChessSettings * settings){
 
 
 
-void desenhaMisc(CChessSettings * settings,SDL_Event event){
+void desenhaMisc(CChessSettings * settings){
     SDL_Rect fundo = {0,0,1920,1080};
     SDL_Rect shop = {1780,30,100,100};
     SDL_Rect cchess = {490,(-60),900,500};
@@ -88,8 +88,8 @@ void desenhaInterfaceMenu(CChessSettings * settings,SDL_Event event){
     SDL_SetRenderDrawColor(settings->gameRenderer, 0, 0, 0, 180); 
     SDL_SetRenderDrawBlendMode(settings->gameRenderer, SDL_BLENDMODE_BLEND);
 
-    desenhaMisc(settings,event);
+    desenhaMisc(settings);
     roundedBoxRGBA(settings->gameRenderer, 660 , 370 , 1260 , 1040 , 40 , 0, 0, 0, 150);
-    desenhaButtons(settings,event);
+    desenhaButtons(settings);
     desenhaCoins(settings);
 }

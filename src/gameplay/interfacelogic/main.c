@@ -13,7 +13,7 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
         case Chess :
             if(game->game_needs_initialization) initializeOfflineGame(game);
             handleJogadaChess(game,settings,*event);
-            desenhaInterfaceJogo(game,settings,*event);
+            desenhaInterfaceJogo(game,settings);
         break;
         case Theme :
             handleJogadaThemes(settings,*event);
@@ -31,8 +31,8 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
             desenhaStoryScreen(game,settings);
         break;
         case Settings :
-            desenhaSettings(settings,event);    
-            handleSettingsScreen(game,settings,event);
+            desenhaSettings(settings);    
+            handleSettingsScreen(settings,event);
         break;
         case Multiplayer :
             handleMultiplayerScreen(settings,event);
@@ -66,7 +66,7 @@ void interfaceCChess(GameStruct * game ,CChessSettings * settings){
 int main(void){
     SDL_Initializators init = sdl_initializer();
     CChessSettings settings = initCChessSettings(init.renderer,init.window);
-    GameStruct game = initGameStruct(init.renderer);
+    GameStruct game = initGameStruct();
     interfaceCChess(&game,&settings);
     writeNewGameFiles(&settings);
     free_allocated_memory(&game,&settings);

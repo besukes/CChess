@@ -183,15 +183,15 @@ void readLineAux(char * line , CChessSettings * settings){
     }
     else if(compareString(line,"offlineTutorial")){
         line = skip_to_value(line);
-        settings->tutorials.tutorial_offline_done = get_number(line,1,0);
+        settings->client_settings.tutorials.tutorial_offline_done = get_number(line,1,0);
     }
     else if(compareString(line,"storyTutorial")){
         line = skip_to_value(line);
-        settings->tutorials.tutorial_story_done = get_number(line,1,0);
+        settings->client_settings.tutorials.tutorial_story_done = get_number(line,1,0);
     }
     else if(compareString(line,"mtplyTutorial")){
         line = skip_to_value(line);
-        settings->tutorials.tutorial_multiplayer_done = get_number(line,1,0);
+        settings->client_settings.tutorials.tutorial_multiplayer_done = get_number(line,1,0);
     }
     else if(compareString(line,"levelsUnlocked")){
         line = skip_to_value(line);
@@ -207,7 +207,7 @@ void readLineAux(char * line , CChessSettings * settings){
     }
     else if(compareString(line,"themePiece")){
         line = skip_to_value(line);
-        settings->client_settings.cosmeticos.themes_piece = get_number(line,2,0);
+        settings->client_settings.cosmeticos.themes_piece = (Themes)(get_number(line,2,0));
     }
     else readLineAuxAux(line,settings);
 }
@@ -218,17 +218,12 @@ void readLine(char * line , CChessSettings * settings){
     if(compareString(line,"difficultyLevel")){
         line = skip_to_value(line);
 
-        settings->nivelDificuldade = get_number(line,6,0);
+        settings->client_settings.nivelDificuldade = (Niveis)(get_number(line,6,0));
     }
     else if(compareString(line,"selectedLevel")){
         line = skip_to_value(line);
 
-        settings->nivelDificuldade = get_number(line,15,0);
-    }
-    else if(compareString(line,"selectedTheme")){
-        line = skip_to_value(line);
-
-        settings->textures.temaSelecionado = get_number(line,2,0);
+        settings->client_settings.nivelSelecionado = get_number(line,15,0);
     }
     else if(compareString(line,"selectedTable")){
         line = skip_to_value(line);
@@ -272,7 +267,6 @@ void writeDefaultGamefiles(FILE * file){
                    "selectedLevel : 0 \n"
                    "ownedPowers : 0 \n"
                    "unlockedPowers : 0 \n"
-                   "selectedTheme : 0 \n"
                    "selectedTable : 0 \n"
                    "selectedMusic : 0 \n"
                    "checkmateEffect : 0 \n"
@@ -334,8 +328,7 @@ void writeNewGameFiles(CChessSettings * settings){
     DIR * dir = opendir("gamefiles");
     if(dir==NULL) createGamefilesDir(settings);
     FILE * file = fopen("gamefiles/GameUserSettings.ini","w");
-    int lvl_difficulty = settings->nivelDificuldade , lvl_selected = settings->nivelSelecionado ,
-        selected_theme = settings->textures.temaSelecionado ,
+    int lvl_difficulty = settings->client_settings.nivelDificuldade , lvl_selected = settings->client_settings.nivelSelecionado ,
         selected_table = settings->client_settings.cosmeticos.tabuleiroSelecionado ,
         selected_music = settings->client_settings.cosmeticos.musicaSelecionada ,
         checkmate_effect = settings->client_settings.cosmeticos.efeito_checkmateSelecionado ,
@@ -343,9 +336,9 @@ void writeNewGameFiles(CChessSettings * settings){
         coins_amount = settings->ccoins_qntd ,
         resolution_option = settings->client_settings.window_res ,
         screen_type = settings->client_settings.window_type ,
-        offline_tutorial_done = settings->tutorials.tutorial_offline_done ,
-        story_tutorial_done = settings->tutorials.tutorial_story_done ,
-        mtply_tutorial_done = settings->tutorials.tutorial_multiplayer_done ,
+        offline_tutorial_done = settings->client_settings.tutorials.tutorial_offline_done ,
+        story_tutorial_done = settings->client_settings.tutorials.tutorial_story_done ,
+        mtply_tutorial_done = settings->client_settings.tutorials.tutorial_multiplayer_done ,
         volume_music = settings->client_settings.volume_music , max_lvl = settings->nivelMaxDesbloqueado ,
         volume_sfx = settings->client_settings.volume_sfx , theme_piece = settings->client_settings.cosmeticos.themes_piece;
     char str_pieces_place[256] = {0} , str_selected_powers[256] = {0} ,  str_owned_powers[256] = {0} , 
@@ -359,7 +352,6 @@ void writeNewGameFiles(CChessSettings * settings){
                    "selectedLevel : %d \n"
                    "ownedPowers : %s \n"
                    "unlockedPowers : %s \n"
-                   "selectedTheme : %d \n"
                    "selectedTable : %d \n"
                    "selectedMusic : %d \n"
                    "checkmateEffect : %d \n"
@@ -377,7 +369,7 @@ void writeNewGameFiles(CChessSettings * settings){
                    "volumeSFX : %d \n"
                    "levelsUnlocked : %d \n"
                    "themePiece : %d \n",
-            lvl_difficulty , lvl_selected , str_owned_powers , str_unlocked_powers , selected_theme , selected_table ,
+            lvl_difficulty , lvl_selected , str_owned_powers , str_unlocked_powers , selected_table ,
             selected_music , checkmate_effect , check_effect , coins_amount , str_pieces_place   , str_selected_powers , str_extra_powers_owned , 
             resolution_option , screen_type ,offline_tutorial_done , story_tutorial_done , mtply_tutorial_done , volume_music , 
             volume_sfx , max_lvl , theme_piece

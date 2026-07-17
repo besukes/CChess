@@ -55,7 +55,7 @@ uint64_bit get_opposing_colour_bitboard(EstadoJogo * estado , CorPiece cor){
 }
 
 
-uint64_bit get_selected_piece_attacks(GameStruct * game , CChessSettings * settings , uint64_bit click , Pieces piece , CorPiece turno){
+uint64_bit get_selected_piece_attacks(GameStruct * game , uint64_bit click , Pieces piece , CorPiece turno){
     uint64_bit atk = 0;
     uint64_bit passant = game->estadoJogo.enpassant;
     if(can_en_passant(game,passant,turno)) atk = passant | get_piece_attacks(click,piece,game,turno);

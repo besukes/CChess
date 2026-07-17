@@ -89,7 +89,7 @@ void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event 
         game->pieceSelecionada = piece;
         if(piece==Empty) game->jogada = Invalid;
         CorPiece turno = game->turnoJogador;
-        game->selected_piece_attacks = get_selected_piece_attacks(game,settings,click,piece,turno);
+        game->selected_piece_attacks = get_selected_piece_attacks(game,click,piece,turno);
     }
     else{
         SDL_Point point = {mouseX,mouseY};

@@ -152,7 +152,6 @@ static int desenhaOptionRow(CChessSettings * s,int px1, int px2, int y,const cha
 
     /* Label à esquerda */
     SDL_Color branco     = {230, 215, 180, 255};
-    SDL_Color dourado    = {COL_GOLD_R, COL_GOLD_G, COL_GOLD_B, 255};
     SDL_Color cinzento   = {140, 130, 110, 255};
 
     int offset = (type == 3) ? row.x + 180 : row.x + 160;
@@ -235,7 +234,6 @@ void drawPainelEsquerdo(CChessSettings * settings , SDL_Renderer * r){
     y = desenhaOptionRow(settings, PNL_L_X1, PNL_L_X2, y,"Board Theme", buf , 3);
 
     /* Preview do tabuleiro */
-    int preview_h = (PNL_L_X2 - PNL_L_X1 - 80);   /* quadrado */
     desenhaTabPreview(settings, PNL_L_X1, PNL_L_X1 + 140, y - 78);
     y += 20;
 
@@ -292,7 +290,7 @@ void drawPainelDireito(CChessSettings * settings , SDL_Renderer * r){
 /* ─────────────────────────────────────────────
    desenhaSettings — ponto de entrada
    ───────────────────────────────────────────── */
-void desenhaSettings(CChessSettings * settings, SDL_Event * event){
+void desenhaSettings(CChessSettings * settings){
     SDL_Renderer * r = settings->gameRenderer;
 
     /* Fundo */
@@ -309,7 +307,7 @@ void desenhaSettings(CChessSettings * settings, SDL_Event * event){
 
 
     SDL_Rect leave = {1750,890,150,150};
-    if(mouseOver(settings,leave)) filledCircleRGBA(r, leave.x + leave.w/2, leave.y + leave.h/2, 62, COL_GOLD_R, COL_GOLD_G, COL_GOLD_B, 20);
+    if(mouseOver(settings,leave)) filledCircleRGBA(r, (Sint16)(leave.x + leave.w/2), (Sint16)(leave.y + leave.h/2), 62, COL_GOLD_R, COL_GOLD_G, COL_GOLD_B, 20);
 }
 
 

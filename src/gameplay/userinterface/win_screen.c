@@ -41,13 +41,13 @@ void desenhaWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event eve
     int temp_inicial = settings->ticks_checkmate, tempo_animacao = temp_inicial + offset_timer;
     while(settings->ticks < tempo_animacao){
         SDL_RenderClear(r);
-        desenhaInterfaceJogo(game,settings,event);
+        desenhaInterfaceJogo(game,settings);
         desenhaAnimacaoCheckmate(temp_inicial,settings,default_animation);
         SDL_RenderPresent(r);
         SDL_PollEvent(&event);
         settings->ticks = (int)SDL_GetTicks();
     }
-    desenhaInterfaceJogo(game,settings,event);
+    desenhaInterfaceJogo(game,settings);
     desenhaEndGameUI(settings);
     desenhaStats(game,settings,event);
 }

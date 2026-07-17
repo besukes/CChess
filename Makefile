@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -Wall -ggdb -Wextra -Wconversion -g3 -fsanitize=address,undefined -I. -Ilibrary -Igamefiles/gameplay -Ichess_engine
+CFLAGS = -Wall -ggdb -Wextra -g3 -fsanitize=address,undefined -I. -Ilibrary -Igamefiles/gameplay -Ichess_engine
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx -lm -fsanitize=address,undefined
 
 SRC =	src/universal/corefunctions.c \

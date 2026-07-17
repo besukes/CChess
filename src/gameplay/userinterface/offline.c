@@ -104,7 +104,7 @@ void desenhaLeave(CChessSettings * settings , GameStruct  * game){
 
 
 
-void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings,SDL_Event event){
+void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings){
     desenhaFundo(settings,settings->textures.niveisTextures[3]);
     SDL_Rect tabuleiro = {210,140,800,800};
     SDL_RenderCopy(settings->gameRenderer,settings->textures.tabTextures[settings->client_settings.cosmeticos.tabuleiroSelecionado],NULL,&tabuleiro);

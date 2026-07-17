@@ -24,6 +24,34 @@ void zeroCustomPieces(CustomPieces * sets){
     sets->extraPieces_owned = NULL;
 }
 
+void defaultClientSettings(CChessSettings * settings){
+    settings->client_settings.story_st_line = NULL;
+    settings->client_settings.indx_starting_line = 0;
+    settings->client_settings.selected_pieces_power = NULL;
+    settings->client_settings.indx_selected_ults = 0;
+    settings->client_settings.volume_music = 100;
+    settings->client_settings.volume_sfx = 100;
+    settings->client_settings.window_res = 0;
+    settings->client_settings.window_type = 0;
+    settings->client_settings.cosmeticos.efeito_checkmateSelecionado = 0;
+    settings->client_settings.cosmeticos.efeito_checkSelecionado = 0;
+    settings->client_settings.cosmeticos.gif_checkmate = NULL;
+    settings->client_settings.cosmeticos.musicaSelecionada = 0;
+    settings->client_settings.cosmeticos.n_frames_gif = 0;
+    settings->client_settings.cosmeticos.tabuleiroSelecionado = 0;
+    settings->client_settings.cosmeticos.themes_piece = 0;
+    settings->client_settings.cosmeticos.ultimo_efeito_checkmateSelecionado = 0;
+    settings->client_settings.nivelSelecionado = 0;
+    settings->client_settings.nivelDificuldade = 0;
+    settings->client_settings.tutorials.tutorial_multiplayer_done = 0;
+    settings->client_settings.tutorials.tutorial_offline_done = 0;
+    settings->client_settings.tutorials.tutorial_story_done = 0;
+
+    //Nao deviam ser client sided 
+    settings->nivelMaxDesbloqueado = 0;
+    settings->ccoins_qntd = 0;
+
+}
 
 
 CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * window){
@@ -37,12 +65,9 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * win
     settings.ticks_checkmate = 0;
     settings.num_imgsTotais = 100;
     settings.num_imgsLoaded = 0;
-    settings.client_settings.story_st_line = NULL;
-    settings.client_settings.indx_starting_line = 0;
-    settings.client_settings.selected_pieces_power = NULL;
-    settings.client_settings.indx_selected_ults = 0;
     zeroCustomPieces(&settings.user_custom_items);
     initTexturasJogo(&settings,&settings.textures,sdl_renderer);
+    defaultClientSettings(&settings);
     initGameFiles(&settings);
     initCosmeticos(&settings);
     TTF_Init();
@@ -78,7 +103,7 @@ void initArrowsStruct(GameStruct * game){
 }
 
 
-GameStruct initGameStruct(SDL_Renderer * sdl_renderer){
+GameStruct initGameStruct(void){
     GameStruct game;
     game.game_needs_initialization = 1;
     game.isKeyPressedDown = 0;
