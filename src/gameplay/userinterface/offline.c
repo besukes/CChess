@@ -44,7 +44,7 @@ void desenhaMenu(GameStruct * game , CChessSettings * settings){
 
 
     roundedBoxRGBA(settings->gameRenderer, 1241 , 637 , 1511 , 920 , 30 , 0, 0, 0, 160);
-    drawLevel(settings->nivelSelecionado,settings->gameRenderer,settings->fonteJogoSmallerTitles,1330,696,0.8);
+    drawLevel(settings->client_settings.nivelSelecionado,settings->gameRenderer,settings->fonteJogoSmallerTitles,1330,696,0.8);
     drawScore(game->score_game,settings->gameRenderer,settings->fonteJogoSmallerTitles,1347,756,0.8);
     drawTurns(game->turnoJogador,game->turns,settings->gameRenderer,settings->fonteJogoSmallerTitles, 1347 , 816 , 0.8);
 
@@ -57,10 +57,10 @@ void desenhaMenu(GameStruct * game , CChessSettings * settings){
 
 void desenhaNivelTitle(CChessSettings * settings){
     SDL_Color branco = {255, 255, 255, 255};
-    if(settings->nivelDificuldade == 0){
+    if(settings->client_settings.nivelDificuldade == 0){
         renderTextoCentradoSombra(settings->gameRenderer,settings->fonteJogoTitles,"In the dawn-",branco,1429,69,2);
         char str[256];
-        sprintf(str,"Stage %d",settings->nivelDificuldade + 1);
+        sprintf(str,"Stage %d",settings->client_settings.nivelDificuldade + 1);
         renderTextoCentradoSombra(settings->gameRenderer,settings->fonteJogoTitles,str,branco,1691,69,2);
     }
 }

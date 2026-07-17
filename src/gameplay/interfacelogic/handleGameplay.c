@@ -66,7 +66,7 @@ void handleStoryScreen(GameStruct * game , CChessSettings * settings,SDL_Event *
     SDL_Rect leave = {100,950,100,100};
     if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT){
         if(0){
-            settings->nivelDificuldade++;
+            settings->client_settings.nivelDificuldade++;
         }
         else if(0){
             initStoryGame(game,settings,1);

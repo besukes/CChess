@@ -30,7 +30,7 @@ void desenhaOrbsLvl0(int lvl,CChessSettings * settings,SDL_Color branco , SDL_Co
 
 
 void desenhaOrbsNiveis(CChessSettings * settings){
-    int lvl = settings->nivelDificuldade;
+    int lvl = settings->client_settings.nivelDificuldade;
     SDL_Texture * orb_laranja = settings->textures.miscTextures[11], 
                 * orb_cinzenta = settings->textures.miscTextures[12];
     SDL_Color branco = {255,255,255,255} , red = {255,0,0,255};
@@ -45,7 +45,7 @@ void desenhaOrbsNiveis(CChessSettings * settings){
 
 void desenhaFundoStory(CChessSettings * settings){
     SDL_Rect fundo = {0, 0, 1920, 1080};
-    if(settings->nivelDificuldade == 0)
+    if(settings->client_settings.nivelDificuldade == 0)
         SDL_RenderCopy(settings->gameRenderer,
                        settings->textures.niveisTextures[2], NULL, &fundo);
 
@@ -83,7 +83,7 @@ void desenhaNivelTitleStory(CChessSettings * settings){
     SDL_Color dourado = {220, 175, 55, 255};
     SDL_Color cinzento_claro = {200, 200, 200, 255};
 
-    if(settings->nivelDificuldade == 0){
+    if(settings->client_settings.nivelDificuldade == 0){
         /* Título centrado horizontalmente */
         renderTextoCentradoSombra(r, settings->fonteJogoTitles,
                                   "IN THE DAWN", dourado, 960, 10, 3.2f);
