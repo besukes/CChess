@@ -56,7 +56,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
            efetuaEventoSoltarArrows(game,event);
         }
     }
-
+    //provisorio
     if(game->turnoJogador == pretas){
         GameStruct game_aux = *game;
         game_aux.active_ultimate = NULL;

@@ -563,7 +563,7 @@ void initializeStructs(int matrix[2][NUMBER_PIECES],int indx);
 
 /// depth_search /////////////////////////////
 
-Moves search_algorithm (uint64_bit posi , uint64_bit atks ,uint64_bit pos, GameStruct * game ,int piece_evals[2][NUMBER_PIECES] , SearchInfo * search_info);
+Moves search_algorithm (uint64_bit posi , uint64_bit atks, GameStruct * game ,int piece_evals[2][NUMBER_PIECES] , SearchInfo * search_info);
 
 /// evaluation //////////////////////////////
 

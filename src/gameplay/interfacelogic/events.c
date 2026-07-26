@@ -177,7 +177,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
             atualizaJogada(game,click,castles,enpassant,&mov);
             game->jogada = check_move(game,castles,click,&mov);
             if(game->jogada==Invalid){
-                undoMove(game,click,castles,castles,game->pieceSelecionada,game->turnoJogador);
+                undoMove(game,click,mov.last_piece_pos,castles,game->pieceSelecionada,game->turnoJogador);
                 game->estadoJogo.king_in_check[game->turnoJogador] = check_antes;
             }
             else if(game->jogada == Checkmate) eventoFimJogo(settings,WinScreen);

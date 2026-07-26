@@ -60,7 +60,7 @@ int evaluate_piece(uint64_bit piece_pos , Pieces piece_type , CorPiece turn , in
     */
     int position_score = 0 , mobility_score = 0 , piece_score = piece_value(piece_type);
     int pos = posTabuleiro(piece_pos);
-    if(pos==(-1)) return;
+    if(pos==(-1)) return 0;
     int line = pos/8 , column = pos%8 , indx = (turn==brancas) ? ((7-line)*8 + column) : (line*8 + column);
     switch(piece_type){
         case Pawn :
