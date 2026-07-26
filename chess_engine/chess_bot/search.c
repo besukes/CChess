@@ -42,6 +42,7 @@ Moves search_algorithm (uint64_bit posi , uint64_bit atks , uint64_bit pos, Game
         atks>>=1; 
         cntr++;
     }
-    Moves ret = {.move = bst , .move_evaluation = search_info->alpha};
+    int eval =(search_info->turn == brancas) ? search_info->alpha : search_info->beta;
+    Moves ret = {.move = bst , .move_evaluation = eval};
     return ret;
 }

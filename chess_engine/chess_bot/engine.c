@@ -20,8 +20,8 @@ Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_leve
     SearchInfo search = {.ai_level = ai_level , .alpha = alpha , .beta = beta, .depth = depth , 
                         .bot_colour = turn , .turn = turn , .white_eval = weval , .black_eval = beval
                         };
-    Pieces piece;
-    uint64_bit current_pos;
+    Pieces best_piece , piece;
+    uint64_bit current_pos , best_pos;
     for(int i=0;i<NUMBER_PIECES;i++){
         int counter=0;
         uint64_bit piece_bitboard = game->estadoJogo.tabuleirojogo[turn][i];
@@ -35,10 +35,14 @@ Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_leve
                 if(best_searched.move_evaluation > search.alpha && turn == brancas){
                     search.alpha = best_searched.move_evaluation;
                     positional_best_move = best_searched.move;
+                    best_piece = piece;
+                    best_pos = current_pos;
                 }
                 else if(best_searched.move_evaluation < search.beta && turn == pretas){
                     search.beta = best_searched.move_evaluation;
                     positional_best_move = best_searched.move;
+                    best_piece = piece;
+                    best_pos = current_pos;
                 }
             }
             counter++;
@@ -47,6 +51,6 @@ Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_leve
         }
     }
     int ret_eval = (turn==brancas) ? search.alpha : search.beta;
-    Moves ret = {.move = positional_best_move , .move_evaluation = ret_eval , .piece_type = piece , .last_piece_pos = current_pos};
+    Moves ret = {.move = positional_best_move , .move_evaluation = ret_eval , .piece_type = best_piece , .last_piece_pos = best_pos};
     return ret;
 }

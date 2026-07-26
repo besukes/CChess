@@ -59,6 +59,8 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
 
     if(game->turnoJogador == pretas){
         GameStruct game_aux = *game;
+        game_aux.active_ultimate = NULL;
+        game_aux.lastmoves = NULL;
         Moves best_move = get_best_move(&game_aux,pretas);
         MoveInfo mov = {.last_piece_pos = best_move.last_piece_pos , .piece_moved = best_move.piece_type , .turn = pretas};
         atualizaJogada(game,best_move.move,0,0,&mov);

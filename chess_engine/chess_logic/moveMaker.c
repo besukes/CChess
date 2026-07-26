@@ -76,6 +76,6 @@ void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean
     else{
         uint64_bit * bit_piece = &(game->estadoJogo.tabuleirojogo[turno][mov->piece_moved]),
                    * bit_global = &(game->estadoJogo.bitboard_todas_pieces);
-        efetuaJogada(bit_piece,bit_global,mov->piece_moved,click,bitboard_cor_turno);
+        efetuaJogada(bit_piece,bit_global,mov->last_piece_pos,click,bitboard_cor_turno);
     } 
 }
