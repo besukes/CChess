@@ -25,6 +25,7 @@ Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_leve
     Pieces best_piece = 0, piece = 0;
     uint64_bit current_pos = 0, best_pos = 0;
     int pieces_analyzed = 0; //Remove
+    int cur_best_alpha = alpha , cur_best_beta = beta;
     for(int i=0;i<NUMBER_PIECES;i++){
         int counter=0;
         uint64_bit piece_bitboard = game->estadoJogo.tabuleirojogo[turn][i];
@@ -34,18 +35,20 @@ Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_leve
         while(piece_bitboard != 0){
             if( (piece_bitboard & 1ULL) != 0){
                 current_pos = 1ULL<<counter;
-                uint64_bit current_attacks = get_piece_attacks(current_pos,piece,game,turn) & ~get_same_colour_bitboard(&game->estadoJogo,turn);
+                uint64_bit current_attacks = get_piece_attacks(current_pos,piece,game,turn) & (~get_same_colour_bitboard(&game->estadoJogo,turn));
                 Moves best_searched = search_algorithm(current_pos,current_attacks,game,evals,&search);
                 pieces_analyzed++; //Remove
                 moves_for_piece++; //Remove
-                if(best_searched.move_evaluation > search.alpha && turn == brancas){
+                if(best_searched.move_evaluation > cur_best_alpha && turn == brancas){
                     search.alpha = best_searched.move_evaluation;
+                    cur_best_alpha = search.alpha;
                     positional_best_move = best_searched.move;
                     best_piece = piece;
                     best_pos = current_pos;
                 }
-                else if(best_searched.move_evaluation < search.beta && turn == pretas){
+                else if(best_searched.move_evaluation < cur_best_beta && turn == pretas){
                     search.beta = best_searched.move_evaluation;
+                    cur_best_beta = search.beta;
                     positional_best_move = best_searched.move;
                     best_piece = piece;
                     best_pos = current_pos;
@@ -55,15 +58,7 @@ Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_leve
             piece_bitboard>>=1;
             if(search.alpha>=search.beta) break;
         }
-        //Remove
-        if(moves_for_piece==0) {
-            //printf("[engine] piece %d had no attack squares\n", piece);
-        } else {
-            printf("[engine] analyzed %d moves for piece %d\n", moves_for_piece, piece);
-        }
     }
-    //Remove
-    printf("[engine] total pieces analyzed: %d positional_best_move=%d best_piece=%d best_pos=%d\n", pieces_analyzed, posTabuleiro(positional_best_move), best_piece, posTabuleiro(best_pos));
     int ret_eval = (turn==brancas) ? search.alpha : search.beta;
     Moves ret = {.move = positional_best_move , .move_evaluation = ret_eval , .piece_type = best_piece , .last_piece_pos = best_pos};
     return ret;
