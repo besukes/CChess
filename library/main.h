@@ -3,6 +3,8 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
+#define NUMBER_PIECES 6
+#define MAX_DEPTH_SEARCH 15
 
 /*Struct que serve apenas no startAndCleanup.c para retornar os endereços de memória do nosso renderer e window*/
 typedef struct SDL_Initializators{
@@ -22,6 +24,7 @@ typedef struct Coordenadas{
 typedef unsigned long long uint64_bit;
 
 typedef uint64_bit (*ShiftFunction)(uint64_bit,int); //Tipo que define um endereço de memória de uma função que recebe um unsigned long long de 64 bits e um int normal
+
 
 /*Enum que guarda todas as peças possíveis do jogo*/
 typedef enum {
@@ -62,6 +65,45 @@ typedef struct ExtraPieces{
 
 //A memória da ordem das peças que o utilizador utiliza no jogo estará guardada como um par (TipoPiece,PosPiece)
 typedef ExtraPieces PlayerChessTable;
+
+typedef struct Booleans{
+    Boolean * castles;
+    Boolean * enpassant;
+    Boolean * promote;
+}Booleans;
+
+typedef struct MoveInfo{
+    Pieces piece_moved;
+    CorPiece turn;
+    uint64_bit last_piece_pos;
+}MoveInfo;
+
+typedef struct Moves{
+    uint64_bit move;
+    uint64_bit last_piece_pos;
+    Pieces piece_type;
+    int move_evaluation;
+}Moves;
+
+typedef struct SearchInfo{
+    int depth;
+    int alpha;
+    int beta;
+    int white_eval;
+    int black_eval;
+    int ai_level;
+    Pieces piece_type;
+    CorPiece bot_colour;
+    CorPiece turn;
+}SearchInfo;
+
+/*Struct que serve como uma lookup table das melhores posições de uma dada peça de uma dada cor no tabuleiro de xadrez.
+Para este projeto a "colour_key" será apenas utilizada a cor preta e as lookup tables de todas as peças pretas*/
+typedef struct LookupTable{
+    CorPiece colour_key;
+    Pieces piece_key;
+    int evaluation_multiplier[64];
+} * ChessLT;
 
 /*Struct que define um estado de um jogo de xadrez.
 Guarda as posições de todas as peças , bem como as posições afetadas por elas.
@@ -251,6 +293,7 @@ CChessSettings initCChessSettings(SDL_Renderer * sdl_renderer , SDL_Window * win
 GameStruct initGameStruct(void);
 EstadoJogo initEstadoJogo(void);
 void initializeOfflineGame(GameStruct * game);
+void initializeStructs(int matrix[2][NUMBER_PIECES],int indx);
 
 
 
@@ -326,23 +369,21 @@ void efetuaEventoSoltarArrows(GameStruct * game , SDL_Event event);
 
 //Modulo moveMaker.c
 
-void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean enpassant);
-void updateBitboard_ClickEvent(CorPiece turno,Pieces piece,EstadoJogo * estado,uint64_bit click);
-void promotePiece(GameStruct * game , Pieces piece, uint64_bit promotion_square);
+void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean enpassant , MoveInfo * mov);
+void promotePiece(GameStruct * game , Pieces piece, uint64_bit promotion_square , CorPiece turno);
 
 
 
 //Modulo possibleMoves.c
 
-int isPseudoValidMove(GameStruct * game , uint64_bit drop,Boolean * castle,Boolean * enpassant , Boolean * promote);
+int isPseudoValidMove(GameStruct * game, uint64_bit drop , Booleans * bools, MoveInfo * move);
 uint64_bit get_knight_attacks(uint64_bit piece_pos);
 uint64_bit get_pawn_attacks(uint64_bit piece_pos,CorPiece cor);
 uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites);
 uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites);
 uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game,CorPiece cor_turno);
 uint64_bit get_king_moves(uint64_bit pos);
-uint64_bit get_dog_protected_squares(uint64_bit pos_dog ,CorPiece turno);
-
+void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,int),uint64_bit pos_rei , uint64_bit colunaA , uint64_bit colunaH);
 
 
 
@@ -359,7 +400,7 @@ void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettin
 
 //Modulo checkAndCheckmate.c
 
-TipoJogada check_move(GameStruct * game, Boolean castles , uint64_bit click);
+TipoJogada check_move(GameStruct * game, Boolean castles , uint64_bit click , MoveInfo * mov);
 int isCheckMate(GameStruct * game, CorPiece cor);
 void notInCheck(GameStruct * game);
 Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor);
@@ -370,8 +411,8 @@ Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor);
 
 //Modulo en_passant.c
 
-void update_en_passant(GameStruct * game ,uint64_bit click);
-Boolean can_en_passant(GameStruct * game , uint64_bit drop,CorPiece cor);
+void update_en_passant(GameStruct * game , uint64_bit click , MoveInfo * mov);
+Boolean can_en_passant(GameStruct * game , uint64_bit drop, MoveInfo * mov);
 void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * mesma_cor,ShiftFunction ep);
 
 
@@ -387,21 +428,23 @@ uint64_bit get_same_colour_bitboard(EstadoJogo * estado , CorPiece cor);
 uint64_bit initQuadrado(void);
 uint64_bit get_opposing_colour_bitboard(EstadoJogo * estado , CorPiece cor);
 uint64_bit get_selected_piece_attacks(GameStruct * game , uint64_bit click , Pieces piece , CorPiece turno);
+int is_attacked_piece(uint64_bit is_attacked , Pieces attacked_piece , CorPiece turn , GameStruct * game , int piece_score);
+int piece_value(Pieces piece);
 
 
 
 //Modulo undoMove.c
 
-void undoMove(GameStruct * game , uint64_bit click , Boolean castles);
+void undoMove(GameStruct * game , uint64_bit click,uint64_bit ant_pos ,Boolean castles, Pieces piece , CorPiece turn);
 
 
 
 //Modulo castle_logic.c
 
 int is_castelling_king(GameStruct * game , CorPiece cor , uint64_bit drop);
-int invalidCastle(GameStruct * game , uint64_bit click);
-void verifica_direito_castle(GameStruct * game ,CorPiece turno);
-void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit * mesmaCor);
+int invalidCastle(GameStruct * game , uint64_bit click , CorPiece turno);
+void verifica_direito_castle(GameStruct * game ,MoveInfo * mov);
+void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit * mesmaCor , CorPiece turno);
 
 
 
@@ -466,6 +509,8 @@ void set_new_window_size(int u, CChessSettings * settings , int type);
 //Modulo custom_interactions.c 
 
 int is_protected_square(GameStruct * game , uint64_bit click);
+uint64_bit get_dog_protected_squares(uint64_bit pos_dog ,CorPiece turno);
+uint64_bit get_dog_attacks(uint64_bit pos_dog);
 
 
 //Modulo story.c
@@ -505,3 +550,27 @@ void handleMultiplayerScreen(CChessSettings * settings , SDL_Event * event);
 //Modulo multiplayerUI.c
 
 void desenhaMultiplayerScreen(CChessSettings * settings);
+
+
+
+
+/////////////////////////////////////////////////////////////////////CHESS BOT///////////////////////////////////////////////////////////////////////
+
+/// initialization ////////////////////////////
+
+void initializeStructs(int matrix[2][NUMBER_PIECES],int indx);
+
+
+/// depth_search /////////////////////////////
+
+Moves search_algorithm (uint64_bit posi , uint64_bit atks ,uint64_bit pos, GameStruct * game ,int piece_evals[2][NUMBER_PIECES] , SearchInfo * search_info);
+
+/// evaluation //////////////////////////////
+
+int evaluate(GameStruct * game , CorPiece turno , int ai_level , int pieces_evals[2][NUMBER_PIECES] , int * white_eval , int * black_eval);
+int evaluate_pos(GameStruct * game , SearchInfo * search , int * w_eval , int * b_eval , int piece_evals[2][NUMBER_PIECES] , int cur_piece_eval);
+
+/// engine /////////////////////////////////
+
+Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_level , int alpha , int beta , int weval , int beval , int evals[2][NUMBER_PIECES]);
+Moves get_best_move(GameStruct * game , CorPiece turn);

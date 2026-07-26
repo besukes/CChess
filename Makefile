@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -Wall -ggdb -Wextra -g3 -fsanitize=address,undefined -I. -Ilibrary -Igamefiles/gameplay -Ichess_engine
+CFLAGS = -Wall -ggdb -Wextra -g3 -fsanitize=address,undefined -I. -Ilibrary 
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx -lm -fsanitize=address,undefined
 
 SRC =	src/universal/corefunctions.c \
@@ -25,13 +25,16 @@ SRC =	src/universal/corefunctions.c \
 		src/multiplayer/multiplayer_logic.c \
 		src/multiplayer/multiplayerUI.c \
 		library/loadAssets.c \
-		chess_engine/possibleMoves.c \
-		chess_engine/checkAndCheckmate.c \
-		chess_engine/en_passant.c \
-		chess_engine/moveMaker.c \
-		chess_engine/undoMove.c \
-		chess_engine/castle_logic.c \
-		chess_engine/custom_interactions.c \
+		chess_engine/chess_logic/possibleMoves.c \
+		chess_engine/chess_logic/checkAndCheckmate.c \
+		chess_engine/chess_logic/en_passant.c \
+		chess_engine/chess_logic/moveMaker.c \
+		chess_engine/chess_logic/undoMove.c \
+		chess_engine/chess_logic/castle_logic.c \
+		chess_engine/chess_logic/custom_interactions.c \
+		chess_engine/chess_bot/engine.c \
+		chess_engine/chess_bot/evaluation.c \
+		chess_engine/chess_bot/search.c \
 
 OBJ = $(SRC:%.c=build/%.o)
 

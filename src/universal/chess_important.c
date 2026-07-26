@@ -58,8 +58,38 @@ uint64_bit get_opposing_colour_bitboard(EstadoJogo * estado , CorPiece cor){
 uint64_bit get_selected_piece_attacks(GameStruct * game , uint64_bit click , Pieces piece , CorPiece turno){
     uint64_bit atk = 0;
     uint64_bit passant = game->estadoJogo.enpassant;
-    if(can_en_passant(game,passant,turno)) atk = passant | get_piece_attacks(click,piece,game,turno);
+    MoveInfo mov = {.last_piece_pos = 0 , .piece_moved = piece , .turn = turno};
+    if(can_en_passant(game,passant,&mov)) atk = passant | get_piece_attacks(click,piece,game,turno);
     else atk = get_piece_attacks(click,piece,game,turno);
     atk = ~get_same_colour_bitboard(&game->estadoJogo,turno) & atk;
     return atk;
+}
+
+
+int piece_value(Pieces piece){
+    switch(piece){
+        case 0: return 100;
+        case 1: return 500;
+        case 2: return 320;
+        case 3: return 330;
+        case 4: return 900;
+        case 5: return 1000;
+        default: 
+            printf("[ERROR] Pieces index out of range\n");
+            return 0;
+        break;
+    }
+}
+
+
+int is_attacked_piece(uint64_bit is_attacked , Pieces attacked_piece , CorPiece turn , GameStruct * game , int piece_score){
+    for(int i=0;i<NUMBER_PIECES;i++){
+        uint64_bit attacker = game->estadoJogo.tabuleirojogo[turn][i];
+        Pieces piece = (Pieces)i;
+        if(attacker!=0 && piece_value(piece) < piece_score){
+            uint64_bit atks = get_piece_attacks(is_attacked,attacked_piece,game,turn);
+            if((atks & attacker)!=0) return 1;
+        }
+    }
+    return 0;
 }

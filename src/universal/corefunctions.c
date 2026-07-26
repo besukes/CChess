@@ -29,7 +29,7 @@ int dentroDoBotao(int mx , int my , int inf_x , int sup_x , int inf_y , int sup_
     return ( (inf_x<=mx && mx<=sup_x) && (inf_y <= my && my<=sup_y));
 }
 
-
+/*Returns (-1) on error or a number between 1-63 on a sucessful attempt*/
 int posTabuleiro(uint64_bit bitboard){
     if(bitboard==0) return (-1);
     return __builtin_ctzll(bitboard);

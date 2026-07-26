@@ -34,27 +34,27 @@ void restauraCastle(uint64_bit * rei_tab,uint64_bit * mesma_cor, uint64_bit clic
 }
 
 
-void undoPiece_move(GameStruct * game , uint64_bit * mesma_cor,uint64_bit * cor_oposta, uint64_bit click,Boolean castles){
-    uint64_bit * piece_tab = &(game->estadoJogo.tabuleirojogo[game->turnoJogador][game->pieceSelecionada]);
+void undoPiece_move(GameStruct * game , uint64_bit * sameCor,uint64_bit * opCor, uint64_bit click,uint64_bit ant_pos ,Boolean castles ,Pieces piece , CorPiece turn){
+    //ant_pos e piece tem de ser mudada no jogo original
+    uint64_bit * piece_tab = &(game->estadoJogo.tabuleirojogo[turn][piece]);
     if(castles){
-        restauraCastle(piece_tab,mesma_cor,click,game,game->turnoJogador);
+        restauraCastle(piece_tab,sameCor,click,game,turn);
     }
     else{
-        *piece_tab = ((*piece_tab & ~click) | game->pieceCoords);
-        *mesma_cor = ((*mesma_cor & ~click) | game->pieceCoords);
+        *piece_tab = ((*piece_tab & ~click) | ant_pos);
+        *sameCor = ((*sameCor & ~click) | ant_pos);
     }
-    game->estadoJogo.bitboard_todas_pieces = *mesma_cor | *cor_oposta;
+    game->estadoJogo.bitboard_todas_pieces = *sameCor | *opCor;
 }
 
 
-void undoMove(GameStruct * game , uint64_bit click,Boolean castles){
-    CorPiece cor = game->turnoJogador;
+void undoMove(GameStruct * game , uint64_bit click,uint64_bit ant_pos ,Boolean castles, Pieces piece , CorPiece turn){
     uint64_bit * mesma_cor = &(game->estadoJogo.bitboard_brancas), 
                * cor_oposta = &(game->estadoJogo.bitboard_pretas);
-    if(cor == pretas){
+    if(turn == pretas){
         mesma_cor = &(game->estadoJogo.bitboard_pretas);
         cor_oposta = &(game->estadoJogo.bitboard_brancas);
     }
-    undoPiece_move(game,mesma_cor,cor_oposta,click,castles);
+    undoPiece_move(game,mesma_cor,cor_oposta,click,ant_pos,castles,piece,turn);
     if(game->lastmoves != NULL && game->lastmoves->pos_de_piece == click) undoPieceComida(game,cor_oposta,click);
 }
