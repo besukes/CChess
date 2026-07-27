@@ -88,7 +88,9 @@ TipoJogada check_move(GameStruct * game, Boolean castles , uint64_bit click , Mo
         verifica_direito_castle(game,mov);
     }
 
-    Boolean cant_move_opp_king = isCheckMate(game,turno_op);
+    GameStruct game_aux = *game;
+    game_aux.lastmoves = NULL;
+    Boolean cant_move_opp_king = isCheckMate(&game_aux,turno_op);
     if(is_in_check(&(game->estadoJogo),pos_king_op,turno_op)){
         if(cant_move_opp_king){
             return Checkmate;

@@ -93,6 +93,18 @@ int evaluate_piece(uint64_bit piece_pos , Pieces piece_type , CorPiece turn , in
 }
 
 
+int evaluate_piece_type(uint64_bit bitboard , Pieces piece_type, CorPiece turn, GameStruct * game , int ai_level){
+    int score = 0;
+    uint64_bit bb = bitboard;
+    while(bb){
+        uint64_bit single = bb & (-bb); // isola o bit mais baixo
+        score += evaluate_piece(single, piece_type, turn, ai_level, game); // avalia só essa peça
+        bb &= bb - 1; // remove esse bit
+    }
+    return score;
+}
+
+
 int evaluate_pos(GameStruct * game , SearchInfo * search , int * w_eval , int * b_eval , int pieces_evals[2][NUMBER_PIECES] , int cur_piece_eval){
     int * cur_player_eval , who2Move ;
     CorPiece other_turn , cur_turn;
@@ -110,8 +122,8 @@ int evaluate_pos(GameStruct * game , SearchInfo * search , int * w_eval , int * 
 
     if(isCheckMate(game,other_turn)) *cur_player_eval = 99999*who2Move;
     else{
-        int new_piece_eval = evaluate_piece(game->estadoJogo.tabuleirojogo[cur_turn][piece],piece,
-                                            cur_turn,search->ai_level,game);
+        int new_piece_eval = evaluate_piece_type(game->estadoJogo.tabuleirojogo[cur_turn][piece],piece,
+                                                cur_turn,game,search->ai_level);
         *cur_player_eval += (new_piece_eval - pieces_evals[cur_turn][piece])*who2Move;
     }
     return (*cur_player_eval);

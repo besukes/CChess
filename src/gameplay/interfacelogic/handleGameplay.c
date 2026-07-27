@@ -30,6 +30,7 @@ void softReset(GameStruct * game){
 }
 
 //teste temporario do bot , temos de mudar eventualmente
+//&& game->turnoJogador == brancas
 void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event){
     if(event.type == SDL_MOUSEBUTTONDOWN && game->turnoJogador == brancas){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown ==0){
