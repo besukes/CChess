@@ -68,12 +68,12 @@ uint64_bit get_selected_piece_attacks(GameStruct * game , uint64_bit click , Pie
 
 int piece_value(Pieces piece){
     switch(piece){
-        case 0: return 100;
-        case 1: return 500;
-        case 2: return 320;
-        case 3: return 330;
-        case 4: return 900;
-        case 5: return 1000;
+        case Pawn: return 100;
+        case Rook: return 500;
+        case Horse: return 320;
+        case Bishop: return 330;
+        case Queen: return 900;
+        case King: return 1000;
         default: 
             printf("[ERROR] Pieces index out of range\n");
             return 0;

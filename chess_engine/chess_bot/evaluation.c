@@ -41,13 +41,13 @@ int get_mobility_score_piece(Pieces type , uint64_bit pos , CorPiece turn , Game
     int who2Move = (turn==brancas) ? 1 : (-1);
     int is_attacked = is_attacked_piece(pos,type,op_turn,game,piece_score);
     if(is_attacked){
-        if(type==King) return (-99999*who2Move);
-        else m_score-=piece_score;
+        m_score-=2*piece_score;
     }
     else{
         int can_take_score = atks_stronger_piece(pos,type,turn,op_turn,game,piece_score);
         if(can_take_score){
-            m_score+= can_take_score;
+            if(can_take_score == piece_value(King)) m_score += (turn==brancas) ? 99999 : -99999;
+            else m_score += (4*can_take_score)/3;
         }
     }
     return (m_score);
@@ -120,7 +120,8 @@ int evaluate_pos(GameStruct * game , SearchInfo * search , int * w_eval , int * 
         who2Move = (-1);
     }
 
-    if(isCheckMate(game,other_turn)) *cur_player_eval = 99999*who2Move;
+    if(0){}
+    //if(isCheckMate(game,other_turn)) *cur_player_eval = 99999*who2Move;
     else{
         int new_piece_eval = evaluate_piece_type(game->estadoJogo.tabuleirojogo[cur_turn][piece],piece,
                                                 cur_turn,game,search->ai_level);

@@ -22,13 +22,13 @@ Moves search_algorithm (uint64_bit posi , uint64_bit atks , GameStruct * game ,i
     CorPiece turn = search_info->turn;
     int piece_eval = piece_evals[turn][search_info->piece_type];
     MoveInfo mov = {.piece_moved =search_info->piece_type,.turn = turn , .last_piece_pos = posi};
-    while(atks!=0){
-        if(atks & 1ULL){
+    uint64_bit capturas = atks & get_opposing_colour_bitboard(&game->estadoJogo, turn);
+    uint64_bit silenciosas = atks & ~capturas;
+    while(capturas!=0 && silenciosas!=0){
+        if(capturas & 1ULL){
             casa_atual = 1ULL<<cntr;
-            /*GameStruct game_aux = *game;
-            game_aux.lastmoves = NULL;*/
             atualizaJogada(game,casa_atual,0,0,&mov);
-            if(!is_in_check(game,game->estadoJogo.tabuleirojogo[turn][King],turn)){
+            if(!is_in_check(&game->estadoJogo,game->estadoJogo.tabuleirojogo[turn][King],turn)){
                 int new_eval = depth_search(game,search_info,piece_evals,piece_eval);
                 if(new_eval > search_info->alpha && search_info->turn == brancas){
                     search_info->alpha = new_eval;
@@ -43,7 +43,30 @@ Moves search_algorithm (uint64_bit posi , uint64_bit atks , GameStruct * game ,i
             piece_evals[turn][search_info->piece_type] = piece_eval;
             if(search_info->alpha>=search_info->beta) break;
         }
-        atks>>=1; 
+        capturas>>=1; 
+        cntr++;
+    }
+    cntr = 0;
+    while(silenciosas!=0){
+        if(silenciosas & 1ULL){
+            casa_atual = 1ULL<<cntr;
+            atualizaJogada(game,casa_atual,0,0,&mov);
+            if(!is_in_check(&game->estadoJogo,game->estadoJogo.tabuleirojogo[turn][King],turn)){
+                int new_eval = depth_search(game,search_info,piece_evals,piece_eval);
+                if(new_eval > search_info->alpha && search_info->turn == brancas){
+                    search_info->alpha = new_eval;
+                    bst = casa_atual;
+                }
+                else if(new_eval < search_info->beta && search_info->turn == pretas){
+                    search_info->beta = new_eval;
+                    bst = casa_atual;
+                }
+            }
+            undoMove(game,casa_atual,posi,0,search_info->piece_type,search_info->turn);
+            piece_evals[turn][search_info->piece_type] = piece_eval;
+            if(search_info->alpha>=search_info->beta) break;
+        }
+        silenciosas>>=1; 
         cntr++;
     }
     int eval =(search_info->turn == brancas) ? search_info->alpha : search_info->beta;

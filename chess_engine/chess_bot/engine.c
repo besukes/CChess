@@ -57,8 +57,9 @@ Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_leve
             if(search.alpha>=search.beta) pruned = 1;
         }
     }
-    //ret_eval tem que dar a avaliacao do turno oposto para depois search.c recursiva funcionar como deve
     int ret_eval = (turn==brancas) ? search.alpha : search.beta;
+    if(positional_best_move = 0 && is_in_check(&game->estadoJogo,game->estadoJogo.tabuleirojogo[turn][King],turn))
+        ret_eval = (turn==brancas) ? -99999 : 99999;
     Moves ret = {.move = positional_best_move , .move_evaluation = ret_eval , .piece_type = best_piece , .last_piece_pos = best_pos};
     return ret;
 }

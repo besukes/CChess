@@ -94,12 +94,8 @@ void removeHeadLinkedList(PecasComidasLL * list){
 
 
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH){
-    *colunaA = 0ULL;
-    *colunaH = 0ULL;
-    for(int i=0;i<8;i++){
-        *colunaA |= (1ULL<< (8*i));
-        *colunaH |= (1ULL<< (8*i + 7));
-    }
+    *colunaA = COLUNA_A;
+    *colunaH = COLUNA_H;
 }
 
 

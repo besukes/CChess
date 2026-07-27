@@ -4,7 +4,10 @@
 #include <SDL2/SDL_ttf.h>
 
 #define NUMBER_PIECES 6
-#define MAX_DEPTH_SEARCH 6
+#define MAX_DEPTH_SEARCH 5
+
+#define COLUNA_A 0x0101010101010101ULL
+#define COLUNA_H 0x8080808080808080ULL
 
 /*Struct que serve apenas no startAndCleanup.c para retornar os endereços de memória do nosso renderer e window*/
 typedef struct SDL_Initializators{
