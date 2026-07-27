@@ -63,7 +63,7 @@ int evaluate_piece(uint64_bit piece_pos , Pieces piece_type , CorPiece turn , in
     int position_score = 0 , mobility_score = 0 , piece_score = piece_value(piece_type);
     int pos = posTabuleiro(piece_pos);
     if(pos==(-1)) return 0;
-    int line = pos/8 , column = pos%8 , indx = (turn==brancas) ? ((7-line)*8 + column) : (line*8 + column);
+    int line = pos/8 , column = pos%8 , indx = (turn==brancas) ? ((7-line)*8 + column) : pos;
     switch(piece_type){
         case Pawn :
             position_score = pawn_evals_black[indx];
@@ -108,12 +108,11 @@ int evaluate_pos(GameStruct * game , SearchInfo * search , int * w_eval , int * 
         who2Move = (-1);
     }
 
-    if(isCheckMate(game,other_turn)) *cur_player_eval = (search->turn == brancas) ? 99999 : (-99999);
+    if(isCheckMate(game,other_turn)) *cur_player_eval = 99999*who2Move;
     else{
         int new_piece_eval = evaluate_piece(game->estadoJogo.tabuleirojogo[cur_turn][piece],piece,
                                             cur_turn,search->ai_level,game);
-        *cur_player_eval += (new_piece_eval - pieces_evals[cur_turn][piece]);
-        *cur_player_eval *= who2Move;
+        *cur_player_eval += (new_piece_eval - pieces_evals[cur_turn][piece])*who2Move;
     }
     return (*cur_player_eval);
 }
@@ -131,15 +130,16 @@ int evaluate(GameStruct * game , CorPiece turno , int ai_level , int pieces_eval
         other_turn_eval = white_eval;
     }
     for(int i=0;i<NUMBER_PIECES;i++){
-        int piece_eval_turn = evaluate_piece(game->estadoJogo.tabuleirojogo[turno][i],(Pieces)i,turno,
+        Pieces piece = (Pieces)i;
+        int piece_eval_turn = evaluate_piece(game->estadoJogo.tabuleirojogo[turno][piece],piece,turno,
                                         ai_level,game);
-        int piece_eval_other_turn = evaluate_piece(game->estadoJogo.tabuleirojogo[other_turn][i],(Pieces)i,
+        int piece_eval_other_turn = evaluate_piece(game->estadoJogo.tabuleirojogo[other_turn][piece],piece,
                                         other_turn,ai_level,game);
 
-        pieces_evals[turno][i] = piece_eval_turn;
+        pieces_evals[turno][piece] = piece_eval_turn;
         *turn_eval+= (piece_eval_turn*who2Move);
 
-        pieces_evals[other_turn][i] = piece_eval_other_turn;
+        pieces_evals[other_turn][piece] = piece_eval_other_turn;
         *other_turn_eval += (piece_eval_other_turn*whoNot2Move);
 
         eval+= piece_eval_turn*who2Move + piece_eval_other_turn*whoNot2Move;

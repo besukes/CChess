@@ -62,8 +62,11 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
         game_aux.active_ultimate = NULL;
         game_aux.lastmoves = NULL;
         Moves best_move = get_best_move(&game_aux,pretas);
+        Boolean castle = 0 , enpassant = 0 , promote = 0;
+        Booleans bools = {.castles = &castle , .enpassant = &enpassant , .promote = &promote};
         MoveInfo mov = {.last_piece_pos = best_move.last_piece_pos , .piece_moved = best_move.piece_type , .turn = pretas};
-        atualizaJogada(game,best_move.move,0,0,&mov);
+        if(!isPseudoValidMove(game,best_move.move,&bools,&mov)) printf("[ERROR] Chess Bot giving non legal moves\n");
+        else atualizaJogada(game,best_move.move,0,0,&mov);
         game->turnoJogador = brancas;
     }
 }

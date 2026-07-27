@@ -6,6 +6,7 @@ void undoPieceComida(GameStruct * game , uint64_bit * bb_cor_piece_comida, uint6
     game->estadoJogo.tabuleirojogo[game->lastmoves->cor_piece][game->lastmoves->tipo_piece] |= click;
     *bb_cor_piece_comida |= click;
     game->estadoJogo.bitboard_todas_pieces |= click;
+    removeHeadLinkedList(&(game->lastmoves));
 }
 
 

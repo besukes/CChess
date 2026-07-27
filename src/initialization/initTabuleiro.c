@@ -11,36 +11,36 @@ void initPieces(uint64_bit pt[6],int index,int tipo,casas_board pos,int difPos){
 
 
 void initTabPawns(uint64_bit * pt,int tipo){
-    pt[0] = 0;
+    pt[Pawn] = 0;
     if(tipo==0){
-        pt[0] |= (1ULL << A2);
-        pt[0] |= (1ULL << B2);
-        pt[0] |= (1ULL << C2);
-        pt[0] |= (1ULL << D2);
-        pt[0] |= (1ULL << E2);
-        pt[0] |= (1ULL << F2);
-        pt[0] |= (1ULL << G2);
-        pt[0] |= (1ULL << H2);
+        pt[Pawn] |= (1ULL << A2);
+        pt[Pawn] |= (1ULL << B2);
+        pt[Pawn] |= (1ULL << C2);
+        pt[Pawn] |= (1ULL << D2);
+        pt[Pawn] |= (1ULL << E2);
+        pt[Pawn] |= (1ULL << F2);
+        pt[Pawn] |= (1ULL << G2);
+        pt[Pawn] |= (1ULL << H2);
     }
     else{
-        pt[0] |= (1ULL << A7);
-        pt[0] |= (1ULL << B7);
-        pt[0] |= (1ULL << C7);
-        pt[0] |= (1ULL << D7);
-        pt[0] |= (1ULL << E7);
-        pt[0] |= (1ULL << F7);
-        pt[0] |= (1ULL << G7);
-        pt[0] |= (1ULL << H7);
+        pt[Pawn] |= (1ULL << A7);
+        pt[Pawn] |= (1ULL << B7);
+        pt[Pawn] |= (1ULL << C7);
+        pt[Pawn] |= (1ULL << D7);
+        pt[Pawn] |= (1ULL << E7);
+        pt[Pawn] |= (1ULL << F7);
+        pt[Pawn] |= (1ULL << G7);
+        pt[Pawn] |= (1ULL << H7);
     }
 }
 
 void initTabuleiro(uint64_bit pt[6], int additor){
     initTabPawns(pt,additor);
-    initPieces(pt,1,additor,A1,7); //rook
-    initPieces(pt,2,additor,B1,5); //horse
-    initPieces(pt,3,additor,C1,3); //bishop
-    initPieces(pt,4,additor,D1,0); //queen
-    initPieces(pt,5,additor,E1,0); //king
+    initPieces(pt,Rook,additor,A1,7); //rook
+    initPieces(pt,Horse,additor,B1,5); //horse
+    initPieces(pt,Bishop,additor,C1,3); //bishop
+    initPieces(pt,Queen,additor,D1,0); //queen
+    initPieces(pt,King,additor,E1,0); //king
 }
 
 void init_other_bitboards(EstadoJogo * es){

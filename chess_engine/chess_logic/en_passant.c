@@ -47,13 +47,13 @@ void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * m
     game->estadoJogo.bitboard_todas_pieces = *mesma_cor | *cor_oposta;
 
     CorPiece turno = game->turnoJogador , op = (turno==brancas) ? pretas : brancas;
-    uint64_bit peoes_turno = game->estadoJogo.tabuleirojogo[turno][0],
-               peoes_opostos = game->estadoJogo.tabuleirojogo[op][0];
+    uint64_bit peoes_turno = game->estadoJogo.tabuleirojogo[turno][Pawn],
+               peoes_opostos = game->estadoJogo.tabuleirojogo[op][Pawn];
     peoes_turno = (peoes_turno & ~game->pieceCoords) | game->estadoJogo.enpassant;
     peoes_opostos &= ~peao_removido;
 
-    game->estadoJogo.tabuleirojogo[turno][0] = peoes_turno;
-    game->estadoJogo.tabuleirojogo[op][0] = peoes_opostos;
+    game->estadoJogo.tabuleirojogo[turno][Pawn] = peoes_turno;
+    game->estadoJogo.tabuleirojogo[op][Pawn] = peoes_opostos;
     game->estadoJogo.enpassant = 0;
 }
 

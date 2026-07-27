@@ -4,7 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #define NUMBER_PIECES 6
-#define MAX_DEPTH_SEARCH 20
+#define MAX_DEPTH_SEARCH 2
 
 /*Struct que serve apenas no startAndCleanup.c para retornar os endereços de memória do nosso renderer e window*/
 typedef struct SDL_Initializators{
@@ -28,12 +28,12 @@ typedef uint64_bit (*ShiftFunction)(uint64_bit,int); //Tipo que define um endere
 
 /*Enum que guarda todas as peças possíveis do jogo*/
 typedef enum {
-    Pawn, //The piece is a PAWN
-    Rook, //The piece is the ROOK
-    Horse, //The piece is the HORSE
-    Bishop, //The piece is the BISHOP
-    Queen, //The piece is the QUEEN
     King, //The piece is the KING
+    Pawn, //The piece is a PAWN
+    Horse, //The piece is the ROOK
+    Bishop, //The piece is the HORSE
+    Rook, //The piece is the BISHOP
+    Queen, //The piece is the QUEEN
     TheDog, //CChess Dog piece that protects the 3 squares in front of him (Norte , Nordeste , Noroeste)
     Empty, //There is no piece
 } Pieces;
@@ -341,6 +341,7 @@ int minimum(int n1,int n2);
 Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique);
 void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor);
 void freeLinkedList(PecasComidasLL list);
+void removeHeadLinkedList(PecasComidasLL * list);
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH);
 int strToNumber(char * str);
 char * skipWhileSpace(char * str);

@@ -6,12 +6,12 @@
 Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor){
     uint64_bit todas_pieces =  estado->bitboard_todas_pieces;
     CorPiece oponente = (cor==brancas) ? pretas : brancas;
-    uint64_bit op_knight = estado->tabuleirojogo[oponente][2],
-               op_pawns = estado->tabuleirojogo[oponente][0],
-               op_rooks = estado->tabuleirojogo[oponente][1],
-               op_bishops = estado->tabuleirojogo[oponente][3],
-               op_queen = estado->tabuleirojogo[oponente][4],
-               op_king = estado->tabuleirojogo[oponente][5];
+    uint64_bit op_knight = estado->tabuleirojogo[oponente][Horse],
+               op_pawns = estado->tabuleirojogo[oponente][Pawn],
+               op_rooks = estado->tabuleirojogo[oponente][Rook],
+               op_bishops = estado->tabuleirojogo[oponente][Bishop],
+               op_queen = estado->tabuleirojogo[oponente][Queen],
+               op_king = estado->tabuleirojogo[oponente][King];
     uint64_bit check_knights = get_knight_attacks(kingpos) & op_knight,
                check_pawns = get_pawn_attacks(kingpos,cor) & op_pawns,
                check_diagonals = get_sliding_attacks(kingpos,todas_pieces) & (op_bishops | op_queen),
@@ -45,8 +45,8 @@ int isCheckMate(GameStruct * game , CorPiece cor){
     game->turnoJogador = cor;
     uint64_bit same_colour = get_same_colour_bitboard(&(game->estadoJogo),cor);
     for(int i=0;i<6 && in_check;i++){
-        uint64_bit tab_piece = game->estadoJogo.tabuleirojogo[cor][i];
         Pieces piece_atual = (Pieces)i;
+        uint64_bit tab_piece = game->estadoJogo.tabuleirojogo[cor][piece_atual];
         MoveInfo mov = {.piece_moved = piece_atual , .turn = cor};
         while(tab_piece !=0 && in_check){
             uint64_bit pos_piece = (1ULL<<(__builtin_ctzll(tab_piece) ));
