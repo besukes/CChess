@@ -41,6 +41,7 @@ Moves search_algorithm (uint64_bit posi , uint64_bit atks , GameStruct * game ,i
             }
             undoMove(game,casa_atual,posi,0,search_info->piece_type,search_info->turn);
             piece_evals[turn][search_info->piece_type] = piece_eval;
+            if(search_info->alpha>=search_info->beta) break;
         }
         atks>>=1; 
         cntr++;
