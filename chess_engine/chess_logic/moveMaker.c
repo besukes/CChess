@@ -31,6 +31,7 @@ void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor
     Pieces piece_comida = comparePiece(game->estadoJogo, cor_oposta, click);
     if(piece_comida == Empty)return;
 
+    addHeadLinkedList(&(game->lastmoves), piece_comida, click, cor_oposta);
     game->estadoJogo.tabuleirojogo[cor_oposta][piece_comida] &= ~click;
     *corOposta &= ~click;
     game->estadoJogo.bitboard_todas_pieces &= ~click;

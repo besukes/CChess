@@ -26,7 +26,7 @@ Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_leve
     Pieces best_piece = 0, piece = 0;
     uint64_bit current_pos = 0, best_pos = 0;
     int cur_best_alpha = alpha , cur_best_beta = beta;
-    for(int i=NUMBER_PIECES - 1;i>=0 & !pruned;i--){
+    for(int i=NUMBER_PIECES - 1;i>=0 && !pruned;i--){
         int counter=0;
         piece = (Pieces)i;
         uint64_bit piece_bitboard = game->estadoJogo.tabuleirojogo[turn][piece];
@@ -58,7 +58,7 @@ Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_leve
         }
     }
     //ret_eval tem que dar a avaliacao do turno oposto para depois search.c recursiva funcionar como deve
-    int ret_eval = (turn==pretas) ? search.alpha : search.beta;
+    int ret_eval = (turn==brancas) ? search.alpha : search.beta;
     Moves ret = {.move = positional_best_move , .move_evaluation = ret_eval , .piece_type = best_piece , .last_piece_pos = best_pos};
     return ret;
 }
