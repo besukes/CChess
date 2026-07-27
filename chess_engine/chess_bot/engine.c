@@ -22,16 +22,17 @@ Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_leve
     SearchInfo search = {.ai_level = ai_level , .alpha = alpha , .beta = beta, .depth = depth , 
                         .bot_colour = turn , .turn = turn , .white_eval = weval , .black_eval = beval
                         };
+    int pruned = 0;
     Pieces best_piece = 0, piece = 0;
     uint64_bit current_pos = 0, best_pos = 0;
     int cur_best_alpha = alpha , cur_best_beta = beta;
-    for(int i=NUMBER_PIECES - 1;i>=0;i--){
+    for(int i=NUMBER_PIECES - 1;i>=0 & !pruned;i--){
         int counter=0;
         piece = (Pieces)i;
         uint64_bit piece_bitboard = game->estadoJogo.tabuleirojogo[turn][piece];
         search.piece_type = piece;
         int moves_for_piece = 0; //Remove
-        while(piece_bitboard != 0){
+        while(piece_bitboard != 0 & !pruned){
             if( (piece_bitboard & 1ULL) != 0){
                 current_pos = 1ULL<<counter;
                 uint64_bit current_attacks = get_piece_attacks(current_pos,piece,game,turn) & (~get_same_colour_bitboard(&game->estadoJogo,turn));
@@ -53,11 +54,11 @@ Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_leve
             }
             counter++;
             piece_bitboard>>=1;
-            if(search.alpha>=search.beta) break;
+            if(search.alpha>=search.beta) pruned = 1;
         }
     }
     //ret_eval tem que dar a avaliacao do turno oposto para depois search.c recursiva funcionar como deve
-    int ret_eval = (turn==brancas) ? search.alpha : search.beta;
+    int ret_eval = (turn==pretas) ? search.alpha : search.beta;
     Moves ret = {.move = positional_best_move , .move_evaluation = ret_eval , .piece_type = best_piece , .last_piece_pos = best_pos};
     return ret;
 }

@@ -143,10 +143,10 @@ int evaluate(GameStruct * game , CorPiece turno , int ai_level , int pieces_eval
     }
     for(int i=0;i<NUMBER_PIECES;i++){
         Pieces piece = (Pieces)i;
-        int piece_eval_turn = evaluate_piece(game->estadoJogo.tabuleirojogo[turno][piece],piece,turno,
-                                        ai_level,game);
-        int piece_eval_other_turn = evaluate_piece(game->estadoJogo.tabuleirojogo[other_turn][piece],piece,
-                                        other_turn,ai_level,game);
+        int piece_eval_turn = evaluate_piece_type(game->estadoJogo.tabuleirojogo[turno][piece],piece,turno,
+                                        game,ai_level);
+        int piece_eval_other_turn = evaluate_piece_type(game->estadoJogo.tabuleirojogo[other_turn][piece],piece,
+                                        other_turn,game,ai_level);
 
         pieces_evals[turno][piece] = piece_eval_turn;
         *turn_eval+= (piece_eval_turn*who2Move);
