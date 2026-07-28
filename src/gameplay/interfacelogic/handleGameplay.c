@@ -32,7 +32,7 @@ void softReset(GameStruct * game){
 //teste temporario do bot , temos de mudar eventualmente
 //&& game->turnoJogador == brancas
 void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event){
-    if(event.type == SDL_MOUSEBUTTONDOWN && game->turnoJogador == brancas){
+    if(event.type == SDL_MOUSEBUTTONDOWN){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown ==0){
             game->isKeyPressedDown = 1;
             cleanArrowEvent(game);
@@ -43,7 +43,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
             efetuaEventoClickArrows(game,event);
         }
     }
-    else if(event.type == SDL_MOUSEBUTTONUP && game->turnoJogador == brancas){
+    else if(event.type == SDL_MOUSEBUTTONUP){
         if(event.button.button == SDL_BUTTON_LEFT){
             game->isKeyPressedDown = 0;
             efetuaEventoSoltar(game,settings,event);
@@ -57,7 +57,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
            efetuaEventoSoltarArrows(game,event);
         }
     }
-    //provisorio
+    /*provisorio
     if(game->turnoJogador == pretas){
         GameStruct game_aux = *game;
         game_aux.active_ultimate = NULL;
@@ -68,7 +68,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
         MoveInfo mov = {.last_piece_pos = best_move.last_piece_pos , .piece_moved = best_move.piece_type , .turn = pretas};
         atualizaJogada(game,best_move.move,0,0,&mov);
         game->turnoJogador = brancas;
-    }
+    }*/
 }
 
 
