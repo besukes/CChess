@@ -44,7 +44,10 @@ SDL_Initializators sdl_initializer(void){
     return init;
 }
 
-
+void freesfxchunks(Mix_Chunk * sfxarray[]){
+    for(int i = 0 ; i < 5 ; i++)
+        Mix_FreeChunk(sfxarray[i]);
+}
 
 void freeUserSettings(CChessSettings * user){
     free(user->client_settings.selected_pieces_power);
@@ -56,7 +59,7 @@ void freeUserSettings(CChessSettings * user){
 }
 
 
-void free_allocated_memory(GameStruct * game , CChessSettings * user){
+void free_allocated_memory(GameStruct * game , CChessSettings * user , Mix_Chunk * sfxarray[]){
     freeLinkedList(game->lastmoves);
     for(int i = 0; i < 12; i++){
         SDL_DestroyTexture(user->textures.chessPieces[i]);
@@ -80,6 +83,7 @@ void free_allocated_memory(GameStruct * game , CChessSettings * user){
     free(game->arrows.arrows_vector);
     SDL_DestroyRenderer(user->gameRenderer);
     freeUserSettings(user);
+    freesfxchunks(sfxarray);
     TTF_CloseFont(user->fonteJogoTitles);
     TTF_CloseFont(user->fonteJogoSmallerTitles);
     IMG_Quit();

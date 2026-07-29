@@ -4,7 +4,7 @@
 #include <SDL2/SDL_mixer.h>
 
 
-void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * event){
+void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * event , Mix_Chunk * sfxarray[]){
     switch(settings->screenAtual){
         case Menu :
             handleJogadaMenuPrincipal(settings,event);
@@ -12,7 +12,7 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
         break;
         case Chess :
             if(game->game_needs_initialization) initializeOfflineGame(game);
-            handleJogadaChess(game,settings,*event);
+            handleJogadaChess(game,settings,*event , sfxarray);
             desenhaInterfaceJogo(game,settings);
         break;
         case Theme :
@@ -28,6 +28,7 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
         break;
         case Story :
             handleStoryScreen(game,settings,event);
+            handleJogadaStory(game,settings,*event,sfxarray);
             desenhaStoryScreen(game,settings);
         break;
         case Settings :
@@ -42,7 +43,7 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
 }
 
 
-void interfaceCChess(GameStruct * game ,CChessSettings * settings){
+void interfaceCChess(GameStruct * game ,CChessSettings * settings , Mix_Chunk * sfxarray[]){
     SDL_Event event;
     //enquanto o utilizador nao clicar no botao para sair ele continua no jogo
     while(event.type != SDL_QUIT && game->jogada!= Leave){
@@ -58,17 +59,20 @@ void interfaceCChess(GameStruct * game ,CChessSettings * settings){
                 settings->posMouseY = tmp.motion.y;
             }
         }
-        handleTipoMenu(game,settings,&event);
+        handleTipoMenu(game,settings,&event , sfxarray);
         SDL_RenderPresent(settings->gameRenderer);
     }
 }
 
 int main(void){
     SDL_Initializators init = sdl_initializer();
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
     CChessSettings settings = initCChessSettings(init.renderer,init.window);
     GameStruct game = initGameStruct();
-    interfaceCChess(&game,&settings);
+    Mix_Chunk * sfxarray[10];
+    initsfx(sfxarray);
+    interfaceCChess(&game,&settings , sfxarray);
     writeNewGameFiles(&settings);
-    free_allocated_memory(&game,&settings);
+    free_allocated_memory(&game,&settings , sfxarray);
     return 0;
 }

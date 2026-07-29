@@ -5,6 +5,13 @@
 #include <stdio.h>
 
 
+void initsfx(Mix_Chunk * sfxarray[]){
+    sfxarray[0] =  Mix_LoadWAV("sfx/move-self.mp3");
+    sfxarray[1] =  Mix_LoadWAV("sfx/capture.mp3");
+    sfxarray[2] =  Mix_LoadWAV("sfx/promote.mp3");
+    sfxarray[3] =  Mix_LoadWAV("sfx/move-check.mp3");
+    sfxarray[4] =  Mix_LoadWAV("sfx/game-end.mp3");
+}
 
 void loadTexturasPieces(CChessSettings * settings ,SDL_Texture * chessPieces[12],SDL_Renderer * sdl_renderer){
     for(int i=0;i<12;i++){

@@ -165,13 +165,16 @@ void freePiecesTaken(GameStruct * game){
 
 
 
-void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event){
+void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event, Mix_Chunk * sfxarray[]){
     int mouseX = event.button.x , mouseY = event.button.y;
     Boolean castles = 0, enpassant = 0 , promote = 0;
     Booleans bools = {.castles = &castles , .enpassant = &enpassant , .promote = &promote};
     uint64_bit click = click_table_position(mouseX,mouseY);
     MoveInfo mov = {.last_piece_pos = game->pieceCoords , .piece_moved = game->pieceSelecionada , .turn = game->turnoJogador};
-    if(game->promoted.promotedSucessfully) eventoPromotePiece(game,settings,click,&mov);
+    if(game->promoted.promotedSucessfully) {
+        eventoPromotePiece(game,settings,click,&mov);
+        promote_sfx(sfxarray);
+    }
     else if(click != 0 && isPseudoValidMove(game,click,&bools,&mov) && !game->promoted.pawnPromoted){
             int check_antes = game->estadoJogo.king_in_check[game->turnoJogador];
             atualizaJogada(game,click,castles,enpassant,&mov);
@@ -180,14 +183,28 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
                 undoMove(game,click,mov.last_piece_pos,castles,game->pieceSelecionada,game->turnoJogador);
                 game->estadoJogo.king_in_check[game->turnoJogador] = check_antes;
             }
-            else if(game->jogada == Checkmate) eventoFimJogo(settings,WinScreen);
-            else if(game->jogada == Stalemate) eventoFimJogo(settings,DrawScreen);
+            else if(game->jogada == Checkmate) {
+                eventoFimJogo(settings,WinScreen);
+                checkmate_sfx(sfxarray);
+            }
+            else if(game->jogada == Stalemate) {
+                eventoFimJogo(settings,DrawScreen);
+                checkmate_sfx(sfxarray);
+            }
             else {
                 notInCheck(game);
                 update_en_passant(game,click,&mov);
                 game->promoted.pawnPromoted = promote;
-                if(promote) game->promoted.promoted_square = click; //para depois se desenhar o quadrado de promoção na posição correta
-                else updateScore(game);
+                if(promote) {
+                    game->promoted.promoted_square = click;
+                    promote_sfx(sfxarray);
+                }
+                else {
+                    updateScore(game);
+                    if(game->lastmoves != NULL) capturepiece_sfx(sfxarray);
+                    else if(game->estadoJogo.king_in_check[(game->turnoJogador == brancas) ? pretas : brancas]) check_sfx(sfxarray);
+                    else movepiece_sfx(sfxarray);
+                }
             }
     }
     else{

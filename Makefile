@@ -6,6 +6,7 @@ LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx -lm -fsanitize=
 SRC =	src/universal/corefunctions.c \
 		src/universal/chess_important.c \
 		src/universal/animations.c \
+		src/universal/music.c \
 		src/gameplay/interfacelogic/main.c \
 		src/gameplay/interfacelogic/events.c \
 		src/gameplay/interfacelogic/handleGameplay.c \

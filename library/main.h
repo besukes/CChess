@@ -312,17 +312,18 @@ void init_other_bitboards(EstadoJogo * es);
 //Modulo loadAssets.c
 
 void initTexturasJogo(CChessSettings * settings , AssetsCChess * assets,SDL_Renderer * sdl_renderer);
+void initsfx(Mix_Chunk * sfxarray[]);
 
 
 
 
 //Modulo handleGameplay.c
 void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event * event);
-void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event);
+void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event , Mix_Chunk * sfxarray[]);
 void handleJogadaThemes(CChessSettings * settings,SDL_Event event);
 void handleWinScreen(GameStruct * game ,CChessSettings * settings,SDL_Event event);
 void handleStoryScreen(GameStruct* game , CChessSettings * settings,SDL_Event * event);
-void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event event);
+void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event event, Mix_Chunk * sfxarray[]);
 void handleSettingsScreen(CChessSettings * settings,SDL_Event * event);
 
 
@@ -330,7 +331,7 @@ void handleSettingsScreen(CChessSettings * settings,SDL_Event * event);
 //Modulo startAndCleanup.c
 
 SDL_Initializators sdl_initializer(void);
-void free_allocated_memory(GameStruct * game , CChessSettings * user);
+void free_allocated_memory(GameStruct * game , CChessSettings * user, Mix_Chunk * sfxarray[]);
 
 
 
@@ -362,7 +363,7 @@ char * skip_to_x_or_value(char * line);
 //Modulo events.c
 
 void efetuaEventoClique(GameStruct * game , CChessSettings * settings,SDL_Event * event);
-void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event);
+void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event , Mix_Chunk * sfxarray[]);
 void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Event * event, Boolean valido_turno);
 void cleanArrowEvent(GameStruct * game);
 void efetuaEventoClickArrows(GameStruct * game , SDL_Event event);
@@ -475,7 +476,12 @@ void desenhaArrows(GameStruct * game , SDL_Renderer * renderer , SDL_Texture * g
 void desenhaInterfaceJogo(GameStruct * game ,CChessSettings * settings);
 
 
-
+//Modulo music.c
+void movepiece_sfx (Mix_Chunk * sfxarray[]);
+void capturepiece_sfx (Mix_Chunk * sfxarray[]);
+void promote_sfx (Mix_Chunk * sfxarray[]);
+void check_sfx (Mix_Chunk * sfxarray[]);
+void checkmate_sfx (Mix_Chunk * sfxarray[]);
 
 
 //Modulo menu.c

@@ -31,7 +31,7 @@ void softReset(GameStruct * game){
 
 //teste temporario do bot , temos de mudar eventualmente
 //&& game->turnoJogador == brancas
-void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event){
+void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event , Mix_Chunk * sfxarray[]){
     if(event.type == SDL_MOUSEBUTTONDOWN){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown ==0){
             game->isKeyPressedDown = 1;
@@ -46,7 +46,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
     else if(event.type == SDL_MOUSEBUTTONUP){
         if(event.button.button == SDL_BUTTON_LEFT){
             game->isKeyPressedDown = 0;
-            efetuaEventoSoltar(game,settings,event);
+            efetuaEventoSoltar(game,settings,event,sfxarray);
             if(game->jogada != Invalid && !game->promoted.pawnPromoted){
                 game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
                 if(game->turnoJogador == brancas) game->turns++;
@@ -97,7 +97,7 @@ void handleStoryScreen(GameStruct * game , CChessSettings * settings,SDL_Event *
 
 
 
-void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event event){
+void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event event, Mix_Chunk * sfxarray[]){
     Boolean valido_turno = game->turnoJogador == brancas;
     if(!valido_turno){
         
@@ -113,7 +113,7 @@ void handleJogadaStory(GameStruct* game , CChessSettings * settings,SDL_Event ev
     else if(event.type == SDL_MOUSEBUTTONUP){
         if(event.button.button == SDL_BUTTON_LEFT){
             game->isKeyPressedDown = 0;
-            efetuaEventoSoltar(game,settings,event);
+            efetuaEventoSoltar(game,settings,event,sfxarray);
             if(game->jogada != Invalid && !game->promoted.pawnPromoted) game->turnoJogador = (game->turnoJogador == brancas) ? pretas : brancas;
         }
     }
