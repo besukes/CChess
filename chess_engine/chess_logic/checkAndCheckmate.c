@@ -38,8 +38,7 @@ void initgame_aux(GameStruct * game_aux , CorPiece cor_pieces_teste , Pieces pie
 
 int isCheckMate(GameStruct * game , CorPiece cor){
     //return 1; // Testes de checkmate , importante remover depois
-    Boolean castles = 0 , enpassant = 0 , promotion = 0;
-    Booleans bools = {.castles = &castles , .enpassant = &enpassant , .promote = &promotion};
+    Jogada j = {.peca_movida = Empty , .origem = 0 , .destino =  0, .promocao = 0 , .especial = 0};
     int in_check = 1;
     CorPiece cor_atual = game->turnoJogador;
     game->turnoJogador = cor;
@@ -47,20 +46,18 @@ int isCheckMate(GameStruct * game , CorPiece cor){
     for(int i=0;i<6 && in_check;i++){
         Pieces piece_atual = (Pieces)i;
         uint64_bit tab_piece = game->estadoJogo.tabuleirojogo[cor][piece_atual];
-        MoveInfo mov = {.piece_moved = piece_atual , .turn = cor};
+        j.peca_movida = piece_atual;
         while(tab_piece !=0 && in_check){
             uint64_bit pos_piece = (1ULL<<(__builtin_ctzll(tab_piece) ));
             uint64_bit pieces_move = get_piece_attacks(pos_piece,piece_atual,game,cor);
             uint64_bit tries = pieces_move & ~same_colour;
-            mov.last_piece_pos = pos_piece;
+            j.origem = __builtin_ctzll(pos_piece);
             while( tries !=0 && in_check){
-                Boolean castles = 0 , enpassant = 0 , promotion = 0;
-                int casa_destino = __builtin_ctzll(tries);
-                uint64_bit drop = 1ULL<<casa_destino;
-                if(isPseudoValidMove(game,drop,&bools,&mov)){
-                    atualizaJogada(game,drop,castles,enpassant,&mov);
+                j.destino = __builtin_ctzll(tries);
+                if(isPseudoValidMove(game,&j,cor)){
+                    atualizaJogada(game,&j,cor);
                     in_check = is_in_check(&(game->estadoJogo),(game->estadoJogo.tabuleirojogo[cor][King]),cor);
-                    undoMove(game,drop,pos_piece,0,piece_atual,cor);
+                    undoMove(game,&j,cor);
                 }
                 tries &= (tries-1);
             }
@@ -74,18 +71,17 @@ int isCheckMate(GameStruct * game , CorPiece cor){
 
 
 
-TipoJogada check_move(GameStruct * game, Boolean castles , uint64_bit click , MoveInfo * mov){
-    CorPiece turno = mov->turn;
+TipoJogada check_move(GameStruct * game, Jogada * jogada , CorPiece turno){
     CorPiece turno_op = (turno == pretas) ? brancas : pretas;
     uint64_bit pos_king_op = game->estadoJogo.tabuleirojogo[turno_op][King];
     if(is_in_check(&(game->estadoJogo),game->estadoJogo.tabuleirojogo[turno][King],turno)){
         return Invalid;
     }
-    else if( castles && invalidCastle(game,click,turno)){
+    else if( jogada->especial == FLAG_CASTLE && invalidCastle(game,jogada->destino,turno)){
         return Invalid;
     }
     else{
-        verifica_direito_castle(game,mov);
+        verifica_direito_castle(game,jogada,turno);
     }
 
     GameStruct game_aux = *game;

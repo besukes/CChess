@@ -118,8 +118,8 @@ void eventoFimJogo(CChessSettings * settings, UserScreen screen){
 
 
 
-void eventoPromotePiece(GameStruct * game , CChessSettings * settings,uint64_bit click,MoveInfo * mov){
-    game->jogada = check_move(game,0,click,mov);
+void eventoPromotePiece(GameStruct * game , CChessSettings * settings,Jogada * j , CorPiece turn){
+    game->jogada = check_move(game,j,turn);
     game->promoted.promotedSucessfully = 0;
     if(game->jogada == Checkmate) eventoFimJogo(settings,WinScreen);
     else if(game->jogada == Stalemate) eventoFimJogo(settings,DrawScreen);
@@ -167,20 +167,20 @@ void freePiecesTaken(GameStruct * game){
 
 void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Event event, Mix_Chunk * sfxarray[]){
     int mouseX = event.button.x , mouseY = event.button.y;
-    Boolean castles = 0, enpassant = 0 , promote = 0;
-    Booleans bools = {.castles = &castles , .enpassant = &enpassant , .promote = &promote};
+    CorPiece turno = game->turnoJogador;
     uint64_bit click = click_table_position(mouseX,mouseY);
-    MoveInfo mov = {.last_piece_pos = game->pieceCoords , .piece_moved = game->pieceSelecionada , .turn = game->turnoJogador};
+    Jogada jogada = {.origem = posTabuleiro(game->pieceCoords) , .destino = posTabuleiro(click) , .peca_movida = game->pieceSelecionada
+                    , .peca_capturada = Empty , .promocao = 0 , .especial = 0};
     if(game->promoted.promotedSucessfully) {
-        eventoPromotePiece(game,settings,click,&mov);
+        eventoPromotePiece(game,settings,&jogada,turno);
         promote_sfx(sfxarray);
     }
-    else if(click != 0 && isPseudoValidMove(game,click,&bools,&mov) && !game->promoted.pawnPromoted){
+    else if(click != 0 && isPseudoValidMove(game,&jogada,turno) && !game->promoted.pawnPromoted){
             int check_antes = game->estadoJogo.king_in_check[game->turnoJogador];
-            atualizaJogada(game,click,castles,enpassant,&mov);
-            game->jogada = check_move(game,castles,click,&mov);
+            atualizaJogada(game,&jogada,turno);
+            game->jogada = check_move(game,&jogada,turno);
             if(game->jogada==Invalid){
-                undoMove(game,click,mov.last_piece_pos,castles,game->pieceSelecionada,game->turnoJogador);
+                undoMove(game,&jogada,turno);
                 game->estadoJogo.king_in_check[game->turnoJogador] = check_antes;
             }
             else if(game->jogada == Checkmate) {
@@ -193,9 +193,9 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
             }
             else {
                 notInCheck(game);
-                update_en_passant(game,click,&mov);
-                game->promoted.pawnPromoted = promote;
-                if(promote) {
+                update_en_passant(game,&jogada,turno);
+                game->promoted.pawnPromoted = jogada.promocao;
+                if(jogada.promocao) {
                     game->promoted.promoted_square = click;
                     promote_sfx(sfxarray);
                 }

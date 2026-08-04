@@ -1,20 +1,21 @@
 #include <library/main.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <SDL2/SDL.h>
 
 
 // A função Search usando Negamax + Alpha-Beta
-int search(GameStruct * game, int depth, int alpha, int beta, double initial_time, double time_limit , CorPiece turn) {
-    if (obter_tempo_ms() - initial_time >= time_limit) {
+int search(GameStruct * game, int depth, int alpha, int beta, double initial_time, double time_limit , CorPiece turn){
+    if (SDL_GetTicks() - initial_time >= time_limit) {
         return FLAG_TIMEOUT;
     }
     // Quando atinge a profundidade 0 ou o jogo acaba, lê a avaliação incremental atual
-    if (depth == 0 || jogo_terminou(game->estadoJogo)) {
+    if (depth == 0) {
         return evaluate(game,turn); // Devolve tab->avaliacao_incremental ajustado ao turno
     }
 
     Jogada jogadas[256];
-    int num_jogadas = gerar_jogadas_legais(game->estadoJogo, jogadas);
+    int num_jogadas = gerar_jogadas_legais(game, jogadas);
 
     // Se não houver jogadas legais: Xeque-Mate ou Empate (Afogamento)
     if (num_jogadas == 0) {
@@ -26,10 +27,10 @@ int search(GameStruct * game, int depth, int alpha, int beta, double initial_tim
     int melhor_eval = -VALOR_INFINITO;
     for (int i = 0; i < num_jogadas; i++) {
         // Aplica a jogada nas Bitboards e atualiza a Avaliação Incremental (Delta)
-        atualizaJogada(game,jogadas[i]);
+        atualizaJogada(game,&jogadas[i],turn);
         // Chamada recursiva do NEGAMAX:
         int eval = -search(game, depth - 1, -beta, -alpha, initial_time, time_limit, (turn == brancas) ? pretas : brancas);
-        undoMove(game,jogadas[i]);
+        undoMove(game,&jogadas[i],turn);
         // Se o tempo acabou em algum nó filho, propaga o timeout para cima sem salvar nada
         if (eval == FLAG_TIMEOUT) {
             return FLAG_TIMEOUT;

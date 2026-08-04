@@ -46,15 +46,15 @@ int get_mobility_score_piece(Pieces type , uint64_bit pos , CorPiece turn , Game
     else{
         int can_take_score = atks_stronger_piece(pos,type,turn,op_turn,game,piece_score);
         if(can_take_score){
-            if(can_take_score == piece_value(King)) m_score += (turn==brancas) ? 99999 : -99999;
+            if(can_take_score == piece_value(King)) m_score += 99999;
             else m_score += (4*can_take_score)/3;
         }
     }
-    return (m_score);
+    return (m_score*who2Move);
 }
 
 
-int evaluate_piece(uint64_bit piece_pos , Pieces piece_type , CorPiece turn , int ai_lvl , GameStruct * game){
+int evaluate_piece(uint64_bit piece_pos , Pieces piece_type , CorPiece turn , GameStruct * game){
     //piece evaluation is based on the position of the piece , its mobility , what pieces it attacks
     //and how it coordinates with other pieces
     /*  
@@ -93,19 +93,19 @@ int evaluate_piece(uint64_bit piece_pos , Pieces piece_type , CorPiece turn , in
 }
 
 
-int evaluate_piece_type(uint64_bit bitboard , Pieces piece_type, CorPiece turn, GameStruct * game , int ai_level){
+int evaluate_piece_type(uint64_bit bitboard , Pieces piece_type, CorPiece turn, GameStruct * game){
     int score = 0;
     uint64_bit bb = bitboard;
     while(bb){
         uint64_bit single = bb & (-bb); // isola o bit mais baixo
-        score += evaluate_piece(single, piece_type, turn, ai_level, game); // avalia só essa peça
+        score += evaluate_piece(single, piece_type, turn, game); // avalia só essa peça
         bb &= bb - 1; // remove esse bit
     }
     return score;
 }
 
 
-int evaluate_pos(GameStruct * game , SearchInfo * search , int * w_eval , int * b_eval , int pieces_evals[2][NUMBER_PIECES] , int cur_piece_eval){
+/*int evaluate_pos(GameStruct * game ){
     int * cur_player_eval , who2Move ;
     CorPiece other_turn , cur_turn;
     Pieces piece = search->piece_type;
@@ -128,32 +128,28 @@ int evaluate_pos(GameStruct * game , SearchInfo * search , int * w_eval , int * 
         *cur_player_eval += (new_piece_eval - pieces_evals[cur_turn][piece])*who2Move;
     }
     return (*cur_player_eval);
-}
+}*/
 
 
-int evaluate(GameStruct * game , CorPiece turno , int ai_level , int pieces_evals[2][NUMBER_PIECES] , int * white_eval , int * black_eval){
+int evaluate(GameStruct * game , CorPiece turno){
     CorPiece other_turn = pretas;
-    int * turn_eval = white_eval , * other_turn_eval = black_eval;
+    int turn_eval = 0 , other_turn_eval = 0;
     int eval = 0 , who2Move =  1 , whoNot2Move = (-1) ;
     if(turno == pretas){
         other_turn = brancas;
         who2Move = (-1);
         whoNot2Move = 1;
-        turn_eval = black_eval;
-        other_turn_eval = white_eval;
     }
     for(int i=0;i<NUMBER_PIECES;i++){
         Pieces piece = (Pieces)i;
-        int piece_eval_turn = evaluate_piece_type(game->estadoJogo.tabuleirojogo[turno][piece],piece,turno,
-                                        game,ai_level);
-        int piece_eval_other_turn = evaluate_piece_type(game->estadoJogo.tabuleirojogo[other_turn][piece],piece,
-                                        other_turn,game,ai_level);
+        int piece_eval_turn = evaluate_piece_type(game->estadoJogo.tabuleirojogo[turno][piece],piece,turno,game);
+        int piece_eval_other_turn = evaluate_piece_type(game->estadoJogo.tabuleirojogo[other_turn][piece],piece,other_turn,game);
 
-        pieces_evals[turno][piece] = piece_eval_turn;
-        *turn_eval+= (piece_eval_turn*who2Move);
+        //pieces_evals[turno][piece] = piece_eval_turn;
+        turn_eval+= (piece_eval_turn*who2Move);
 
-        pieces_evals[other_turn][piece] = piece_eval_other_turn;
-        *other_turn_eval += (piece_eval_other_turn*whoNot2Move);
+        //pieces_evals[other_turn][piece] = piece_eval_other_turn;
+        other_turn_eval += (piece_eval_other_turn*whoNot2Move);
 
         eval+= piece_eval_turn*who2Move + piece_eval_other_turn*whoNot2Move;
     }

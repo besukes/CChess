@@ -23,20 +23,19 @@ void efetuaJogada(uint64_bit * selected_piece , uint64_bit * todas_pieces , uint
 
 
 
-void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor , uint64_bit * corOposta , MoveInfo * mov){
-    CorPiece turno = mov->turn;
+void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor , uint64_bit * corOposta, Jogada * jogada , CorPiece turno){
     CorPiece cor_oposta = (turno == brancas) ? pretas : brancas;
-    Pieces selected = mov->piece_moved;
+    Pieces selected = jogada->peca_movida;
 
     Pieces piece_comida = comparePiece(game->estadoJogo, cor_oposta, click);
-    if(piece_comida == Empty)return;
+    if(piece_comida == Empty || selected == Empty )return;
 
     addHeadLinkedList(&(game->lastmoves), piece_comida, click, cor_oposta);
     game->estadoJogo.tabuleirojogo[cor_oposta][piece_comida] &= ~click;
     *corOposta &= ~click;
     game->estadoJogo.bitboard_todas_pieces &= ~click;
     efetuaJogada(&(game->estadoJogo.tabuleirojogo[turno][selected]),
-                 &(game->estadoJogo.bitboard_todas_pieces),mov->last_piece_pos,
+                 &(game->estadoJogo.bitboard_todas_pieces),jogada->origem,
                  click,mesmaCor
                 );
 }
@@ -60,23 +59,24 @@ void checkTurno(CorPiece turno , uint64_bit * * oposta , uint64_bit * * mesma_co
 }
 
 
-void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean enpassant , MoveInfo * mov){
-    CorPiece turno = mov->turn;
+void atualizaJogada(GameStruct * game , Jogada * jogada , CorPiece turno){
+    if(jogada->peca_movida == Empty) return;
     uint64_bit * bitboard_cor_oposta , * bitboard_cor_turno , (*ep)(uint64_bit,int);
     int square;
     checkTurno(turno,&bitboard_cor_oposta,&bitboard_cor_turno,&square,game,&ep);
-    if(castles){
+    uint64_bit click = 1ULL<<jogada->destino;
+    if(jogada->especial == FLAG_CASTLE){
         castle_King(game,click,square,bitboard_cor_turno,turno);
     }
-    else if(enpassant){
+    else if(jogada->especial == FLAG_ENPASSANT){
         enpassant_move(game,bitboard_cor_oposta,bitboard_cor_turno,ep);
     }
-    else if( (*bitboard_cor_oposta) & click){
-        fetch_change_board(game,click,bitboard_cor_turno,bitboard_cor_oposta,mov);
+    else if( (click & *bitboard_cor_oposta) != 0){
+        fetch_change_board(game,click,bitboard_cor_turno,bitboard_cor_oposta,jogada,turno);
     }
     else{
-        uint64_bit * bit_piece = &(game->estadoJogo.tabuleirojogo[turno][mov->piece_moved]),
+        uint64_bit * bit_piece = &(game->estadoJogo.tabuleirojogo[turno][jogada->peca_movida]),
                    * bit_global = &(game->estadoJogo.bitboard_todas_pieces);
-        efetuaJogada(bit_piece,bit_global,mov->last_piece_pos,click,bitboard_cor_turno);
+        efetuaJogada(bit_piece,bit_global,jogada->origem,click,bitboard_cor_turno);
     } 
 }

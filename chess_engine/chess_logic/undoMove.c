@@ -35,27 +35,29 @@ void restauraCastle(uint64_bit * rei_tab,uint64_bit * mesma_cor, uint64_bit clic
 }
 
 
-void undoPiece_move(GameStruct * game , uint64_bit * sameCor,uint64_bit * opCor, uint64_bit click,uint64_bit ant_pos ,Boolean castles ,Pieces piece , CorPiece turn){
+void undoPiece_move(GameStruct * game , uint64_bit * sameCor,uint64_bit * opCor, uint8_t click,uint8_t ant_pos ,Boolean castles ,Pieces piece , CorPiece turn){
     //ant_pos e piece tem de ser mudada no jogo original
-    uint64_bit * piece_tab = &(game->estadoJogo.tabuleirojogo[turn][piece]);
+    uint64_bit * piece_tab = &(game->estadoJogo.tabuleirojogo[turn][piece]),
+               antiga_pos = (1ULL<<ant_pos),
+               new_pos = (1ULL<<click);
     if(castles){
         restauraCastle(piece_tab,sameCor,click,game,turn);
     }
     else{
-        *piece_tab = ((*piece_tab & ~click) | ant_pos);
-        *sameCor = ((*sameCor & ~click) | ant_pos);
+        *piece_tab = ((*piece_tab & ~new_pos) | antiga_pos);
+        *sameCor = ((*sameCor & ~new_pos) | antiga_pos);
     }
     game->estadoJogo.bitboard_todas_pieces = *sameCor | *opCor;
 }
 
 
-void undoMove(GameStruct * game , uint64_bit click,uint64_bit ant_pos ,Boolean castles, Pieces piece , CorPiece turn){
+void undoMove(GameStruct * game , Jogada * jogada , CorPiece turn){
     uint64_bit * mesma_cor = &(game->estadoJogo.bitboard_brancas), 
                * cor_oposta = &(game->estadoJogo.bitboard_pretas);
     if(turn == pretas){
         mesma_cor = &(game->estadoJogo.bitboard_pretas);
         cor_oposta = &(game->estadoJogo.bitboard_brancas);
     }
-    undoPiece_move(game,mesma_cor,cor_oposta,click,ant_pos,castles,piece,turn);
-    if(game->lastmoves != NULL && game->lastmoves->pos_de_piece == click) undoPieceComida(game,cor_oposta,click);
+    undoPiece_move(game,mesma_cor,cor_oposta,jogada->destino,jogada->origem,jogada->especial,jogada->peca_movida,turn);
+    if(game->lastmoves != NULL && game->lastmoves->pos_de_piece == (1ULL<<jogada->destino)) undoPieceComida(game,cor_oposta,jogada->destino);
 }

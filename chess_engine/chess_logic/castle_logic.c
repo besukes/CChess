@@ -28,10 +28,10 @@ int is_castelling_king(GameStruct * game , CorPiece cor, uint64_bit drop){
 
 
 
-int invalidCastle(GameStruct * game , uint64_bit click , CorPiece turno){
-    int pos = posTabuleiro(click) , offset = 0;
+int invalidCastle(GameStruct * game , uint8_t pos , CorPiece turno){
+    int offset = 0;
     unsigned int indx = 0;
-    if(pos == (-1)) return 0;
+    if(pos == 64) return 0;
     casas_board casa_rook = (pos%8 > 4) ? F1 : D1;
     if(turno == pretas){
         offset = 1; indx = 7;
@@ -45,10 +45,9 @@ int invalidCastle(GameStruct * game , uint64_bit click , CorPiece turno){
 }
 
 
-void verifica_direito_castle(GameStruct * game ,MoveInfo * mov){
-    Pieces piece = mov->piece_moved;
-    CorPiece turn = mov->turn;
-    uint64_bit cur_pos = mov->last_piece_pos;
+void verifica_direito_castle(GameStruct * game , Jogada * jogada , CorPiece turn){
+    Pieces piece = jogada->peca_movida;
+    uint64_bit cur_pos = jogada->origem;
     if(piece == King){
         game->estadoJogo.canCastle[turn][Short] = 0;
         game->estadoJogo.canCastle[turn][Long] = 0;
@@ -69,6 +68,7 @@ void verifica_direito_castle(GameStruct * game ,MoveInfo * mov){
 
 void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit * mesmaCor , CorPiece turno){
     int pos = posTabuleiro(click) , offset = 0 , shiftam = 3;
+    if(pos == (-1)) return;
     uint64_bit (*funcRook)(uint64_bit,int) = &shiftl,
                (*funcKing)(uint64_bit,int) = &shiftr;
     if(pos%8 > 4){

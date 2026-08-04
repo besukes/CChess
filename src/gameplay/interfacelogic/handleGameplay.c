@@ -32,7 +32,7 @@ void softReset(GameStruct * game){
 //teste temporario do bot , temos de mudar eventualmente
 //&& game->turnoJogador == brancas
 void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event , Mix_Chunk * sfxarray[]){
-    if(event.type == SDL_MOUSEBUTTONDOWN){
+    if(event.type == SDL_MOUSEBUTTONDOWN && game->turnoJogador == brancas){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown ==0){
             game->isKeyPressedDown = 1;
             cleanArrowEvent(game);
@@ -43,7 +43,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
             efetuaEventoClickArrows(game,event);
         }
     }
-    else if(event.type == SDL_MOUSEBUTTONUP){
+    else if(event.type == SDL_MOUSEBUTTONUP && game->turnoJogador == brancas){
         if(event.button.button == SDL_BUTTON_LEFT){
             game->isKeyPressedDown = 0;
             efetuaEventoSoltar(game,settings,event,sfxarray);
@@ -57,18 +57,16 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
            efetuaEventoSoltarArrows(game,event);
         }
     }
-    /*provisorio
     if(game->turnoJogador == pretas){
         GameStruct game_aux = *game;
         game_aux.active_ultimate = NULL;
         game_aux.lastmoves = NULL;
-        Moves best_move = get_best_move(&game_aux,pretas);
+        Jogada best_move = get_best_move(&game_aux,pretas);
         Boolean castle = 0 , enpassant = 0 , promote = 0;
-        Booleans bools = {.castles = &castle , .enpassant = &enpassant , .promote = &promote};
-        MoveInfo mov = {.last_piece_pos = best_move.last_piece_pos , .piece_moved = best_move.piece_type , .turn = pretas};
-        atualizaJogada(game,best_move.move,0,0,&mov);
         game->turnoJogador = brancas;
-    }*/
+        if(best_move.peca_movida == Empty || best_move.destino >= 64 || best_move.origem >= 64) return;
+        atualizaJogada(game,&best_move,pretas);
+    }
 }
 
 

@@ -11,6 +11,9 @@
 #define COLUNA_A 0x0101010101010101ULL
 #define COLUNA_H 0x8080808080808080ULL
 
+#define FLAG_CASTLE 1
+#define FLAG_ENPASSANT 2
+
 /*Struct que serve apenas no startAndCleanup.c para retornar os endereços de memória do nosso renderer e window*/
 typedef struct SDL_Initializators{
     SDL_Renderer * renderer; //renderer do jogo
@@ -355,14 +358,14 @@ void efetuaEventoSoltarArrows(GameStruct * game , SDL_Event event);
 
 //Modulo moveMaker.c
 
-void atualizaJogada(GameStruct * game , uint64_bit click,Boolean castles,Boolean enpassant , MoveInfo * mov);
+void atualizaJogada(GameStruct * game , Jogada * jogada , CorPiece turno);
 void promotePiece(GameStruct * game , Pieces piece, uint64_bit promotion_square , CorPiece turno);
 
 
 
 //Modulo possibleMoves.c
 
-int isPseudoValidMove(GameStruct * game, uint64_bit drop , Booleans * bools, MoveInfo * move);
+int isPseudoValidMove(GameStruct * game, Jogada * jogada , CorPiece turno);
 uint64_bit get_knight_attacks(uint64_bit piece_pos);
 uint64_bit get_pawn_attacks(uint64_bit piece_pos,CorPiece cor);
 uint64_bit get_sliding_attacks(uint64_bit piece_pos, uint64_bit pos_limites);
@@ -370,6 +373,7 @@ uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites);
 uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game,CorPiece cor_turno);
 uint64_bit get_king_moves(uint64_bit pos);
 void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,int),uint64_bit pos_rei , uint64_bit colunaA , uint64_bit colunaH);
+int gerar_jogadas_legais(GameStruct* game, Jogada * jogadas);
 
 
 
@@ -386,7 +390,7 @@ void desenharPieceDrag(Pieces tipoPiece , int mouseX , int mouseY , CChessSettin
 
 //Modulo checkAndCheckmate.c
 
-TipoJogada check_move(GameStruct * game, Boolean castles , uint64_bit click , MoveInfo * mov);
+TipoJogada check_move(GameStruct * game, Jogada * jogada , CorPiece turno);
 int isCheckMate(GameStruct * game, CorPiece cor);
 void notInCheck(GameStruct * game);
 Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor);
@@ -397,8 +401,8 @@ Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor);
 
 //Modulo en_passant.c
 
-void update_en_passant(GameStruct * game , uint64_bit click , MoveInfo * mov);
-Boolean can_en_passant(GameStruct * game , uint64_bit drop, MoveInfo * mov);
+void update_en_passant(GameStruct * game , Jogada * jogada , CorPiece turno);
+Boolean can_en_passant(GameStruct * game , Jogada * jogada , CorPiece turno);
 void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * mesma_cor,ShiftFunction ep);
 
 
@@ -421,15 +425,15 @@ int piece_value(Pieces piece);
 
 //Modulo undoMove.c
 
-void undoMove(GameStruct * game , uint64_bit click,uint64_bit ant_pos ,Boolean castles, Pieces piece , CorPiece turn);
+void undoMove(GameStruct * game , Jogada * jogada , CorPiece turn);
 
 
 
 //Modulo castle_logic.c
 
 int is_castelling_king(GameStruct * game , CorPiece cor , uint64_bit drop);
-int invalidCastle(GameStruct * game , uint64_bit click , CorPiece turno);
-void verifica_direito_castle(GameStruct * game ,MoveInfo * mov);
+int invalidCastle(GameStruct * game , uint8_t pos , CorPiece turno);
+void verifica_direito_castle(GameStruct * game , Jogada * jogada , CorPiece turn);
 void castle_King(GameStruct * game , uint64_bit click , int square, uint64_bit * mesmaCor , CorPiece turno);
 
 
@@ -552,16 +556,15 @@ void desenhaMultiplayerScreen(CChessSettings * settings);
 void initializeStructs(int matrix[2][NUMBER_PIECES],int indx);
 
 
-/// depth_search /////////////////////////////
+/// search /////////////////////////////
 
-Moves search_algorithm (uint64_bit posi , uint64_bit atks, GameStruct * game ,int piece_evals[2][NUMBER_PIECES] , SearchInfo * search_info);
+int search(GameStruct * game, int depth, int alpha, int beta, double initial_time, double time_limit , CorPiece turn);
 
 /// evaluation //////////////////////////////
 
-int evaluate(GameStruct * game , CorPiece turno , int ai_level , int pieces_evals[2][NUMBER_PIECES] , int * white_eval , int * black_eval);
-int evaluate_pos(GameStruct * game , SearchInfo * search , int * w_eval , int * b_eval , int piece_evals[2][NUMBER_PIECES] , int cur_piece_eval);
+int evaluate(GameStruct * game , CorPiece turno);
+//int evaluate_pos(GameStruct * game);
 
 /// engine /////////////////////////////////
 
-Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_level , int alpha , int beta , int weval , int beval , int evals[2][NUMBER_PIECES]);
-Moves get_best_move(GameStruct * game , CorPiece turn);
+Jogada get_best_move(GameStruct * game , CorPiece turn);

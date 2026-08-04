@@ -169,15 +169,50 @@ int pawnPromoting(uint64_bit pos,CorPiece cor){
 }
 
 
-int isPseudoValidMove(GameStruct * game, uint64_bit drop , Booleans * bools, MoveInfo * move){
-    Pieces piece = move->piece_moved;
-    CorPiece cor = move->turn;
-    uint64_bit pos_piece = move->last_piece_pos,
+int isPseudoValidMove(GameStruct * game, Jogada * jogada , CorPiece cor){
+    if(jogada->peca_movida == Empty || jogada->destino == 64 || jogada->origem == 64) return 0;
+    uint64_bit pos_dest = 1ULL<<jogada->destino;
+    Pieces piece = jogada->peca_movida;
+    uint64_bit pos_piece = 1ULL<<jogada->origem,
                pos_atacks = get_piece_attacks(pos_piece,piece,game,cor),
                pos_mesma_cor = get_same_colour_bitboard(&(game->estadoJogo),cor);
-    uint64_bit jogada = (~pos_mesma_cor & (pos_atacks & drop));
-    *(bools->promote) = ( (jogada != 0) && (piece == Pawn) && pawnPromoting(drop,cor) );
-    *(bools->castles) = piece == King  && is_castelling_king(game,cor,drop);
-    *(bools->enpassant) = can_en_passant(game,drop,move);
-    return (jogada != 0 || *(bools->castles) || *(bools->enpassant));
+    uint64_bit move = (~pos_mesma_cor & (pos_atacks & pos_dest));
+    jogada->promocao = ( (jogada != 0) && (piece == Pawn) && pawnPromoting(pos_dest,cor) );
+    jogada->especial = piece == King  && is_castelling_king(game,cor,pos_dest);
+    if(jogada->especial) jogada->especial = FLAG_CASTLE;
+    else jogada->especial = 0;
+    int enpassant = can_en_passant(game,jogada,cor);
+    if(enpassant) jogada->especial = FLAG_ENPASSANT;
+    return (move != 0 || jogada->especial == FLAG_CASTLE || jogada->especial == FLAG_ENPASSANT);
+}
+
+
+int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas) {
+    int num_jogadas = 0;
+    for (int i = 0; i < NUMBER_PIECES; i++) {
+        Pieces piece = (Pieces)i;
+        uint64_bit bitboard = game->estadoJogo.tabuleirojogo[brancas][piece] | game->estadoJogo.tabuleirojogo[pretas][piece];
+        while (bitboard) {
+            uint64_bit single_piece = bitboard & (-bitboard); // Isola o bit mais baixo
+            uint64_bit attacks = get_piece_attacks(single_piece, piece,game, brancas); // Supondo que é a vez das brancas
+            while (attacks) {
+                uint64_bit single_attack = attacks & (-attacks);
+                Jogada jogada = {.origem = posTabuleiro(single_piece), .destino = posTabuleiro(single_attack), .peca_movida = piece, 
+                                .peca_capturada = Empty, .promocao = 0, .especial = 0};
+                if (isPseudoValidMove(game, &jogada, brancas)) { // Supondo que é a vez das brancas
+                    jogadas[num_jogadas++] = jogada;
+                }
+                attacks &= attacks - 1; // Remove esse bit
+            }
+            bitboard &= bitboard - 1; // Remove esse bit
+        }
+    }
+    return num_jogadas;
+}
+
+int jogo_terminou(EstadoJogo *estado) {
+    if (estado->checkMate || estado->stalemate) {
+        return 1; // O jogo terminou
+    }
+    return 0; // O jogo não terminou
 }

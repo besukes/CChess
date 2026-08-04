@@ -2,10 +2,10 @@
 
 
 
-void update_en_passant(GameStruct * game , uint64_bit click , MoveInfo * mov){
-    CorPiece turno = mov->turn;
-    uint64_bit coords = mov->last_piece_pos;
-    Pieces piece = mov->piece_moved;
+void update_en_passant(GameStruct * game , Jogada * jogada , CorPiece turno){
+    uint64_bit coords = 1ULL<<jogada->origem;
+    uint64_bit click = 1ULL<<jogada->destino;
+    Pieces piece = jogada->peca_movida;
     if(pawnFirstRank(coords,turno) && piece == Pawn){
         if(turno==brancas && (click == (coords << 16))) game->estadoJogo.enpassant = (coords << 8);
         else if(turno==pretas && (click == (coords >> 16))) game->estadoJogo.enpassant = (coords >> 8);
@@ -15,10 +15,11 @@ void update_en_passant(GameStruct * game , uint64_bit click , MoveInfo * mov){
 
 
 
-Boolean can_en_passant(GameStruct * game , uint64_bit drop, MoveInfo * mov){
-    CorPiece turn = mov->turn;
-    Pieces piece = mov->piece_moved;
-    uint64_bit cur_pos = mov->last_piece_pos;
+Boolean can_en_passant(GameStruct * game , Jogada * j, CorPiece turn){
+    if(j->peca_movida == Empty || j->destino >= 64 || j->origem >= 64) return 0;
+    uint64_bit drop = 1ULL<<j->destino;
+    Pieces piece = j->peca_movida;
+    uint64_bit cur_pos = 1ULL<<j->origem;
     if(piece != Pawn || game->estadoJogo.enpassant == 0) return 0;
     uint64_bit passant = game->estadoJogo.enpassant;
     int pos_tab_drop = posTabuleiro(drop) , pos_tab_piece = posTabuleiro(cur_pos);
