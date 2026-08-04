@@ -187,19 +187,19 @@ int isPseudoValidMove(GameStruct * game, Jogada * jogada , CorPiece cor){
 }
 
 
-int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas) {
+int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor){
     int num_jogadas = 0;
-    for (int i = 0; i < NUMBER_PIECES; i++) {
+    for (int i = NUMBER_PIECES - 1; i >= 0; i--) {
         Pieces piece = (Pieces)i;
-        uint64_bit bitboard = game->estadoJogo.tabuleirojogo[brancas][piece] | game->estadoJogo.tabuleirojogo[pretas][piece];
+        uint64_bit bitboard = game->estadoJogo.tabuleirojogo[cor][piece];
         while (bitboard) {
             uint64_bit single_piece = bitboard & (-bitboard); // Isola o bit mais baixo
-            uint64_bit attacks = get_piece_attacks(single_piece, piece,game, brancas); // Supondo que é a vez das brancas
+            uint64_bit attacks = get_piece_attacks(single_piece, piece,game, cor); // Supondo que é a vez das brancas
             while (attacks) {
                 uint64_bit single_attack = attacks & (-attacks);
                 Jogada jogada = {.origem = posTabuleiro(single_piece), .destino = posTabuleiro(single_attack), .peca_movida = piece, 
                                 .peca_capturada = Empty, .promocao = 0, .especial = 0};
-                if (isPseudoValidMove(game, &jogada, brancas)) { // Supondo que é a vez das brancas
+                if (isPseudoValidMove(game, &jogada, cor)) { // Supondo que é a vez das brancas
                     jogadas[num_jogadas++] = jogada;
                 }
                 attacks &= attacks - 1; // Remove esse bit

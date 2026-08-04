@@ -66,33 +66,6 @@ uint64_bit click_table_position(int mouseX , int mouseY){
 
 
 
-void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor){
-    PecasComidasLL novo = malloc(sizeof(struct PecasComidas));
-    novo->cor_piece = cor;
-    novo->pos_de_piece = pos_piece;
-    novo->tipo_piece = piece_comida;
-    novo->prox = *list;
-    *list = novo;
-}
-
-
-void freeLinkedList(PecasComidasLL list){
-    PecasComidasLL cur = list;
-    while(cur != NULL){
-        PecasComidasLL next = cur->prox;
-        free(cur);
-        cur = next;
-    }
-}
-
-
-void removeHeadLinkedList(PecasComidasLL * list){
-    PecasComidasLL u = *list;
-    *list = (*list)->prox;
-    free(u);
-}
-
-
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH){
     *colunaA = COLUNA_A;
     *colunaH = COLUNA_H;

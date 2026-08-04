@@ -129,7 +129,7 @@ void eventoPromotePiece(GameStruct * game , CChessSettings * settings,Jogada * j
 
 
 void updateScore(GameStruct *game){
-    if(game->lastmoves!=NULL){
+    if(game->indx_lastmoves > 0){
         Pieces p = game->lastmoves->tipo_piece;
         int mult = 1;
         if(game->lastmoves->cor_piece == brancas) mult = (-1);
@@ -157,11 +157,6 @@ void updateScore(GameStruct *game){
     }
 }
 
-
-void freePiecesTaken(GameStruct * game){
-    if(game->lastmoves != NULL) freeLinkedList(game->lastmoves);
-    game->lastmoves = NULL;
-}
 
 
 
@@ -201,7 +196,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
                 }
                 else {
                     updateScore(game);
-                    if(game->lastmoves != NULL) capturepiece_sfx(sfxarray);
+                    if(game->indx_lastmoves > 0) capturepiece_sfx(sfxarray);
                     else if(game->estadoJogo.king_in_check[(game->turnoJogador == brancas) ? pretas : brancas]) check_sfx(sfxarray);
                     else movepiece_sfx(sfxarray);
                 }
@@ -211,7 +206,7 @@ void efetuaEventoSoltar(GameStruct * game , CChessSettings * settings , SDL_Even
         game->jogada = Invalid;
     }
     game->selected_piece_attacks = 0;
-    freePiecesTaken(game);
+    game->indx_lastmoves = 0;
 }
 
 

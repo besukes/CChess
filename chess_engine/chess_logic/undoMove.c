@@ -3,10 +3,15 @@
 
 
 void undoPieceComida(GameStruct * game , uint64_bit * bb_cor_piece_comida, uint64_bit click){
-    game->estadoJogo.tabuleirojogo[game->lastmoves->cor_piece][game->lastmoves->tipo_piece] |= click;
+    int * indx = &(game->indx_lastmoves);
+    if(*indx <= 0){
+        printf("Error: No captured pieces to undo.\n");
+        return;
+    }
+    game->estadoJogo.tabuleirojogo[game->lastmoves[*indx - 1].cor_piece][game->lastmoves[*indx - 1].tipo_piece] |= click;
     *bb_cor_piece_comida |= click;
     game->estadoJogo.bitboard_todas_pieces |= click;
-    removeHeadLinkedList(&(game->lastmoves));
+    (*indx)--;
 }
 
 
@@ -59,5 +64,7 @@ void undoMove(GameStruct * game , Jogada * jogada , CorPiece turn){
         cor_oposta = &(game->estadoJogo.bitboard_brancas);
     }
     undoPiece_move(game,mesma_cor,cor_oposta,jogada->destino,jogada->origem,jogada->especial,jogada->peca_movida,turn);
-    if(game->lastmoves != NULL && game->lastmoves->pos_de_piece == (1ULL<<jogada->destino)) undoPieceComida(game,cor_oposta,jogada->destino);
+    if(game->indx_lastmoves > 0 && game->lastmoves[game->indx_lastmoves - 1].pos_de_piece == (1ULL<<jogada->destino)){
+        undoPieceComida(game,cor_oposta,jogada->destino);
+    }
 }

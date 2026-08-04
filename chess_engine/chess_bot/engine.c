@@ -14,8 +14,9 @@ typedef struct jogadabot{
 
 
 jogadabot engine_search(GameStruct * game , CorPiece turn , int depth){
+    CorPiece op_turn = (turn == brancas) ? pretas : brancas;
     Jogada jogadas[256];
-    int num_jogadas = gerar_jogadas_legais(game, jogadas);
+    int num_jogadas = gerar_jogadas_legais(game, jogadas,turn);
     int melhor_eval = -VALOR_INFINITO;
     int initial_time = SDL_GetTicks();
     Jogada best_move = {.origem = 0, .destino = 0, .peca_movida = Empty, .peca_capturada = Empty, .promocao = 0, .especial = 0};
@@ -23,7 +24,7 @@ jogadabot engine_search(GameStruct * game , CorPiece turn , int depth){
         // Aplica a jogada nas Bitboards e atualiza a Avaliação Incremental (Delta)
         atualizaJogada(game,&jogadas[i],turn);
         // Chamada recursiva do NEGAMAX:
-        int eval = -search(game, depth - 1, -VALOR_INFINITO, VALOR_INFINITO, initial_time, initial_time + 1000, (turn == brancas) ? pretas : brancas);
+        int eval = -search(game, depth - 1, -VALOR_INFINITO , VALOR_INFINITO, initial_time, initial_time + 3000, op_turn);
         undoMove(game,&jogadas[i],turn);
         // Se o tempo acabou em algum nó filho, propaga o timeout para cima sem salvar nada
         if(eval == FLAG_TIMEOUT) {

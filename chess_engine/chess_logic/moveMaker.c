@@ -21,7 +21,15 @@ void efetuaJogada(uint64_bit * selected_piece , uint64_bit * todas_pieces , uint
 }
 
 
-
+void addToArray(PecaComida * array , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor , int indx){
+    if(indx>=30){
+        printf("Error: Exceeded maximum number of captured pieces in the game.\n");
+        return;
+    }
+    array[indx].tipo_piece = piece_comida;
+    array[indx].pos_de_piece = pos_piece;
+    array[indx].cor_piece = cor;
+}
 
 void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor , uint64_bit * corOposta, Jogada * jogada , CorPiece turno){
     CorPiece cor_oposta = (turno == brancas) ? pretas : brancas;
@@ -30,7 +38,8 @@ void fetch_change_board(GameStruct * game,uint64_bit click,uint64_bit * mesmaCor
     Pieces piece_comida = comparePiece(game->estadoJogo, cor_oposta, click);
     if(piece_comida == Empty || selected == Empty )return;
 
-    addHeadLinkedList(&(game->lastmoves), piece_comida, click, cor_oposta);
+    addToArray(game->lastmoves, piece_comida, click, cor_oposta, game->indx_lastmoves);
+    game->indx_lastmoves++;
     game->estadoJogo.tabuleirojogo[cor_oposta][piece_comida] &= ~click;
     *corOposta &= ~click;
     game->estadoJogo.bitboard_todas_pieces &= ~click;

@@ -60,7 +60,6 @@ void freeUserSettings(CChessSettings * user){
 
 
 void free_allocated_memory(GameStruct * game , CChessSettings * user , Mix_Chunk * sfxarray[]){
-    freeLinkedList(game->lastmoves);
     for(int i = 0; i < 12; i++){
         SDL_DestroyTexture(user->textures.chessPieces[i]);
     }

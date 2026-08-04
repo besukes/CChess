@@ -111,7 +111,7 @@ GameStruct initGameStruct(void){
     game.pieceSelecionada = Empty;
     game.turnoJogador = brancas;
     game.pieceCoords = 0;
-    game.lastmoves = NULL;
+    game.indx_lastmoves = 0;
     game.promoted.pawnPromoted = 0;
     game.active_ultimate = NULL;
     game.promoted.promotedSucessfully = 0;
@@ -134,8 +134,7 @@ void initializeOfflineGame(GameStruct * game){
     game->pieceSelecionada = Empty;
     game->turnoJogador = brancas;
     game->pieceCoords = 0;
-    freeLinkedList(game->lastmoves);
-    game->lastmoves = NULL;
+    game->indx_lastmoves = 0;
     game->promoted.pawnPromoted = 0;
     free(game->active_ultimate);
     game->active_ultimate = NULL;

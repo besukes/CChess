@@ -15,7 +15,7 @@ int search(GameStruct * game, int depth, int alpha, int beta, double initial_tim
     }
 
     Jogada jogadas[256];
-    int num_jogadas = gerar_jogadas_legais(game, jogadas);
+    int num_jogadas = gerar_jogadas_legais(game, jogadas,turn);
 
     // Se não houver jogadas legais: Xeque-Mate ou Empate (Afogamento)
     if (num_jogadas == 0) {
@@ -28,21 +28,23 @@ int search(GameStruct * game, int depth, int alpha, int beta, double initial_tim
     for (int i = 0; i < num_jogadas; i++) {
         // Aplica a jogada nas Bitboards e atualiza a Avaliação Incremental (Delta)
         atualizaJogada(game,&jogadas[i],turn);
-        // Chamada recursiva do NEGAMAX:
-        int eval = -search(game, depth - 1, -beta, -alpha, initial_time, time_limit, (turn == brancas) ? pretas : brancas);
+        if(!is_in_check(&game->estadoJogo,game->estadoJogo.tabuleirojogo[turn][King],turn)){
+            // Chamada recursiva do NEGAMAX:
+            int eval = -search(game, depth - 1, -beta, -alpha, initial_time, time_limit, (turn == brancas) ? pretas : brancas);
+            // Se o tempo acabou em algum nó filho, propaga o timeout para cima sem salvar nada
+            if ((-eval) == FLAG_TIMEOUT) {
+                return FLAG_TIMEOUT;
+            }
+            // Guarda a melhor pontuação encontrada para o jogador atual
+            if (eval > melhor_eval) {
+                melhor_eval = eval;
+            }
+            // Atualiza o teto mínimo garantido (Alpha)
+            if (melhor_eval > alpha) {
+                alpha = melhor_eval;
+            }
+        }
         undoMove(game,&jogadas[i],turn);
-        // Se o tempo acabou em algum nó filho, propaga o timeout para cima sem salvar nada
-        if (eval == FLAG_TIMEOUT) {
-            return FLAG_TIMEOUT;
-        }
-        // Guarda a melhor pontuação encontrada para o jogador atual
-        if (eval > melhor_eval) {
-            melhor_eval = eval;
-        }
-        // Atualiza o teto mínimo garantido (Alpha)
-        if (melhor_eval > alpha) {
-            alpha = melhor_eval;
-        }
         // 4. PODA ALPHA-BETA (Pruning):
         // Se a avaliação atual ultrapassa o Beta do adversário, ele nunca deixará esta posição acontecer.
         if (alpha >= beta) {

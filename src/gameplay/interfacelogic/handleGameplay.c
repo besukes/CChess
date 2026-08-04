@@ -60,9 +60,8 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
     if(game->turnoJogador == pretas){
         GameStruct game_aux = *game;
         game_aux.active_ultimate = NULL;
-        game_aux.lastmoves = NULL;
+        game_aux.indx_lastmoves = 0;
         Jogada best_move = get_best_move(&game_aux,pretas);
-        Boolean castle = 0 , enpassant = 0 , promote = 0;
         game->turnoJogador = brancas;
         if(best_move.peca_movida == Empty || best_move.destino >= 64 || best_move.origem >= 64) return;
         atualizaJogada(game,&best_move,pretas);

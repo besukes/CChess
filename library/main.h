@@ -4,9 +4,9 @@
 #include <SDL2/SDL_ttf.h>
 
 #define NUMBER_PIECES 6
-#define MAX_DEPTH_SEARCH 15
+#define MAX_DEPTH_SEARCH 5
 #define FLAG_TIMEOUT -999999
-#define VALOR_INFINITO 999999
+#define VALOR_INFINITO 99999
 
 #define COLUNA_A 0x0101010101010101ULL
 #define COLUNA_H 0x8080808080808080ULL
@@ -123,8 +123,7 @@ typedef struct PecasComidas{
     uint64_bit pos_de_piece;
     Pieces tipo_piece;
     CorPiece cor_piece;
-    struct PecasComidas * prox;
-} * PecasComidasLL;
+} PecaComida;
 
 /*Guarda informações sobre os tutoriais já realizados pelo utilizador no jogo*/
 typedef struct TutorialsDone{
@@ -189,7 +188,8 @@ typedef struct GameStruct{
     uint64_bit selected_piece_attacks; //Guarda as posições da peça que estão sobre ataque da mesma
     CorPiece turnoJogador; //Guarda o turno do utilizador 
     TipoJogada jogada; //Guarda a jogada do utilizador
-    PecasComidasLL lastmoves; //Guarda a peça que foi comida na jogada anterior , para depois desfazer a jogada , caso seja necessário
+    int indx_lastmoves; //Guarda o número de pecas ja comidas no jogo
+    PecaComida lastmoves[30]; //Guarda a peça que foi comida na jogada anterior , para depois desfazer a jogada , caso seja necessário
     PromotedInformation promoted; //Guarda informações sobre se uma promotion aconteceu e onde ela ocorreu
     ArrowsGame arrows; //Guarda informações sobre se existem ou não setas desenhadas pelo utilizador e onde elas se encontram desenhadas
     int score_game; //Guarda o score do jogo (diferenca de pecas comidas)
@@ -327,9 +327,6 @@ uint64_bit click_table_position(int mouseX , int mouseY);
 int dentroDoBotao(int mx , int my , int inf_x , int sup_x , int inf_y , int sup_y);
 int minimum(int n1,int n2);
 Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique);
-void addHeadLinkedList(PecasComidasLL * list , Pieces piece_comida , uint64_bit pos_piece , CorPiece cor);
-void freeLinkedList(PecasComidasLL list);
-void removeHeadLinkedList(PecasComidasLL * list);
 void getColunasAH(uint64_bit * colunaA , uint64_bit * colunaH);
 int strToNumber(char * str);
 char * skipWhileSpace(char * str);
@@ -373,7 +370,7 @@ uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites);
 uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game,CorPiece cor_turno);
 uint64_bit get_king_moves(uint64_bit pos);
 void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,int),uint64_bit pos_rei , uint64_bit colunaA , uint64_bit colunaH);
-int gerar_jogadas_legais(GameStruct* game, Jogada * jogadas);
+int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor);
 
 
 

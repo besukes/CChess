@@ -88,8 +88,8 @@ int evaluate_piece(uint64_bit piece_pos , Pieces piece_type , CorPiece turn , Ga
         break;
         default:break;
     }
-    mobility_score = get_mobility_score_piece(piece_type,piece_pos,turn,game,piece_score);
-    return (piece_score + position_score + mobility_score);
+    //mobility_score = get_mobility_score_piece(piece_type,piece_pos,turn,game,piece_score);
+    return (piece_score + position_score);
 }
 
 
@@ -135,11 +135,6 @@ int evaluate(GameStruct * game , CorPiece turno){
     CorPiece other_turn = pretas;
     int turn_eval = 0 , other_turn_eval = 0;
     int eval = 0 , who2Move =  1 , whoNot2Move = (-1) ;
-    if(turno == pretas){
-        other_turn = brancas;
-        who2Move = (-1);
-        whoNot2Move = 1;
-    }
     for(int i=0;i<NUMBER_PIECES;i++){
         Pieces piece = (Pieces)i;
         int piece_eval_turn = evaluate_piece_type(game->estadoJogo.tabuleirojogo[turno][piece],piece,turno,game);
