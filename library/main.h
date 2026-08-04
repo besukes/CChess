@@ -4,7 +4,9 @@
 #include <SDL2/SDL_ttf.h>
 
 #define NUMBER_PIECES 6
-#define MAX_DEPTH_SEARCH 5
+#define MAX_DEPTH_SEARCH 15
+#define FLAG_TIMEOUT -999999
+#define VALOR_INFINITO 999999
 
 #define COLUNA_A 0x0101010101010101ULL
 #define COLUNA_H 0x8080808080808080ULL
@@ -69,36 +71,15 @@ typedef struct ExtraPieces{
 //A memória da ordem das peças que o utilizador utiliza no jogo estará guardada como um par (TipoPiece,PosPiece)
 typedef ExtraPieces PlayerChessTable;
 
-typedef struct Booleans{
-    Boolean * castles;
-    Boolean * enpassant;
-    Boolean * promote;
-}Booleans;
-
-typedef struct MoveInfo{
-    Pieces piece_moved;
-    CorPiece turn;
-    uint64_bit last_piece_pos;
-}MoveInfo;
-
-typedef struct Moves{
-    uint64_bit move;
-    uint64_bit last_piece_pos;
-    Pieces piece_type;
-    int move_evaluation;
-}Moves;
-
-typedef struct SearchInfo{
-    int depth;
-    int alpha;
-    int beta;
-    int white_eval;
-    int black_eval;
-    int ai_level;
-    Pieces piece_type;
-    CorPiece bot_colour;
-    CorPiece turn;
-}SearchInfo;
+// Estrutura leve para Bitboards (6 bytes)
+typedef struct {
+    uint8_t origem;
+    uint8_t destino;
+    uint8_t peca_movida;
+    uint8_t peca_capturada;
+    uint8_t promocao;
+    uint8_t especial;
+} Jogada;
 
 /*Struct que serve como uma lookup table das melhores posições de uma dada peça de uma dada cor no tabuleiro de xadrez.
 Para este projeto a "colour_key" será apenas utilizada a cor preta e as lookup tables de todas as peças pretas*/

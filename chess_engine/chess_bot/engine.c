@@ -5,61 +5,45 @@
 //beta usually starts at 99999 , int beta = 99999; --Current best black evaluation
 //alpha - white eval , beta - black eval
 
-Moves get_best_move(GameStruct * game , CorPiece turn){
-    int depth = MAX_DEPTH_SEARCH , ai_level = 0;
-    int pieces_eval[2][NUMBER_PIECES] = {};
-    int black_eval = 0 , white_eval = 0;
-    initializeStructs(pieces_eval,NUMBER_PIECES);
-    evaluate(game,turn,ai_level,pieces_eval,&white_eval,&black_eval);
-    Moves best_move = move_algorithm(game,turn,depth,ai_level,-99999,99999,white_eval,black_eval,pieces_eval);
-    printf("[engine] get_best_move: piece %d from %d to %d eval %d\n", best_move.piece_type, posTabuleiro(best_move.last_piece_pos), posTabuleiro(best_move.move), best_move.move_evaluation);
-    return (best_move);
+typedef struct jogadabot{
+    Jogada best_move;
+    int move_eval;
+}jogadabot;
+
+
+Jogada get_best_move(GameStruct * game , CorPiece turn){
+    int depth = MAX_DEPTH_SEARCH;
+    jogadabot best_move = engine_search(game,turn,depth);
+    if(best_move.move_eval == FLAG_TIMEOUT) printf("[engine] get_best_move: timeout reached during search\n");
+    else printf("[engine] get_best_move: piece %d from %d to %d eval %d\n", best_move.best_move.peca_movida, 
+                    posTabuleiro(best_move.best_move.origem), posTabuleiro(best_move.best_move.destino), best_move.move_eval);
+    return (best_move.best_move);
 }
 
 
-Moves move_algorithm(GameStruct * game , CorPiece turn , int depth , int ai_level , int alpha , int beta , int weval , int beval , int evals[2][NUMBER_PIECES]){
-    uint64_bit positional_best_move = 0; //No move to start with
-    SearchInfo search = {.ai_level = ai_level , .alpha = alpha , .beta = beta, .depth = depth , 
-                        .bot_colour = turn , .turn = turn , .white_eval = weval , .black_eval = beval
-                        };
-    int pruned = 0;
-    Pieces best_piece = 0, piece = 0;
-    uint64_bit current_pos = 0, best_pos = 0;
-    int cur_best_alpha = alpha , cur_best_beta = beta;
-    for(int i=NUMBER_PIECES - 1;i>=0 && !pruned;i--){
-        int counter=0;
-        piece = (Pieces)i;
-        uint64_bit piece_bitboard = game->estadoJogo.tabuleirojogo[turn][piece];
-        search.piece_type = piece;
-        int moves_for_piece = 0; //Remove
-        while(piece_bitboard != 0 & !pruned){
-            if( (piece_bitboard & 1ULL) != 0){
-                current_pos = 1ULL<<counter;
-                uint64_bit current_attacks = get_piece_attacks(current_pos,piece,game,turn) & (~get_same_colour_bitboard(&game->estadoJogo,turn));
-                Moves best_searched = search_algorithm(current_pos,current_attacks,game,evals,&search);
-                if(best_searched.move_evaluation > cur_best_alpha && turn == brancas){
-                    search.alpha = best_searched.move_evaluation;
-                    cur_best_alpha = search.alpha;
-                    positional_best_move = best_searched.move;
-                    best_piece = piece;
-                    best_pos = current_pos;
-                }
-                else if(best_searched.move_evaluation < cur_best_beta && turn == pretas){
-                    search.beta = best_searched.move_evaluation;
-                    cur_best_beta = search.beta;
-                    positional_best_move = best_searched.move;
-                    best_piece = piece;
-                    best_pos = current_pos;
-                }
-            }
-            counter++;
-            piece_bitboard>>=1;
-            if(search.alpha>=search.beta) pruned = 1;
+jogadabot engine_search(GameStruct * game , CorPiece turn , int depth){
+    Jogada jogadas[256];
+    int num_jogadas = gerar_jogadas_legais(game->estadoJogo, jogadas);
+    int melhor_eval = -VALOR_INFINITO;
+    int initial_time = SDL_GetTicks();
+    Jogada best_move = {0,0,0,0,0,0};
+    for (int i = 0; i < num_jogadas; i++) {
+        // Aplica a jogada nas Bitboards e atualiza a Avaliação Incremental (Delta)
+        atualizaJogada(game,jogadas[i]);
+        // Chamada recursiva do NEGAMAX:
+        int eval = -search(game, depth - 1, VALOR_INFINITO, VALOR_INFINITO, initial_time, initial_time + 1000, (turn == brancas) ? pretas : brancas);
+        undoMove(game,jogadas[i]);
+        // Se o tempo acabou em algum nó filho, propaga o timeout para cima sem salvar nada
+        if (eval == FLAG_TIMEOUT) {
+            printf("[engine] engine_search: timeout reached during search\n");
+            return (jogadabot){{0,0,0,0,0,0}, FLAG_TIMEOUT};
+        }
+        // Guarda a melhor pontuação encontrada para o jogador atual
+        if (eval > melhor_eval) {
+            melhor_eval = eval;
+            best_move = jogadas[i];
         }
     }
-    int ret_eval = (turn==brancas) ? search.alpha : search.beta;
-    if(positional_best_move = 0 && is_in_check(&game->estadoJogo,game->estadoJogo.tabuleirojogo[turn][King],turn))
-        ret_eval = (turn==brancas) ? -99999 : 99999;
-    Moves ret = {.move = positional_best_move , .move_evaluation = ret_eval , .piece_type = best_piece , .last_piece_pos = best_pos};
-    return ret;
+    jogadabot result = {.best_move = best_move,.move_eval = melhor_eval};
+    return result;
 }

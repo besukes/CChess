@@ -3,73 +3,50 @@
 #include <stdio.h>
 
 
-int depth_search(GameStruct * game , SearchInfo * search_info , int piece_evals[2][NUMBER_PIECES] , int cur_piece_eval){
-    int cur_alpha = search_info->alpha , cur_beta = search_info->beta;
-    int white_eval = search_info->white_eval , black_eval = search_info->black_eval;
-    evaluate_pos(game,search_info,&white_eval,&black_eval,piece_evals,cur_piece_eval);
-    if(search_info->depth <= 0) return ((search_info->turn == brancas) ? white_eval : black_eval); 
-    int new_turn = (search_info->turn == brancas) ? pretas : brancas;
-    return move_algorithm(game,new_turn,search_info->depth-1,search_info->ai_level,cur_alpha,cur_beta,white_eval,black_eval,piece_evals).move_evaluation;
-    //necessita de verificar o turno atual e aplicar a melhor jogada , decrementando o turno e fazendo recursividade para procurar
-    //os proximos melhor moves
-    //secalhar utilizar a funcao move_algorithm e fazer algumas alteracoes
-}
-
-
-Moves search_algorithm (uint64_bit posi , uint64_bit atks , GameStruct * game ,int piece_evals[2][NUMBER_PIECES] , SearchInfo * search_info){
-    int cntr = 0;
-    uint64_bit casa_atual = 0 , bst = 0;
-    CorPiece turn = search_info->turn;
-    int piece_eval = piece_evals[turn][search_info->piece_type];
-    MoveInfo mov = {.piece_moved =search_info->piece_type,.turn = turn , .last_piece_pos = posi};
-    uint64_bit capturas = atks & get_opposing_colour_bitboard(&game->estadoJogo, turn);
-    uint64_bit silenciosas = atks & ~capturas;
-    while(capturas!=0 && silenciosas!=0){
-        if(capturas & 1ULL){
-            casa_atual = 1ULL<<cntr;
-            atualizaJogada(game,casa_atual,0,0,&mov);
-            if(!is_in_check(&game->estadoJogo,game->estadoJogo.tabuleirojogo[turn][King],turn)){
-                int new_eval = depth_search(game,search_info,piece_evals,piece_eval);
-                if(new_eval > search_info->alpha && search_info->turn == brancas){
-                    search_info->alpha = new_eval;
-                    bst = casa_atual;
-                }
-                else if(new_eval < search_info->beta && search_info->turn == pretas){
-                    search_info->beta = new_eval;
-                    bst = casa_atual;
-                }
-            }
-            undoMove(game,casa_atual,posi,0,search_info->piece_type,search_info->turn);
-            piece_evals[turn][search_info->piece_type] = piece_eval;
-            if(search_info->alpha>=search_info->beta) break;
-        }
-        capturas>>=1; 
-        cntr++;
+// A função Search usando Negamax + Alpha-Beta
+int search(GameStruct * game, int depth, int alpha, int beta, double initial_time, double time_limit , CorPiece turn) {
+    if (obter_tempo_ms() - initial_time >= time_limit) {
+        return FLAG_TIMEOUT;
     }
-    cntr = 0;
-    while(silenciosas!=0){
-        if(silenciosas & 1ULL){
-            casa_atual = 1ULL<<cntr;
-            atualizaJogada(game,casa_atual,0,0,&mov);
-            if(!is_in_check(&game->estadoJogo,game->estadoJogo.tabuleirojogo[turn][King],turn)){
-                int new_eval = depth_search(game,search_info,piece_evals,piece_eval);
-                if(new_eval > search_info->alpha && search_info->turn == brancas){
-                    search_info->alpha = new_eval;
-                    bst = casa_atual;
-                }
-                else if(new_eval < search_info->beta && search_info->turn == pretas){
-                    search_info->beta = new_eval;
-                    bst = casa_atual;
-                }
-            }
-            undoMove(game,casa_atual,posi,0,search_info->piece_type,search_info->turn);
-            piece_evals[turn][search_info->piece_type] = piece_eval;
-            if(search_info->alpha>=search_info->beta) break;
-        }
-        silenciosas>>=1; 
-        cntr++;
+    // Quando atinge a profundidade 0 ou o jogo acaba, lê a avaliação incremental atual
+    if (depth == 0 || jogo_terminou(game->estadoJogo)) {
+        return evaluate(game,turn); // Devolve tab->avaliacao_incremental ajustado ao turno
     }
-    int eval =(search_info->turn == brancas) ? search_info->alpha : search_info->beta;
-    Moves ret = {.move = bst , .move_evaluation = eval , .last_piece_pos = posi , .piece_type = search_info->piece_type};
-    return ret;
+
+    Jogada jogadas[256];
+    int num_jogadas = gerar_jogadas_legais(game->estadoJogo, jogadas);
+
+    // Se não houver jogadas legais: Xeque-Mate ou Empate (Afogamento)
+    if (num_jogadas == 0) {
+        if (is_in_check(&game->estadoJogo,game->estadoJogo.tabuleirojogo[turn][King],turn)) {
+            return -VALOR_INFINITO + depth; // Xeque-mate (prioriza mates mais rápidos)
+        }
+        return 0; // Empate por afogamento
+    }
+    int melhor_eval = -VALOR_INFINITO;
+    for (int i = 0; i < num_jogadas; i++) {
+        // Aplica a jogada nas Bitboards e atualiza a Avaliação Incremental (Delta)
+        atualizaJogada(game,jogadas[i]);
+        // Chamada recursiva do NEGAMAX:
+        int eval = -search(game, depth - 1, -beta, -alpha, initial_time, time_limit, (turn == brancas) ? pretas : brancas);
+        undoMove(game,jogadas[i]);
+        // Se o tempo acabou em algum nó filho, propaga o timeout para cima sem salvar nada
+        if (eval == FLAG_TIMEOUT) {
+            return FLAG_TIMEOUT;
+        }
+        // Guarda a melhor pontuação encontrada para o jogador atual
+        if (eval > melhor_eval) {
+            melhor_eval = eval;
+        }
+        // Atualiza o teto mínimo garantido (Alpha)
+        if (melhor_eval > alpha) {
+            alpha = melhor_eval;
+        }
+        // 4. PODA ALPHA-BETA (Pruning):
+        // Se a avaliação atual ultrapassa o Beta do adversário, ele nunca deixará esta posição acontecer.
+        if (alpha >= beta) {
+            break; // Para de avaliar as restantes jogadas nesta profundidade!
+        }
+    }
+    return melhor_eval;
 }
