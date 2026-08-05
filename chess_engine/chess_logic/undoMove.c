@@ -66,6 +66,6 @@ void undoMove(GameStruct * game , Jogada * jogada , CorPiece turn){
     undoPiece_move(game,mesma_cor,cor_oposta,jogada->destino,jogada->origem,jogada->especial
                     ,(Pieces)(jogada->peca_movida),turn);
     if(game->indx_lastmoves > 0 && game->lastmoves[game->indx_lastmoves - 1].pos_de_piece == (1ULL<<jogada->destino)){
-        undoPieceComida(game,cor_oposta,jogada->destino);
+        undoPieceComida(game,cor_oposta,1ULL<<jogada->destino);
     }
 }
