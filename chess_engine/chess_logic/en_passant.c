@@ -41,16 +41,16 @@ Boolean can_en_passant(GameStruct * game , Jogada * j, CorPiece turn){
 }
 
 
-void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * mesma_cor,ShiftFunction ep_shift){
+void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * mesma_cor,ShiftFunction ep_shift, CorPiece turno, uint64_bit origem){
     uint64_bit peao_removido = ep_shift(game->estadoJogo.enpassant,8);
     (*cor_oposta) &= ~peao_removido;
-    (*mesma_cor) = ((*mesma_cor & ~game->pieceCoords) | game->estadoJogo.enpassant);
+    (*mesma_cor) = ((*mesma_cor & ~origem) | game->estadoJogo.enpassant);
     game->estadoJogo.bitboard_todas_pieces = *mesma_cor | *cor_oposta;
 
-    CorPiece turno = game->turnoJogador , op = (turno==brancas) ? pretas : brancas;
+    CorPiece op = (turno==brancas) ? pretas : brancas;
     uint64_bit peoes_turno = game->estadoJogo.tabuleirojogo[turno][Pawn],
                peoes_opostos = game->estadoJogo.tabuleirojogo[op][Pawn];
-    peoes_turno = (peoes_turno & ~game->pieceCoords) | game->estadoJogo.enpassant;
+    peoes_turno = (peoes_turno & ~origem) | game->estadoJogo.enpassant;
     peoes_opostos &= ~peao_removido;
 
     game->estadoJogo.tabuleirojogo[turno][Pawn] = peoes_turno;

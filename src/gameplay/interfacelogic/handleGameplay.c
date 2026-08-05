@@ -62,9 +62,23 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
         game_aux.active_ultimate = NULL;
         game_aux.indx_lastmoves = 0;
         Jogada best_move = get_best_move(&game_aux,pretas);
-        game->turnoJogador = brancas;
-        if(best_move.peca_movida == Empty || best_move.destino >= 64 || best_move.origem >= 64) return;
+        if(best_move.peca_movida == Empty || best_move.destino >= 64 || best_move.origem >= 64){
+            game->turnoJogador = brancas;
+            return;
+        }
         atualizaJogada(game,&best_move,pretas);
+        if(best_move.promocao){
+            promotePiece(game,Queen,1ULL<<best_move.destino,pretas);
+        }
+        notInCheck(game);
+        update_en_passant(game,&best_move,pretas);
+        game->promoted.pawnPromoted = 0;
+        updateScore(game);
+        if(game->indx_lastmoves > 0) capturepiece_sfx(sfxarray);
+        else if(game->estadoJogo.king_in_check[brancas]) check_sfx(sfxarray);
+        else movepiece_sfx(sfxarray);
+        game->indx_lastmoves = 0;
+        game->turnoJogador = brancas;
     }
 }
 

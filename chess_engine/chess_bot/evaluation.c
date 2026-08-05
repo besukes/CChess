@@ -132,21 +132,19 @@ int evaluate_piece_type(uint64_bit bitboard , Pieces piece_type, CorPiece turn, 
 
 
 int evaluate(GameStruct * game , CorPiece turno){
-    CorPiece other_turn = pretas;
-    int turn_eval = 0 , other_turn_eval = 0;
+    int total_white_eval = 0 , total_black_eval = 0;
     int eval = 0 , who2Move =  1 , whoNot2Move = (-1) ;
     for(int i=0;i<NUMBER_PIECES;i++){
         Pieces piece = (Pieces)i;
-        int piece_eval_turn = evaluate_piece_type(game->estadoJogo.tabuleirojogo[turno][piece],piece,turno,game);
-        int piece_eval_other_turn = evaluate_piece_type(game->estadoJogo.tabuleirojogo[other_turn][piece],piece,other_turn,game);
+        int white_eval = evaluate_piece_type(game->estadoJogo.tabuleirojogo[brancas][piece],piece,brancas,game);
+        int black_eval = evaluate_piece_type(game->estadoJogo.tabuleirojogo[pretas][piece],piece,pretas,game);
 
-        //pieces_evals[turno][piece] = piece_eval_turn;
-        turn_eval+= (piece_eval_turn*who2Move);
+        total_white_eval+= white_eval;
 
-        //pieces_evals[other_turn][piece] = piece_eval_other_turn;
-        other_turn_eval += (piece_eval_other_turn*whoNot2Move);
-
-        eval+= piece_eval_turn*who2Move + piece_eval_other_turn*whoNot2Move;
+        total_black_eval += black_eval;
+ 
     }
+    eval+= total_white_eval - total_black_eval;
+    eval = (turno==brancas) ? eval : (-eval);
     return eval;
 }

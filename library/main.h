@@ -4,7 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #define NUMBER_PIECES 6
-#define MAX_DEPTH_SEARCH 5
+#define MAX_DEPTH_SEARCH 6
 #define FLAG_TIMEOUT -999999
 #define VALOR_INFINITO 99999
 
@@ -84,13 +84,6 @@ typedef struct {
     uint8_t especial;
 } Jogada;
 
-/*Struct que serve como uma lookup table das melhores posições de uma dada peça de uma dada cor no tabuleiro de xadrez.
-Para este projeto a "colour_key" será apenas utilizada a cor preta e as lookup tables de todas as peças pretas*/
-typedef struct LookupTable{
-    CorPiece colour_key;
-    Pieces piece_key;
-    int evaluation_multiplier[64];
-} * ChessLT;
 
 /*Struct que define um estado de um jogo de xadrez.
 Guarda as posições de todas as peças , bem como as posições afetadas por elas.
@@ -400,7 +393,7 @@ Boolean is_in_check(EstadoJogo * estado , uint64_bit kingpos , CorPiece cor);
 
 void update_en_passant(GameStruct * game , Jogada * jogada , CorPiece turno);
 Boolean can_en_passant(GameStruct * game , Jogada * jogada , CorPiece turno);
-void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * mesma_cor,ShiftFunction ep);
+void enpassant_move(GameStruct * game , uint64_bit * cor_oposta , uint64_bit * mesma_cor,ShiftFunction ep, CorPiece turno, uint64_bit origem);
 
 
 
