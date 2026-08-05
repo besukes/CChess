@@ -342,6 +342,7 @@ void efetuaEventoClickStory(GameStruct * game , CChessSettings * settings,SDL_Ev
 void cleanArrowEvent(GameStruct * game);
 void efetuaEventoClickArrows(GameStruct * game , SDL_Event event);
 void efetuaEventoSoltarArrows(GameStruct * game , SDL_Event event);
+void updateScore(GameStruct *game);
 
 
 
