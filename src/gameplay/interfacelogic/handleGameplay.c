@@ -27,6 +27,7 @@ void handleJogadaMenuPrincipal(CChessSettings * settings,SDL_Event * event){
 void softReset(GameStruct * game){
     game->pieceCoords = 0;
     game->pieceSelecionada = Empty;
+    game->selected_piece_attacks = 0;
 }
 
 //teste temporario do bot , temos de mudar eventualmente
@@ -57,6 +58,7 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
            efetuaEventoSoltarArrows(game,event);
         }
     }
+    
     if(game->turnoJogador == pretas){
         GameStruct game_aux = *game;
         game_aux.active_ultimate = NULL;

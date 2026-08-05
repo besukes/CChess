@@ -20,7 +20,7 @@ jogadabot engine_search(GameStruct * game , CorPiece turn , int depth){
     int melhor_eval = -VALOR_INFINITO ,
         alpha = -VALOR_INFINITO,
         beta = VALOR_INFINITO;
-    int initial_time = SDL_GetTicks();
+    double initial_time = SDL_GetTicks();
     Jogada best_move = {.origem = 64, .destino = 64, .peca_movida = Empty, .peca_capturada = Empty, .promocao = 0, .especial = 0};
     for (int i = 0; i < num_jogadas; i++) {
         // Aplica a jogada nas Bitboards e atualiza a Avaliação Incremental (Delta)

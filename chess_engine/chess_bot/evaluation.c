@@ -40,13 +40,13 @@ int get_mobility_score_piece(Pieces type , uint64_bit pos , CorPiece turn , Game
     CorPiece op_turn = (turn==brancas) ? pretas : brancas;
     int is_attacked = is_attacked_piece(pos,type,op_turn,game,piece_score);
     if(is_attacked){
-        m_score-=2*piece_score;
+        m_score-=piece_score;
     }
     else{
         int can_take_score = atks_stronger_piece(pos,type,turn,op_turn,game,piece_score);
         if(can_take_score){
             if(can_take_score == piece_value(King)) m_score += 99999;
-            else m_score += (4*can_take_score)/3;
+            else m_score += can_take_score;
         }
     }
     return (m_score);

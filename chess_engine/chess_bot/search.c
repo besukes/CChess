@@ -6,9 +6,9 @@
 
 // A função Search usando Negamax + Alpha-Beta
 int search(GameStruct * game, int depth, int alpha, int beta, double initial_time, double time_limit , CorPiece turn){
-    if (SDL_GetTicks() - initial_time >= time_limit) {
+    /*if (SDL_GetTicks() - initial_time >= time_limit) {
         return FLAG_TIMEOUT;
-    }
+    }*/
     if (depth == 0) { // Quando atinge a profundidade 0 ou o jogo acaba, lê a avaliação incremental atual
         return evaluate(game,turn);
     }

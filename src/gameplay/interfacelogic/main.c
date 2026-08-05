@@ -12,8 +12,8 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
         break;
         case Chess :
             if(game->game_needs_initialization) initializeOfflineGame(game);
-            handleJogadaChess(game,settings,*event , sfxarray);
             desenhaInterfaceJogo(game,settings);
+            handleJogadaChess(game,settings,*event , sfxarray);
         break;
         case Theme :
             handleJogadaThemes(settings,*event);
