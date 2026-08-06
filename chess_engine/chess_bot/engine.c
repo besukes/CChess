@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
+#define NO_FLAGS 0
+
 //alpha usually starts at -99999 , int alpha = -99999; --Current best white evaluation
 //beta usually starts at 99999 , int beta = 99999; --Current best black evaluation
 //alpha - white eval , beta - black eval
@@ -16,17 +18,18 @@ typedef struct jogadabot{
 jogadabot engine_search(GameStruct * game , CorPiece turn , int depth){
     CorPiece op_turn = (turn == brancas) ? pretas : brancas;
     Jogada jogadas[256];
-    int num_jogadas = gerar_jogadas_legais(game, jogadas,turn);
+    int num_jogadas = gerar_jogadas_legais(game, jogadas,turn, NO_FLAGS);
     int melhor_eval = -VALOR_INFINITO ,
         alpha = -VALOR_INFINITO,
         beta = VALOR_INFINITO;
     double initial_time = SDL_GetTicks();
+    int eval_wb_inicial = evaluate(game, brancas); // avaliação completa, calculada só uma vez (na raiz)
     Jogada best_move = {.origem = 64, .destino = 64, .peca_movida = Empty, .peca_capturada = Empty, .promocao = 0, .especial = 0};
     for (int i = 0; i < num_jogadas; i++) {
         // Aplica a jogada nas Bitboards e atualiza a Avaliação Incremental (Delta)
-        atualizaJogada(game,&jogadas[i],turn);
+        int delta = applyDeltaMove(game,&jogadas[i],turn);
         // Chamada recursiva do NEGAMAX:
-        int eval = -search(game, depth - 1, -beta , -alpha, initial_time, initial_time + 3000, op_turn);
+        int eval = -search(game, depth - 1, -beta , -alpha, eval_wb_inicial + delta, initial_time, initial_time + 3000, op_turn);
         undoMove(game,&jogadas[i],turn);
         // Se o tempo acabou em algum nó filho, propaga o timeout para cima sem salvar nada
         if((-eval) == FLAG_TIMEOUT) {

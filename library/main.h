@@ -364,7 +364,7 @@ uint64_bit get_cross_attacks(uint64_bit piece_pos , uint64_bit pos_limites);
 uint64_bit get_piece_attacks(uint64_bit pos,Pieces piece,GameStruct * game,CorPiece cor_turno);
 uint64_bit get_king_moves(uint64_bit pos);
 void king_line_dependant_moves(uint64_bit * atk ,uint64_bit (*func)(uint64_bit,int),uint64_bit pos_rei , uint64_bit colunaA , uint64_bit colunaH);
-int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor);
+int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor , int flags);
 
 
 
@@ -549,12 +549,13 @@ void initializeStructs(int matrix[2][NUMBER_PIECES],int indx);
 
 /// search /////////////////////////////
 
-int search(GameStruct * game, int depth, int alpha, int beta, double initial_time, double time_limit , CorPiece turn);
+int search(GameStruct * game, int depth, int alpha, int beta, int wb_eval , double initial_time, double time_limit , CorPiece turn);
+int applyDeltaMove(GameStruct * game , Jogada * jogada , CorPiece turn);
 
 /// evaluation //////////////////////////////
 
 int evaluate(GameStruct * game , CorPiece turno);
-//int evaluate_pos(GameStruct * game);
+
 
 /// engine /////////////////////////////////
 

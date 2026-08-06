@@ -186,8 +186,13 @@ int isPseudoValidMove(GameStruct * game, Jogada * jogada , CorPiece cor){
     return (move != 0 || jogada->especial == FLAG_CASTLE || jogada->especial == FLAG_ENPASSANT);
 }
 
+int flags_func(Jogada * jogada , int flags){
+    int ret = 1;
+    if(flags == 1) return (jogada->peca_capturada!=Empty);
+    return ret;
+}
 
-int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor){
+int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor , int flags){
     int num_jogadas = 0;
     uint64_bit prev_enpassant = game->estadoJogo.enpassant;
     int prev_canCastleShort = game->estadoJogo.canCastle[cor][Short];
@@ -206,7 +211,7 @@ int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor){
                     atualizaJogada(game, &jogada, cor);
                     Boolean king_safe = !is_in_check(&(game->estadoJogo), game->estadoJogo.tabuleirojogo[cor][King], cor);
                     undoMove(game, &jogada, cor);
-                    if (king_safe) {
+                    if (king_safe & flags_func(&jogada, flags)) {
                         jogadas[num_jogadas++] = jogada;
                     }
                 }
@@ -220,6 +225,7 @@ int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor){
     game->estadoJogo.canCastle[cor][Long] = prev_canCastleLong;
     return num_jogadas;
 }
+
 
 int jogo_terminou(EstadoJogo *estado) {
     if (estado->checkMate || estado->stalemate) {
