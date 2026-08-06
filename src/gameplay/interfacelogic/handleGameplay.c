@@ -33,7 +33,30 @@ void softReset(GameStruct * game){
 //teste temporario do bot , temos de mudar eventualmente
 //&& game->turnoJogador == brancas
 void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event event , Mix_Chunk * sfxarray[]){
-    if(event.type == SDL_MOUSEBUTTONDOWN && game->turnoJogador == brancas){
+    if(game->turnoJogador == pretas){
+        GameStruct game_aux = *game;
+        game_aux.active_ultimate = NULL;
+        game_aux.indx_lastmoves = 0;
+        Jogada best_move = get_best_move(&game_aux,pretas);
+        if(best_move.peca_movida == Empty || best_move.destino >= 64 || best_move.origem >= 64){
+            game->turnoJogador = brancas;
+            return;
+        }
+        atualizaJogada(game,&best_move,pretas);
+        if(best_move.promocao){
+            promotePiece(game,Queen,1ULL<<best_move.destino,pretas);
+        }
+        notInCheck(game);
+        update_en_passant(game,&best_move,pretas);
+        game->promoted.pawnPromoted = 0;
+        updateScore(game);
+        if(game->indx_lastmoves > 0) capturepiece_sfx(sfxarray);
+        else if(game->estadoJogo.king_in_check[brancas]) check_sfx(sfxarray);
+        else movepiece_sfx(sfxarray);
+        game->indx_lastmoves = 0;
+        game->turnoJogador = brancas;
+    }
+    else if(event.type == SDL_MOUSEBUTTONDOWN && game->turnoJogador == brancas){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown ==0){
             game->isKeyPressedDown = 1;
             cleanArrowEvent(game);
@@ -57,30 +80,6 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
         else if( (event.button.button == SDL_BUTTON_RIGHT) && game->arrows.is_drawing_arrows){
            efetuaEventoSoltarArrows(game,event);
         }
-    }
-    
-    if(game->turnoJogador == pretas){
-        GameStruct game_aux = *game;
-        game_aux.active_ultimate = NULL;
-        game_aux.indx_lastmoves = 0;
-        Jogada best_move = get_best_move(&game_aux,pretas);
-        if(best_move.peca_movida == Empty || best_move.destino >= 64 || best_move.origem >= 64){
-            game->turnoJogador = brancas;
-            return;
-        }
-        atualizaJogada(game,&best_move,pretas);
-        if(best_move.promocao){
-            promotePiece(game,Queen,1ULL<<best_move.destino,pretas);
-        }
-        notInCheck(game);
-        update_en_passant(game,&best_move,pretas);
-        game->promoted.pawnPromoted = 0;
-        updateScore(game);
-        if(game->indx_lastmoves > 0) capturepiece_sfx(sfxarray);
-        else if(game->estadoJogo.king_in_check[brancas]) check_sfx(sfxarray);
-        else movepiece_sfx(sfxarray);
-        game->indx_lastmoves = 0;
-        game->turnoJogador = brancas;
     }
 }
 

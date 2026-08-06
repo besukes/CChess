@@ -186,13 +186,9 @@ int isPseudoValidMove(GameStruct * game, Jogada * jogada , CorPiece cor){
     return (move != 0 || jogada->especial == FLAG_CASTLE || jogada->especial == FLAG_ENPASSANT);
 }
 
-int flags_func(Jogada * jogada , int flags){
-    int ret = 1;
-    if(flags == 1) return (jogada->peca_capturada!=Empty);
-    return ret;
-}
 
-int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor , int flags){
+int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor , int only_captures){
+    uint64_bit * oposto = (cor==brancas) ? &(game->estadoJogo.bitboard_pretas) : &(game->estadoJogo.bitboard_brancas);
     int num_jogadas = 0;
     uint64_bit prev_enpassant = game->estadoJogo.enpassant;
     int prev_canCastleShort = game->estadoJogo.canCastle[cor][Short];
@@ -203,6 +199,7 @@ int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor , int
         while (bitboard) {
             uint64_bit single_piece = bitboard & (-bitboard); // Isola o bit mais baixo
             uint64_bit attacks = get_piece_attacks(single_piece, piece,game, cor);
+            if(only_captures) attacks &= *oposto; // Se for apenas capturas, filtra os ataques para incluir apenas as peças do oponente{
             while (attacks) {
                 uint64_bit single_attack = attacks & (-attacks);
                 Jogada jogada = {.origem = posTabuleiro(single_piece), .destino = posTabuleiro(single_attack), .peca_movida = piece, 
@@ -211,7 +208,7 @@ int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor , int
                     atualizaJogada(game, &jogada, cor);
                     Boolean king_safe = !is_in_check(&(game->estadoJogo), game->estadoJogo.tabuleirojogo[cor][King], cor);
                     undoMove(game, &jogada, cor);
-                    if (king_safe & flags_func(&jogada, flags)) {
+                    if (king_safe) {
                         jogadas[num_jogadas++] = jogada;
                     }
                 }
