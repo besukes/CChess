@@ -34,8 +34,9 @@ int applyDeltaMove(GameStruct * game , Jogada * jogada , CorPiece turn){
 
 
 int quiescence(GameStruct * game, int alpha, int beta, int quiescence_eval, CorPiece turn){
-    if (quiescence_eval >= beta) return beta;
-    if (alpha < quiescence_eval) alpha = quiescence_eval;
+    int stand_pat = (turn == brancas) ? quiescence_eval : (-quiescence_eval); // Avaliação estática da posição atual
+    if (stand_pat >= beta) return beta;
+    if (alpha < stand_pat) alpha = stand_pat;
 
     Jogada jogadas[256];
     int num_jogadas = gerar_jogadas_legais(game, jogadas, turn, FLAG_ONLY_CAPTURES); // idealmente só capturas aqui
