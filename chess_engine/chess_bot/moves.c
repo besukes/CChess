@@ -27,7 +27,7 @@ int matches_killer_move(int depth, Jogada * jogada, int index) {
 
 
 void moveScoringCaptures(Jogada * jogadas , int num_jogadas , Jogada * hash_move){
-    for(int i=0;i<num_jogadas-1;i++){
+    for(int i=0;i<num_jogadas;i++){
         Jogada * atual = &jogadas[i];
         Boolean matches_hash_move = (hash_move != NULL && atual->origem == hash_move->origem 
                                         && atual->destino == hash_move->destino 
@@ -39,7 +39,8 @@ void moveScoringCaptures(Jogada * jogadas , int num_jogadas , Jogada * hash_move
             int captured = atual->peca_capturada;
             int moved = atual->peca_movida;
             if(captured < 0 || captured >= NUMBER_PIECES || moved < 0 || moved >= NUMBER_PIECES){
-                printf("[moveScoringCaptures] Invalid piece indices: captured=%d, moved=%d\n", captured, moved);
+                printf("[moveScoringCaptures] Invalid piece indices: piece moved %d captured piece %d in position %d\n", 
+                    moved, captured, atual->destino);
             }
             else{
                 atual->score = mvv_lva_table[captured][moved];
@@ -51,7 +52,7 @@ void moveScoringCaptures(Jogada * jogadas , int num_jogadas , Jogada * hash_move
 
 
 void moveScoring(Jogada * jogadas , int num_jogadas , Jogada * hash_move , int depth){
-    for(int i=0;i<num_jogadas-1;i++){
+    for(int i=0;i<num_jogadas;i++){
         Jogada * atual = &jogadas[i];
         Boolean matches_hash_move = (hash_move != NULL && atual->origem == hash_move->origem 
                                         && atual->destino == hash_move->destino 

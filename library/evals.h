@@ -14,13 +14,14 @@ static const int pieces_value[NUMBER_PIECES] = {
     900, //Queen
 };
 
+
 static const int mvv_lva_table[NUMBER_PIECES][NUMBER_PIECES] = {
-    {0,  0,  0,  0,  0,  0}, //King victim
-    {100, 0, 90, 80, 1, 0}, // Pawn victim
-    {50, 80, 0, 0, 0, 0}, // Knight victim
-    {50, 80, 0, 10, 0, 0}, // Bishop victim
-    {30, 200, 50, 50, 0, 0}, // Rook victim
-    {20, 600, 100 , 100, 80, 0} // Queen victim
+    /* King victim */  {9000, 9900, 9680, 9670, 9500, 9100},
+    /* Pawn victim */  {   0,  900,  680,  670,  500,  100},
+    /* Knight victim */{2200, 3100, 2880, 2870, 2700, 2300},
+    /* Bishop victim */{2300, 3200, 2980, 2970, 2800, 2400},
+    /* Rook victim */  {4000, 4900, 4680, 4670, 4500, 4100},
+    /* Queen victim */ {8000, 8900, 8680, 8670, 8500, 8100}
 };
 
 static const int pawn_evals_black[] = {

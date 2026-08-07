@@ -31,7 +31,7 @@ jogadabot engine_search(GameStruct * game , CorPiece turn , int depth){
         // Aplica a jogada nas Bitboards e atualiza a Avaliação Incremental (Delta)
         int delta = applyDeltaMove(game,cur_move,turn);
         // Chamada recursiva do NEGAMAX:
-        int eval = -search(game, depth - 1, -beta , -alpha, eval_wb_inicial + delta, initial_time, initial_time + 3000, op_turn);
+        int eval = -search(game, depth - 1, -beta , -alpha, eval_wb_inicial + delta, initial_time, initial_time + 5000, op_turn);
         undoMove(game,cur_move,turn);
         // Se o tempo acabou em algum nó filho, propaga o timeout para cima sem salvar nada
         if((-eval) == FLAG_TIMEOUT) {
