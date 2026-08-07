@@ -33,20 +33,31 @@ int atks_stronger_piece(uint64_bit pos , Pieces type , CorPiece turn , CorPiece 
     return 0;
 }
 
-
+int is_defended_piece(uint64_bit pos , Pieces type , CorPiece turn , GameStruct * game , int piece_score){
+    for(int i=0;i<NUMBER_PIECES;i++){
+        uint64_bit tab = game->estadoJogo.tabuleirojogo[turn][i];
+        while(tab){
+            uint64_bit single = tab & (-tab); // isola o bit mais baixo
+            uint64_bit atks = get_piece_attacks(single,(Pieces)i,game,turn);
+            if((atks&pos) != 0) return 1;
+            tab &= tab - 1; // remove esse bit
+        }
+    }
+    return 0;
+}
 
 int get_mobility_score_piece(Pieces type , uint64_bit pos , CorPiece turn , GameStruct * game , int piece_score){
     int m_score = 0;
     CorPiece op_turn = (turn==brancas) ? pretas : brancas;
     int is_attacked = is_attacked_piece(pos,type,op_turn,game,piece_score);
-    if(is_attacked){
+    int is_defended = is_defended_piece(pos,type,turn,game,piece_score);
+    if(is_attacked && !is_defended){
         m_score-=piece_score;
     }
     else{
-        int can_take_score = atks_stronger_piece(pos,type,turn,op_turn,game,piece_score);
-        if(can_take_score){
-            if(can_take_score == pieces_value[King]) m_score += 99999;
-            else m_score += can_take_score;
+        int can_take_greater_score = atks_stronger_piece(pos,type,turn,op_turn,game,piece_score);
+        if(can_take_greater_score && is_defended){
+            m_score += (4*can_take_greater_score)/3;
         }
     }
     return (m_score);
@@ -87,8 +98,8 @@ int evaluate_piece(uint64_bit piece_pos , Pieces piece_type , CorPiece turn , Ga
         break;
         default:break;
     }
-    mobility_score = get_mobility_score_piece(piece_type,piece_pos,turn,game,piece_score);
-    return (piece_score + position_score + mobility_score);
+    ///mobility_score = get_mobility_score_piece(piece_type,piece_pos,turn,game,piece_score);
+    return (piece_score + position_score);
 }
 
 
