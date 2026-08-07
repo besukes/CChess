@@ -21,7 +21,7 @@ int quiescence(GameStruct * game, int alpha, int beta, int quiescence_eval, CorP
         Jogada * best_move = pick_best_move(jogadas, num_jogadas, i);
         int delta = applyDeltaMove(game,best_move,turn);
         int eval = -quiescence(game, -beta, -alpha, quiescence_eval + delta, (turn==brancas)?pretas:brancas , q_depth + 1);
-        undoMove(game,&jogadas[i],turn);
+        undoMove(game,best_move,turn);
         if (eval >= beta){
             history_table[jogadas[i].peca_movida][jogadas[i].destino] += q_depth * q_depth; // Atualiza a tabela de histórico para capturas
             return beta;
@@ -53,7 +53,7 @@ int search(GameStruct * game, int depth, int alpha, int beta, int wb_eval , doub
         int delta = applyDeltaMove(game,best_move,turn);
         // Chamada recursiva do NEGAMAX:
         int eval = -search(game, depth - 1, -beta, -alpha, wb_eval + delta, initial_time, time_limit, (turn == brancas) ? pretas : brancas);
-        undoMove(game,&jogadas[i],turn);
+        undoMove(game,best_move,turn);
         // Se o tempo acabou em algum nó filho, propaga o timeout para cima sem salvar nada
         if ((-eval) == FLAG_TIMEOUT) {
             return FLAG_TIMEOUT;
