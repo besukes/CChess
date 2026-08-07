@@ -25,7 +25,32 @@ int matches_killer_move(int depth, Jogada * jogada, int index) {
     return (killer->origem == jogada->origem && killer->destino == jogada->destino && killer->peca_movida == jogada->peca_movida);
 }
 
-void moveOrdering(Jogada * jogadas , int num_jogadas , Jogada * hash_move , int depth){
+
+void moveScoringCaptures(Jogada * jogadas , int num_jogadas , Jogada * hash_move){
+    for(int i=0;i<num_jogadas-1;i++){
+        Jogada * atual = &jogadas[i];
+        Boolean matches_hash_move = (hash_move != NULL && atual->origem == hash_move->origem 
+                                        && atual->destino == hash_move->destino 
+                                        && hash_move->peca_movida == atual->peca_movida);
+        if(matches_hash_move){
+            atual->score = 2000000;
+        }
+        else{
+            int captured = atual->peca_capturada;
+            int moved = atual->peca_movida;
+            if(captured < 0 || captured >= NUMBER_PIECES || moved < 0 || moved >= NUMBER_PIECES){
+                printf("[moveScoringCaptures] Invalid piece indices: captured=%d, moved=%d\n", captured, moved);
+            }
+            else{
+                atual->score = mvv_lva_table[captured][moved];
+                atual->score += history_table[moved][atual->destino];
+            }
+        }
+    }
+}
+
+
+void moveScoring(Jogada * jogadas , int num_jogadas , Jogada * hash_move , int depth){
     for(int i=0;i<num_jogadas-1;i++){
         Jogada * atual = &jogadas[i];
         Boolean matches_hash_move = (hash_move != NULL && atual->origem == hash_move->origem 

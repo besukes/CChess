@@ -566,5 +566,6 @@ Jogada get_best_move(GameStruct * game , CorPiece turn);
 
 int applyDeltaMove(GameStruct * game , Jogada * jogada , CorPiece turn);
 Jogada * pick_best_move(Jogada * jogadas, int num_jogadas, int start_index);
-void moveOrdering(Jogada * jogadas , int num_jogadas , Jogada * hash_move , int depth);
+void moveScoring(Jogada * jogadas , int num_jogadas , Jogada * hash_move , int depth);
+void moveScoringCaptures(Jogada * jogadas , int num_jogadas , Jogada * hash_move);
 int matches_killer_move(int depth, Jogada * jogada, int index) ;

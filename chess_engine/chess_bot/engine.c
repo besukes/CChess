@@ -19,7 +19,7 @@ jogadabot engine_search(GameStruct * game , CorPiece turn , int depth){
     CorPiece op_turn = (turn == brancas) ? pretas : brancas;
     Jogada jogadas[256];
     int num_jogadas = gerar_jogadas_legais(game, jogadas,turn, NO_FLAGS);
-    moveOrdering(jogadas, num_jogadas, NULL, depth); // Ordena as jogadas para melhorar a poda alpha-beta , ainda nao existe hash_moves
+    moveScoring(jogadas, num_jogadas, NULL, depth); // Ordena as jogadas para melhorar a poda alpha-beta , ainda nao existe hash_moves
     int melhor_eval = -VALOR_INFINITO ,
         alpha = -VALOR_INFINITO,
         beta = VALOR_INFINITO;
@@ -56,8 +56,8 @@ jogadabot engine_search(GameStruct * game , CorPiece turn , int depth){
 Jogada get_best_move(GameStruct * game , CorPiece turn){
     int depth = MAX_DEPTH_SEARCH;
     jogadabot best_move = engine_search(game,turn,depth);
-    printf("[engine] get_best_move: piece %d from %d to %d , took %d ms with an eval of %d\n", best_move.best_move.peca_movida, 
-                posTabuleiro(best_move.best_move.origem), posTabuleiro(best_move.best_move.destino), best_move.move_time, best_move.move_eval);
+    printf("[engine] get_best_move: piece %d from %d to %d , took %d ms with an eval of %f\n", best_move.best_move.peca_movida, 
+                posTabuleiro(best_move.best_move.origem), posTabuleiro(best_move.best_move.destino), best_move.move_time, (float)(best_move.move_eval / 100));
     return (best_move.best_move);
 }
 

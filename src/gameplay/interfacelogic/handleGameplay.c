@@ -55,6 +55,11 @@ void handleJogadaChess(GameStruct* game , CChessSettings * settings,SDL_Event ev
         else movepiece_sfx(sfxarray);
         game->indx_lastmoves = 0;
         game->turnoJogador = brancas;
+        game->turns++;
+        TipoJogada t = check_move(game,&best_move,pretas);
+        if(t == Checkmate ){
+            settings->screenAtual = WinScreen;
+        }
     }
     else if(event.type == SDL_MOUSEBUTTONDOWN && game->turnoJogador == brancas){
         if(event.button.button == SDL_BUTTON_LEFT && game->isKeyPressedDown ==0){

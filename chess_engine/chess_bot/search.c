@@ -9,18 +9,23 @@
 
 
 
-int quiescence(GameStruct * game, int alpha, int beta, int quiescence_eval, CorPiece turn){
+int quiescence(GameStruct * game, int alpha, int beta, int quiescence_eval, CorPiece turn , int q_depth){
     int est_eval = (turn == brancas) ? quiescence_eval : (-quiescence_eval); // Avaliação estática da posição atual
     if (est_eval >= beta) return beta;
     if (alpha < est_eval) alpha = est_eval;
 
     Jogada jogadas[256];
     int num_jogadas = gerar_jogadas_legais(game, jogadas, turn, FLAG_ONLY_CAPTURES); // idealmente só capturas aqui
+    moveScoringCaptures(jogadas, num_jogadas, NULL); // Ordena as jogadas de captura para melhorar a poda alpha-beta
     for (int i = 0; i < num_jogadas; i++){
-        int delta = applyDeltaMove(game,&jogadas[i],turn);
-        int eval = -quiescence(game, -beta, -alpha, quiescence_eval + delta, (turn==brancas)?pretas:brancas);
+        Jogada * best_move = pick_best_move(jogadas, num_jogadas, i);
+        int delta = applyDeltaMove(game,best_move,turn);
+        int eval = -quiescence(game, -beta, -alpha, quiescence_eval + delta, (turn==brancas)?pretas:brancas , q_depth + 1);
         undoMove(game,&jogadas[i],turn);
-        if (eval >= beta) return beta;
+        if (eval >= beta){
+            history_table[jogadas[i].peca_movida][jogadas[i].destino] += q_depth * q_depth; // Atualiza a tabela de histórico para capturas
+            return beta;
+        }
         alpha = (eval > alpha) ? eval : alpha;
     }
     return alpha;
@@ -33,7 +38,7 @@ int search(GameStruct * game, int depth, int alpha, int beta, int wb_eval , doub
         return FLAG_TIMEOUT;
     }*/
     if (depth == 0) { // Quando atinge a profundidade 0 ou o jogo acaba, lê a avaliação incremental atual
-        return quiescence(game, alpha, beta, wb_eval, turn);
+        return quiescence(game, alpha, beta, wb_eval, turn, MAX_DEPTH_SEARCH);
     }
     Jogada jogadas[256];int num_jogadas = gerar_jogadas_legais(game, jogadas,turn, NO_FLAGS);
     if (num_jogadas == 0) { // Se não houver jogadas legais: Xeque-Mate ou Empate (Afogamento)
@@ -42,7 +47,7 @@ int search(GameStruct * game, int depth, int alpha, int beta, int wb_eval , doub
         }
         return 0; // Empate por afogamento
     }
-    moveOrdering(jogadas, num_jogadas, NULL, depth); // Ordena as jogadas para melhorar a poda alpha-beta , ainda nao existe hash_moves
+    moveScoring(jogadas, num_jogadas, NULL, depth); // Ordena as jogadas para melhorar a poda alpha-beta , ainda nao existe hash_moves
     for (int i = 0; i < num_jogadas; i++) {
         Jogada * best_move = pick_best_move(jogadas, num_jogadas, i);
         int delta = applyDeltaMove(game,best_move,turn);

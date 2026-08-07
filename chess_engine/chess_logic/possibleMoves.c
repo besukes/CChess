@@ -1,5 +1,5 @@
 #include "library/main.h"
-
+#include <stdint.h>
 
 
 void get_attacks(int max , uint64_bit (*func)(uint64_bit,int),uint64_bit pos_limites,uint64_bit pos_piece,int shift ,uint64_bit * atk){
@@ -202,7 +202,7 @@ int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor , int
             if(only_captures) attacks &= *oposto; // Se for apenas capturas, filtra os ataques para incluir apenas as peças do oponente{
             while (attacks) {
                 uint64_bit single_attack = attacks & (-attacks);
-                Jogada jogada = {.origem = posTabuleiro(single_piece), .destino = posTabuleiro(single_attack), .peca_movida = piece, 
+                Jogada jogada = {.origem = (uint8_t)posTabuleiro(single_piece), .destino = (uint8_t)posTabuleiro(single_attack), .peca_movida = piece, 
                                 .peca_capturada = Empty, .promocao = 0, .especial = 0 , .score = 0};
                 if (isPseudoValidMove(game, &jogada, cor)) {
                     atualizaJogada(game, &jogada, cor);

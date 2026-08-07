@@ -15,7 +15,7 @@ int minimum(int n1,int n2){
 
 Pieces comparePiece(EstadoJogo estado , CorPiece cor , uint64_bit posclique){
     int i;
-    for(i=0;i<6;i++){
+    for(i=0;i<NUMBER_PIECES;i++){
         if(estado.tabuleirojogo[cor][i] & posclique){
             return((Pieces)i);
         }

@@ -130,9 +130,9 @@ void eventoPromotePiece(GameStruct * game , CChessSettings * settings,Jogada * j
 
 void updateScore(GameStruct *game){
     if(game->indx_lastmoves > 0){
-        Pieces p = game->lastmoves->tipo_piece;
+        Pieces p = game->lastmoves[game->indx_lastmoves].tipo_piece;
         int mult = 1;
-        if(game->lastmoves->cor_piece == brancas) mult = (-1);
+        if(game->lastmoves[game->indx_lastmoves].cor_piece == brancas) mult = (-1);
         switch(p){
             case 0:
                 game->score_game+=1*mult;
