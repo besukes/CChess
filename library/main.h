@@ -14,6 +14,22 @@
 #define FLAG_CASTLE 1
 #define FLAG_ENPASSANT 2
 
+#define NUM_SQUARES 64
+
+// Estrutura leve para Bitboards (6 bytes)
+typedef struct {
+    uint8_t origem;
+    uint8_t destino;
+    uint8_t peca_movida;
+    uint8_t peca_capturada;
+    uint8_t promocao;
+    uint8_t especial;
+    uint8_t score;
+} Jogada;
+
+Jogada killer_moves[MAX_DEPTH_SEARCH][2]; //Armazena os killer moves para cada profundidade de busca
+int history_table[NUMBER_PIECES*2][NUM_SQUARES] = {0};
+
 /*Struct que serve apenas no startAndCleanup.c para retornar os endereços de memória do nosso renderer e window*/
 typedef struct SDL_Initializators{
     SDL_Renderer * renderer; //renderer do jogo
@@ -38,9 +54,9 @@ typedef uint64_bit (*ShiftFunction)(uint64_bit,int); //Tipo que define um endere
 typedef enum {
     King, //The piece is the KING
     Pawn, //The piece is a PAWN
-    Horse, //The piece is the ROOK
-    Bishop, //The piece is the HORSE
-    Rook, //The piece is the BISHOP
+    Horse, //The piece is the Knight
+    Bishop, //The piece is the Bishop
+    Rook, //The piece is the Rook
     Queen, //The piece is the QUEEN
     TheDog, //CChess Dog piece that protects the 3 squares in front of him (Norte , Nordeste , Noroeste)
     Empty, //There is no piece
@@ -73,16 +89,6 @@ typedef struct ExtraPieces{
 
 //A memória da ordem das peças que o utilizador utiliza no jogo estará guardada como um par (TipoPiece,PosPiece)
 typedef ExtraPieces PlayerChessTable;
-
-// Estrutura leve para Bitboards (6 bytes)
-typedef struct {
-    uint8_t origem;
-    uint8_t destino;
-    uint8_t peca_movida;
-    uint8_t peca_capturada;
-    uint8_t promocao;
-    uint8_t especial;
-} Jogada;
 
 
 /*Struct que define um estado de um jogo de xadrez.
@@ -410,7 +416,6 @@ uint64_bit initQuadrado(void);
 uint64_bit get_opposing_colour_bitboard(EstadoJogo * estado , CorPiece cor);
 uint64_bit get_selected_piece_attacks(GameStruct * game , uint64_bit click , Pieces piece , CorPiece turno);
 int is_attacked_piece(uint64_bit is_attacked , Pieces attacked_piece , CorPiece turn , GameStruct * game , int piece_score);
-int piece_value(Pieces piece);
 
 
 
@@ -550,7 +555,6 @@ void initializeStructs(int matrix[2][NUMBER_PIECES],int indx);
 /// search /////////////////////////////
 
 int search(GameStruct * game, int depth, int alpha, int beta, int wb_eval , double initial_time, double time_limit , CorPiece turn);
-int applyDeltaMove(GameStruct * game , Jogada * jogada , CorPiece turn);
 
 /// evaluation //////////////////////////////
 
@@ -560,3 +564,8 @@ int evaluate(GameStruct * game , CorPiece turno);
 /// engine /////////////////////////////////
 
 Jogada get_best_move(GameStruct * game , CorPiece turn);
+
+/// moves /////////////////////////////////
+
+int applyDeltaMove(GameStruct * game , Jogada * jogada , CorPiece turn);
+Jogada * pick_best_move(Jogada * jogadas, int num_jogadas, int start_index);

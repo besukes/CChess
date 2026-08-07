@@ -1,5 +1,5 @@
 #include "library/main.h"
-
+#include "library/evals.h"
 
 
 uint64_bit shiftr(uint64_bit pos,int shift){
@@ -66,27 +66,12 @@ uint64_bit get_selected_piece_attacks(GameStruct * game , uint64_bit click , Pie
 }
 
 
-int piece_value(Pieces piece){
-    switch(piece){
-        case Pawn: return 100;
-        case Rook: return 500;
-        case Horse: return 320;
-        case Bishop: return 330;
-        case Queen: return 900;
-        case King: return 1000;
-        default: 
-            printf("[ERROR] Pieces index out of range\n");
-            return 0;
-        break;
-    }
-}
-
 
 int is_attacked_piece(uint64_bit is_attacked , Pieces attacked_piece , CorPiece turn , GameStruct * game , int piece_score){
     for(int i=0;i<NUMBER_PIECES;i++){
         uint64_bit attacker = game->estadoJogo.tabuleirojogo[turn][i];
         Pieces piece = (Pieces)i;
-        if(attacker!=0 && piece_value(piece) < piece_score){
+        if(attacker!=0 && pieces_value[i] < piece_score){
             uint64_bit atks = get_piece_attacks(is_attacked,attacked_piece,game,turn);
             if((atks & attacker)!=0) return 1;
         }

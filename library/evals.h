@@ -5,6 +5,24 @@ To acess the white_evals we just need to grab the Board position "n" and do the 
     evals_indx = (7-line)*8 + column
 */
 
+static const int pieces_value[NUMBER_PIECES] = {
+    1000, //King
+    100, //Pawn
+    320, //Knight
+    330, //Bishop
+    500, //Rook
+    900, //Queen
+};
+
+static const int mvv_lva_table[NUMBER_PIECES][NUMBER_PIECES] = {
+    {0,  0,  0,  0,  0,  0}, //King victim
+    {100, 0, 90, 80, 1, 0}, // Pawn victim
+    {50, 80, 0, 0, 0, 0}, // Knight victim
+    {50, 80, 0, 10, 0, 0}, // Bishop victim
+    {30, 200, 50, 50, 0, 0}, // Rook victim
+    {20, 600, 100 , 100, 80, 0} // Queen victim
+};
+
 static const int pawn_evals_black[] = {
     0,  0,  0,  0,  0,  0,  0,  0,
     50, 50, 50, 50, 50, 50, 50, 50,

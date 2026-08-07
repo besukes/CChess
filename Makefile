@@ -36,6 +36,7 @@ SRC =	src/universal/corefunctions.c \
 		chess_engine/chess_bot/engine.c \
 		chess_engine/chess_bot/evaluation.c \
 		chess_engine/chess_bot/search.c \
+		chess_engine/chess_bot/moves.c \
 
 OBJ = $(SRC:%.c=build/%.o)
 

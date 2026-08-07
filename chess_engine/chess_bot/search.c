@@ -8,35 +8,11 @@
 
 
 
-int applyDeltaMove(GameStruct * game , Jogada * jogada , CorPiece turn){
-    CorPiece op_turn = (turn == brancas) ? pretas : brancas;
-    uint64_bit origem_bit = 1ULL << jogada->origem;
-    uint64_bit destino_bit = 1ULL << jogada->destino;
-    Pieces peca_movida = (Pieces)jogada->peca_movida;
-    int old_moved_eval = evaluate_piece(origem_bit, peca_movida, turn, game);
-
-    Pieces peca_capturada = Empty;
-    for(int i=0;i<NUMBER_PIECES;i++){
-        if(game->estadoJogo.tabuleirojogo[op_turn][i] & destino_bit){
-            peca_capturada = (Pieces)i;
-            break;
-        }
-    }
-    int old_captured_eval = (peca_capturada != Empty) ? evaluate_piece(destino_bit, peca_capturada, op_turn, game) : 0;
-
-    atualizaJogada(game, jogada, turn);
-
-    int new_moved_eval = evaluate_piece(destino_bit, peca_movida, turn, game);
-
-    int who2Move = (turn == brancas) ? 1 : -1;
-    return (who2Move * (new_moved_eval - old_moved_eval + old_captured_eval));
-}
-
 
 int quiescence(GameStruct * game, int alpha, int beta, int quiescence_eval, CorPiece turn){
-    int stand_pat = (turn == brancas) ? quiescence_eval : (-quiescence_eval); // Avaliação estática da posição atual
-    if (stand_pat >= beta) return beta;
-    if (alpha < stand_pat) alpha = stand_pat;
+    int est_eval = (turn == brancas) ? quiescence_eval : (-quiescence_eval); // Avaliação estática da posição atual
+    if (est_eval >= beta) return beta;
+    if (alpha < est_eval) alpha = est_eval;
 
     Jogada jogadas[256];
     int num_jogadas = gerar_jogadas_legais(game, jogadas, turn, FLAG_ONLY_CAPTURES); // idealmente só capturas aqui
@@ -45,7 +21,7 @@ int quiescence(GameStruct * game, int alpha, int beta, int quiescence_eval, CorP
         int eval = -quiescence(game, -beta, -alpha, quiescence_eval + delta, (turn==brancas)?pretas:brancas);
         undoMove(game,&jogadas[i],turn);
         if (eval >= beta) return beta;
-        if (eval > alpha) alpha = eval;
+        alpha = (eval > alpha) ? eval : alpha;
     }
     return alpha;
 }
@@ -66,8 +42,10 @@ int search(GameStruct * game, int depth, int alpha, int beta, int wb_eval , doub
         }
         return 0; // Empate por afogamento
     }
+    moveOrdering(jogadas, num_jogadas, NULL, depth); // Ordena as jogadas para melhorar a poda alpha-beta , ainda nao existe hash_moves
     for (int i = 0; i < num_jogadas; i++) {
-        int delta = applyDeltaMove(game,&jogadas[i],turn);
+        Jogada * best_move = pick_best_move(jogadas, num_jogadas, i);
+        int delta = applyDeltaMove(game,best_move,turn);
         // Chamada recursiva do NEGAMAX:
         int eval = -search(game, depth - 1, -beta, -alpha, wb_eval + delta, initial_time, time_limit, (turn == brancas) ? pretas : brancas);
         undoMove(game,&jogadas[i],turn);
@@ -78,6 +56,13 @@ int search(GameStruct * game, int depth, int alpha, int beta, int wb_eval , doub
         // 4. PODA ALPHA-BETA (Pruning):
         // Se a avaliação atual ultrapassa o Beta do adversário, ele nunca deixará esta posição acontecer.
         if (eval >= beta) {
+            if(best_move->peca_capturada == Empty) {
+                // Se não for uma captura, registra como um killer move
+                killer_moves[depth][1] = killer_moves[depth][0];
+                killer_moves[depth][0] = *best_move;
+
+                history_table[best_move->peca_movida][best_move->destino] += depth * depth; // Atualiza a tabela de histórico
+            }
             return beta;
         }
         alpha = (eval > alpha) ? eval : alpha; // Atualiza o Alpha se a avaliação atual for melhor

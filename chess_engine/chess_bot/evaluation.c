@@ -27,7 +27,7 @@ int atks_stronger_piece(uint64_bit pos , Pieces type , CorPiece turn , CorPiece 
     uint64_bit piece_atks = get_piece_attacks(pos,type,game,turn);
     for(int i=0;i<NUMBER_PIECES;i++){
         uint64_bit tab = game->estadoJogo.tabuleirojogo[op_turn][i];
-        int p_value = piece_value((Pieces)i);
+        int p_value = pieces_value[i];
         if(p_value > piece_score && (tab&piece_atks) !=0) return p_value; 
     }
     return 0;
@@ -45,7 +45,7 @@ int get_mobility_score_piece(Pieces type , uint64_bit pos , CorPiece turn , Game
     else{
         int can_take_score = atks_stronger_piece(pos,type,turn,op_turn,game,piece_score);
         if(can_take_score){
-            if(can_take_score == piece_value(King)) m_score += 99999;
+            if(can_take_score == pieces_value[King]) m_score += 99999;
             else m_score += can_take_score;
         }
     }
@@ -59,7 +59,7 @@ int evaluate_piece(uint64_bit piece_pos , Pieces piece_type , CorPiece turn , Ga
     /*  
         piece_eval = piece_score + position_score + mobility_score;
     */
-    int position_score = 0 , mobility_score = 0 , piece_score = piece_value(piece_type);
+    int position_score = 0 , mobility_score = 0 , piece_score = pieces_value[piece_type];
     int pos = posTabuleiro(piece_pos);
     if(pos==(-1)) return 0;
     int line = pos/8 , column = pos%8 , indx = (turn==brancas) ? ((7-line)*8 + column) : pos;

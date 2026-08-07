@@ -203,7 +203,7 @@ int gerar_jogadas_legais(GameStruct *game, Jogada * jogadas , CorPiece cor , int
             while (attacks) {
                 uint64_bit single_attack = attacks & (-attacks);
                 Jogada jogada = {.origem = posTabuleiro(single_piece), .destino = posTabuleiro(single_attack), .peca_movida = piece, 
-                                .peca_capturada = Empty, .promocao = 0, .especial = 0};
+                                .peca_capturada = Empty, .promocao = 0, .especial = 0 , .score = 0};
                 if (isPseudoValidMove(game, &jogada, cor)) {
                     atualizaJogada(game, &jogada, cor);
                     Boolean king_safe = !is_in_check(&(game->estadoJogo), game->estadoJogo.tabuleirojogo[cor][King], cor);

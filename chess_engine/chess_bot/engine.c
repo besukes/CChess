@@ -19,6 +19,7 @@ jogadabot engine_search(GameStruct * game , CorPiece turn , int depth){
     CorPiece op_turn = (turn == brancas) ? pretas : brancas;
     Jogada jogadas[256];
     int num_jogadas = gerar_jogadas_legais(game, jogadas,turn, NO_FLAGS);
+    moveOrdering(jogadas, num_jogadas, NULL, depth); // Ordena as jogadas para melhorar a poda alpha-beta , ainda nao existe hash_moves
     int melhor_eval = -VALOR_INFINITO ,
         alpha = -VALOR_INFINITO,
         beta = VALOR_INFINITO;
@@ -26,11 +27,12 @@ jogadabot engine_search(GameStruct * game , CorPiece turn , int depth){
     int eval_wb_inicial = evaluate(game, brancas); // avaliação completa, calculada só uma vez (na raiz)
     Jogada best_move = {.origem = 64, .destino = 64, .peca_movida = Empty, .peca_capturada = Empty, .promocao = 0, .especial = 0};
     for (int i = 0; i < num_jogadas; i++) {
+        Jogada * cur_move = pick_best_move(jogadas, num_jogadas, i);
         // Aplica a jogada nas Bitboards e atualiza a Avaliação Incremental (Delta)
-        int delta = applyDeltaMove(game,&jogadas[i],turn);
+        int delta = applyDeltaMove(game,cur_move,turn);
         // Chamada recursiva do NEGAMAX:
         int eval = -search(game, depth - 1, -beta , -alpha, eval_wb_inicial + delta, initial_time, initial_time + 3000, op_turn);
-        undoMove(game,&jogadas[i],turn);
+        undoMove(game,cur_move,turn);
         // Se o tempo acabou em algum nó filho, propaga o timeout para cima sem salvar nada
         if((-eval) == FLAG_TIMEOUT) {
             printf("[engine] engine_search: timeout reached during search\n");
@@ -41,7 +43,7 @@ jogadabot engine_search(GameStruct * game , CorPiece turn , int depth){
         // Guarda a melhor pontuação encontrada para o jogador atual
         if(eval > melhor_eval) {
             melhor_eval = eval;
-            best_move = jogadas[i];
+            best_move = *cur_move;
         }
         alpha = (melhor_eval>alpha) ? melhor_eval : alpha;
     }
