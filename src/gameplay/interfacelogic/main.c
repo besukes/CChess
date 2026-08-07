@@ -3,6 +3,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 
+Jogada killer_moves[MAX_DEPTH_SEARCH][2] = {0};
+int history_table[NUMBER_PIECES*2][NUM_SQUARES] = {0};
 
 void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * event , Mix_Chunk * sfxarray[]){
     switch(settings->screenAtual){
@@ -45,6 +47,7 @@ void handleTipoMenu(GameStruct * game , CChessSettings * settings , SDL_Event * 
 
 void interfaceCChess(GameStruct * game ,CChessSettings * settings , Mix_Chunk * sfxarray[]){
     SDL_Event event;
+    SDL_PollEvent(&event);
     //enquanto o utilizador nao clicar no botao para sair ele continua no jogo
     while(event.type != SDL_QUIT && game->jogada!= Leave){
         SDL_PollEvent(&event);

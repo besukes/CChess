@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
+#include <stdint.h>
 
 #define NUMBER_PIECES 6
 #define MAX_DEPTH_SEARCH 6
@@ -24,11 +25,11 @@ typedef struct {
     uint8_t peca_capturada;
     uint8_t promocao;
     uint8_t especial;
-    uint8_t score;
+    int score;
 } Jogada;
 
-Jogada killer_moves[MAX_DEPTH_SEARCH][2]; //Armazena os killer moves para cada profundidade de busca
-int history_table[NUMBER_PIECES*2][NUM_SQUARES] = {0};
+extern Jogada killer_moves[MAX_DEPTH_SEARCH][2]; //Armazena os killer moves para cada profundidade de busca
+extern int history_table[NUMBER_PIECES*2][NUM_SQUARES]; //Armazena a tabela de histórico para cada peça e posição
 
 /*Struct que serve apenas no startAndCleanup.c para retornar os endereços de memória do nosso renderer e window*/
 typedef struct SDL_Initializators{
@@ -547,11 +548,6 @@ void desenhaMultiplayerScreen(CChessSettings * settings);
 
 /////////////////////////////////////////////////////////////////////CHESS BOT///////////////////////////////////////////////////////////////////////
 
-/// initialization ////////////////////////////
-
-void initializeStructs(int matrix[2][NUMBER_PIECES],int indx);
-
-
 /// search /////////////////////////////
 
 int search(GameStruct * game, int depth, int alpha, int beta, int wb_eval , double initial_time, double time_limit , CorPiece turn);
@@ -559,6 +555,7 @@ int search(GameStruct * game, int depth, int alpha, int beta, int wb_eval , doub
 /// evaluation //////////////////////////////
 
 int evaluate(GameStruct * game , CorPiece turno);
+int evaluate_piece(uint64_bit piece_pos , Pieces piece_type , CorPiece turn , GameStruct * game);
 
 
 /// engine /////////////////////////////////
@@ -569,3 +566,5 @@ Jogada get_best_move(GameStruct * game , CorPiece turn);
 
 int applyDeltaMove(GameStruct * game , Jogada * jogada , CorPiece turn);
 Jogada * pick_best_move(Jogada * jogadas, int num_jogadas, int start_index);
+void moveOrdering(Jogada * jogadas , int num_jogadas , Jogada * hash_move , int depth);
+int matches_killer_move(int depth, Jogada * jogada, int index) ;

@@ -132,7 +132,7 @@ int evaluate_piece_type(uint64_bit bitboard , Pieces piece_type, CorPiece turn, 
 
 int evaluate(GameStruct * game , CorPiece turno){
     int total_white_eval = 0 , total_black_eval = 0;
-    int eval = 0 , who2Move =  1 , whoNot2Move = (-1) ;
+    int eval = 0;
     for(int i=0;i<NUMBER_PIECES;i++){
         Pieces piece = (Pieces)i;
         int white_eval = evaluate_piece_type(game->estadoJogo.tabuleirojogo[brancas][piece],piece,brancas,game);
