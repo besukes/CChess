@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 #define NUMBER_PIECES 6
-#define MAX_DEPTH_SEARCH 6
+#define MAX_DEPTH_SEARCH 5
 #define FLAG_TIMEOUT -999999
 #define VALOR_INFINITO 99999
 

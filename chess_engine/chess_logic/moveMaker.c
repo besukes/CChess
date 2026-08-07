@@ -88,5 +88,8 @@ void atualizaJogada(GameStruct * game , Jogada * jogada , CorPiece turno){
         uint64_bit * bit_piece = &(game->estadoJogo.tabuleirojogo[turno][jogada->peca_movida]),
                    * bit_global = &(game->estadoJogo.bitboard_todas_pieces);
         efetuaJogada(bit_piece,bit_global,1ULL<<jogada->origem,click,bitboard_cor_turno);
+        if(jogada->promocao){
+            promotePiece(game,Queen,click,turno);
+        }
     } 
 }

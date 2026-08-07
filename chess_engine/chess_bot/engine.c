@@ -57,7 +57,7 @@ Jogada get_best_move(GameStruct * game , CorPiece turn){
     int depth = MAX_DEPTH_SEARCH;
     jogadabot best_move = engine_search(game,turn,depth);
     printf("[engine] get_best_move: piece %d from %d to %d , took %d ms with an eval of %f\n", best_move.best_move.peca_movida, 
-                posTabuleiro(best_move.best_move.origem), posTabuleiro(best_move.best_move.destino), best_move.move_time, (float)(best_move.move_eval / 100));
+                (int)best_move.best_move.origem, (int)best_move.best_move.destino, best_move.move_time, (float)(best_move.move_eval / 100));
     return (best_move.best_move);
 }
 

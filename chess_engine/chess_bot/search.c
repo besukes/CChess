@@ -9,8 +9,11 @@
 
 
 
-int quiescence(GameStruct * game, int alpha, int beta, int quiescence_eval, CorPiece turn , int q_depth){
+int quiescence(GameStruct * game, int alpha, int beta, int quiescence_eval, CorPiece turn , int q_depth , int init_time , int max_time){
     int est_eval = (turn == brancas) ? quiescence_eval : (-quiescence_eval); // Avaliação estática da posição atual
+    if (SDL_GetTicks() - init_time >= max_time) {
+        return FLAG_TIMEOUT;
+    }
     if (est_eval >= beta) return beta;
     if (alpha < est_eval) alpha = est_eval;
 
@@ -20,11 +23,14 @@ int quiescence(GameStruct * game, int alpha, int beta, int quiescence_eval, CorP
     for (int i = 0; i < num_jogadas; i++){
         Jogada * best_move = pick_best_move(jogadas, num_jogadas, i);
         int delta = applyDeltaMove(game,best_move,turn);
-        int eval = -quiescence(game, -beta, -alpha, quiescence_eval + delta, (turn==brancas)?pretas:brancas , q_depth + 1);
+        int eval = -quiescence(game, -beta, -alpha, quiescence_eval + delta, (turn==brancas)?pretas:brancas , q_depth + 1 , init_time , max_time);
         undoMove(game,best_move,turn);
         if (eval >= beta){
             history_table[jogadas[i].peca_movida][jogadas[i].destino] += q_depth * q_depth; // Atualiza a tabela de histórico para capturas
             return beta;
+        }
+        if((-eval) == FLAG_TIMEOUT) {
+            return FLAG_TIMEOUT;
         }
         alpha = (eval > alpha) ? eval : alpha;
     }
@@ -39,7 +45,8 @@ int search(GameStruct * game, int depth, int alpha, int beta, int wb_eval , doub
         return FLAG_TIMEOUT;
     }
     if (depth == 0) { // Quando atinge a profundidade 0 ou o jogo acaba, lê a avaliação incremental atual
-        return quiescence(game, alpha, beta, wb_eval, turn, MAX_DEPTH_SEARCH);
+        double time = SDL_GetTicks();
+        return quiescence(game, alpha, beta, wb_eval, turn, MAX_DEPTH_SEARCH , time , time + 2000);
     }
     Jogada jogadas[256];int num_jogadas = gerar_jogadas_legais(game, jogadas,turn, NO_FLAGS);
     if (num_jogadas == 0) { // Se não houver jogadas legais: Xeque-Mate ou Empate (Afogamento)
